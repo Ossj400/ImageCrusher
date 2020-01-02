@@ -33,10 +33,9 @@ namespace ImageCrusher
             }
             catch
             {
-
             }
-
         }
+
         private void BtScratches_CheckedChanged(object sender, EventArgs e)
         {
             try
@@ -45,7 +44,6 @@ namespace ImageCrusher
             }
             catch
             {
-
             }
         }
 
@@ -57,7 +55,6 @@ namespace ImageCrusher
             }
             catch
             {
-
             }
         }
 
@@ -90,10 +87,7 @@ namespace ImageCrusher
             }
             catch
             {
-
             }
         }
-
-
     }
 }

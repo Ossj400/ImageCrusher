@@ -15,20 +15,20 @@ namespace ImageCrusher.Inpainting
 {
     class AlexandruTeleaInpaint
     {
-        Image<Bgr, byte> imageOutTelea;
-        Image<Bgr, byte> imageIn;
+        Image<Rgb, byte> imageOutTelea;
+        Image<Rgb, byte> imageIn;
         Image<Gray, byte> mask;
 
-        public Image<Bgr, byte> InpaintTel(ImageMenu image, Noise mask)
+        public Image<Rgb, byte> InpaintTel(ImageMenu image, Noise mask)
         {
             imageIn = image.GetImageIn();
-            imageOutTelea = new Image<Bgr, byte>(image.GetImageIn().ToBitmap());
+            imageOutTelea = new Image<Rgb, byte>(image.GetImageIn().ToBitmap());
             this.mask = mask.GetMask();
             CvInvoke.Inpaint(imageIn, this.mask, imageOutTelea, 1, Emgu.CV.CvEnum.InpaintType.Telea);
 
             return imageOutTelea;
         }
-        public Image<Bgr, byte> GetImage()
+        public Image<Rgb, byte> GetImage()
         {
             return imageOutTelea;
         }

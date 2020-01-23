@@ -14,19 +14,19 @@ namespace ImageCrusher.ImageController
 {
     class Noise
     {
-        Image<Bgr, byte> image;
+        Image<Rgb, byte> image;
         Image<Gray, byte> mask;
         Image<Gray, byte> maskLoaded;
-        Image<Bgr, byte> imageOut;
+        Image<Rgb, byte> imageOut;
         public Noise(ImageMenu image)
         {
             this.image = image.GetImageIn();
             maskLoaded = image.GetMask();          
         }
       
-        public Image<Bgr, byte> MakeStarsNoise(int trackBarValue, int noiseRange)  // "Stars" Noise
+        public Image<Rgb, byte> MakeStarsNoise(int trackBarValue, int noiseRange)  // "Stars" Noise
         {
-            imageOut = new Image<Bgr, byte>(image.ToBitmap());
+            imageOut = new Image<Rgb, byte>(image.ToBitmap());
             byte[,,] Data = imageOut.Data;
             Random random = new Random();
             int xPixels = imageOut.Size.Width;
@@ -64,9 +64,9 @@ namespace ImageCrusher.ImageController
             }
             return imageOut;
         }
-        public Image<Bgr, byte> VerticalScratches(int trackBarValue, int noiseRange)
+        public Image<Rgb, byte> VerticalScratches(int trackBarValue, int noiseRange)
         {
-            imageOut = new Image<Bgr, byte>(image.ToBitmap());
+            imageOut = new Image<Rgb, byte>(image.ToBitmap());
             byte[,,] Data = imageOut.Data;
             Random random = new Random();
             int xPixels = imageOut.Size.Width;

@@ -90,7 +90,7 @@ namespace ImageCrusher
 
         private void BtSaveImg_Click(object sender, EventArgs e)
         {
-            Image<Bgr, byte> img = new Image<Bgr, byte>(MenuImg.GetImageIn().ToBitmap());
+            Image<Rgb, byte> img = new Image<Rgb, byte>(MenuImg.GetImageIn().ToBitmap());
             if (alexandruTelea.GetImage()!= null)
                 img = alexandruTelea.GetImage();
             if (navierStokes.GetImage()!= null)

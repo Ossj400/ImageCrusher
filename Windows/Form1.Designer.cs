@@ -1,6 +1,6 @@
 ﻿namespace ImageCrusher
 {
-    partial class Form1
+    partial class MainWindow
     {
         /// <summary>
         /// Required designer variable.
@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.TrBarNoiseController = new System.Windows.Forms.TrackBar();
             this.PicBox2Editedmg = new System.Windows.Forms.PictureBox();
             this.PicBox1OrgImg = new System.Windows.Forms.PictureBox();
@@ -48,6 +49,7 @@
             this.PicBox3InPainted = new System.Windows.Forms.PictureBox();
             this.BtInpaintNavierStokes = new System.Windows.Forms.Button();
             this.BtLoadMask = new System.Windows.Forms.Button();
+            this.BtInpaintTelea = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.TrBarNoiseController)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PicBox2Editedmg)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PicBox1OrgImg)).BeginInit();
@@ -89,7 +91,7 @@
             // 
             // BtLoadImg
             // 
-            this.BtLoadImg.Location = new System.Drawing.Point(65, 566);
+            this.BtLoadImg.Location = new System.Drawing.Point(69, 567);
             this.BtLoadImg.Name = "BtLoadImg";
             this.BtLoadImg.Size = new System.Drawing.Size(108, 30);
             this.BtLoadImg.TabIndex = 3;
@@ -99,7 +101,7 @@
             // 
             // BtSaveImg
             // 
-            this.BtSaveImg.Location = new System.Drawing.Point(745, 565);
+            this.BtSaveImg.Location = new System.Drawing.Point(1278, 614);
             this.BtSaveImg.Name = "BtSaveImg";
             this.BtSaveImg.Size = new System.Drawing.Size(135, 31);
             this.BtSaveImg.TabIndex = 4;
@@ -232,7 +234,7 @@
             // 
             // BtInpaintNavierStokes
             // 
-            this.BtInpaintNavierStokes.Location = new System.Drawing.Point(1278, 565);
+            this.BtInpaintNavierStokes.Location = new System.Drawing.Point(1278, 567);
             this.BtInpaintNavierStokes.Name = "BtInpaintNavierStokes";
             this.BtInpaintNavierStokes.Size = new System.Drawing.Size(163, 31);
             this.BtInpaintNavierStokes.TabIndex = 18;
@@ -242,7 +244,7 @@
             // 
             // BtLoadMask
             // 
-            this.BtLoadMask.Location = new System.Drawing.Point(1278, 602);
+            this.BtLoadMask.Location = new System.Drawing.Point(897, 567);
             this.BtLoadMask.Name = "BtLoadMask";
             this.BtLoadMask.Size = new System.Drawing.Size(108, 30);
             this.BtLoadMask.TabIndex = 19;
@@ -250,12 +252,24 @@
             this.BtLoadMask.UseVisualStyleBackColor = true;
             this.BtLoadMask.Click += new System.EventHandler(this.BtLoadMask_Click);
             // 
-            // Form1
+            // BtInpaintTelea
+            // 
+            this.BtInpaintTelea.Location = new System.Drawing.Point(1474, 566);
+            this.BtInpaintTelea.Name = "BtInpaintTelea";
+            this.BtInpaintTelea.Size = new System.Drawing.Size(163, 31);
+            this.BtInpaintTelea.TabIndex = 20;
+            this.BtInpaintTelea.Text = "Inpaint Telea";
+            this.BtInpaintTelea.UseVisualStyleBackColor = true;
+            this.BtInpaintTelea.Click += new System.EventHandler(this.BtInpaintTelea_Click);
+            // 
+            // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSize = true;
             this.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
             this.ClientSize = new System.Drawing.Size(1887, 740);
+            this.Controls.Add(this.BtInpaintTelea);
             this.Controls.Add(this.BtLoadMask);
             this.Controls.Add(this.BtInpaintNavierStokes);
             this.Controls.Add(this.PicBox3InPainted);
@@ -276,7 +290,9 @@
             this.Controls.Add(this.PicBox1OrgImg);
             this.Controls.Add(this.PicBox2Editedmg);
             this.Controls.Add(this.TrBarNoiseController);
-            this.Name = "Form1";
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Name = "MainWindow";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.TrBarNoiseController)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.PicBox2Editedmg)).EndInit();
@@ -310,6 +326,7 @@
         private System.Windows.Forms.PictureBox PicBox3InPainted;
         private System.Windows.Forms.Button BtInpaintNavierStokes;
         private System.Windows.Forms.Button BtLoadMask;
+        private System.Windows.Forms.Button BtInpaintTelea;
     }
 }
 

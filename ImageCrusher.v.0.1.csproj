@@ -57,18 +57,21 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Algorithms\NavierStokes.cs" />
+    <Compile Include="Inpainting\AlexandruTelea.cs" />
+    <Compile Include="Inpainting\Indicator.cs" />
+    <Compile Include="Inpainting\NavierStokes.cs" />
     <Compile Include="ExtensionMethods.cs" />
-    <Compile Include="Form1.cs">
+    <Compile Include="Windows\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
+    <Compile Include="Windows\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="ImageController.cs" />
+    <Compile Include="ImageController\ImageMenu.cs" />
+    <Compile Include="ImageController\Noise.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Form1.resx">
+    <EmbeddedResource Include="Windows\Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -97,6 +100,7 @@
   <ItemGroup>
     <Content Include="License-LGPL.txt" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="packages\EMGU.CV.4.1.1.3497\build\EMGU.CV.targets" Condition="Exists('packages\EMGU.CV.4.1.1.3497\build\EMGU.CV.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

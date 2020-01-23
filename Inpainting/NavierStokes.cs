@@ -9,8 +9,9 @@ using Emgu.CV;
 using System.Windows.Forms;
 using Emgu.CV.Quality;
 using System.Drawing.Imaging;
+using ImageCrusher.ImageController;
 
-namespace ImageCrusher.Algorithms
+namespace ImageCrusher.ImageController
 {
     class NavierStokesInpaint
     {
@@ -18,14 +19,19 @@ namespace ImageCrusher.Algorithms
         Image<Bgr, byte> imageIn;
         Image<Gray, byte> mask;
 
-        public Image<Bgr, byte> InpaintNav(ImageController image)
+        public Image<Bgr, byte> InpaintNav(ImageMenu image, Noise mask)
         {
             imageIn = image.GetImageIn();
             imageOutNav = new Image<Bgr, byte>(image.GetImageIn().ToBitmap());
-            mask = image.GetMask(); 
-            CvInvoke.Inpaint(imageIn, mask, imageOutNav, 3, 0);
+            this.mask = mask.GetMask(); 
+            CvInvoke.Inpaint(imageIn, this.mask, imageOutNav, 1, 0);
             
             return imageOutNav;
         }
+        public Image<Bgr, byte> GetImage()
+        {
+           return imageOutNav;
+        }
+
     }
 }

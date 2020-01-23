@@ -8,12 +8,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Emgu.CV;
+using ExtensionMethodsSpace;
+using ImageCrusher.Algorithms;
 
 namespace ImageCrusher
 {
     public partial class Form1 : Form
     {
         ImageController ImageControl = new ImageController();
+        NavierStokesInpaint navierStokes = new NavierStokesInpaint();
         public Form1()
         {
             InitializeComponent();
@@ -29,7 +32,7 @@ namespace ImageCrusher
             try
             {
                 NoiseMethod(TrBarRangeNoise.Value);
-                PicBox2Editedmg.Image = ImageControl.GetImage().ToBitmap();
+                PicBox2Editedmg.Image = ImageControl.GetImageOut().ToBitmap();
             }
             catch
             {
@@ -82,12 +85,38 @@ namespace ImageCrusher
         private void BtCalcRMSError_Click(object sender, EventArgs e)
         {
             try
-            { 
-            TxtBoxRMSError.Text = ImageControl.RMSE();
+            {
+                //ImageControl.RMSE_Algorithm();
+                TxtBoxRMSerror.Text = ImageControl.RMSE().DisplayDouble(3);
             }
             catch
             {
             }
+        }
+
+        private void BtCalcPSNRerror_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                double[] psnr = ImageControl.PNSR();
+                TxtBoxPSNRRed.Text = psnr[0].DisplayDouble(3);
+                TxtBoxPSNRGreen.Text = psnr[1].DisplayDouble(3);
+                TxtBoxPSNRBlue.Text = psnr[2].DisplayDouble(3);
+            }
+            catch
+            {
+            }
+        }
+
+        private void BtInpaintNavierStokes_Click(object sender, EventArgs e)
+        {
+            PicBox3InPainted.Image = navierStokes.InpaintNav(ImageControl).ToBitmap();
+        }
+
+        private void BtLoadMask_Click(object sender, EventArgs e)
+        {
+            PicBox2Editedmg.Image = ImageControl.LoadMask();
+            PicBox2Editedmg.Image = ImageControl.mask.ToBitmap();
         }
     }
 }

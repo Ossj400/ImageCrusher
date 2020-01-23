@@ -11,12 +11,29 @@ using Emgu.CV.Quality;
 using System.Drawing.Imaging;
 
 
+
+/// <summary>
+///  Podzielic na klasy. 
+///  1. Do ładowania obrazu i przechowywania
+///  2. Do zaszumiania
+///  3. Do oceny 
+///  4. Do inpaintaingu
+///  
+/// SZUM
+/// Pojedyncze piksele szum i dziury kwadratowe na objętności %
+///  
+/// Przetestować te metody inpaintingu (można opisać)
+/// 
+/// 
+/// </summary>
+
 namespace ImageCrusher
 {
     class ImageController
     {
         Image<Bgr, byte> image;
         Image<Bgr, byte> imageOut;
+       public Image<Gray, byte> mask;  // delete this ?
         public Bitmap LoadImage()
         {
             OpenFileDialog OpenFile = new OpenFileDialog();
@@ -25,6 +42,15 @@ namespace ImageCrusher
                 image = new Image<Bgr, byte>(OpenFile.FileName);
             }
             return image.ToBitmap();
+        }
+        public Bitmap LoadMask()
+        {
+            OpenFileDialog OpenFile = new OpenFileDialog();
+            if (OpenFile.ShowDialog() == DialogResult.OK)
+            {
+                mask = new Image<Gray, byte>(OpenFile.FileName);
+            }
+            return mask.ToBitmap();
         }
         public void SaveImage()
         {
@@ -36,16 +62,28 @@ namespace ImageCrusher
                 imageOut.Save(saveFile.FileName);
             }
         }
-        public Image<Bgr, Byte> GetImage()
+        public Image<Bgr, Byte> GetImageOut()
         {
             return imageOut;
         }
-        public string RMSE()
+        public Image<Bgr, Byte> GetImageIn()
+        {
+            return image;
+        }
+
+        public Image<Gray, byte> GetMask()
+        {
+            if(imageOut!=null)
+            mask = image.AbsDiff(imageOut).Convert<Gray,byte>();
+            return mask;
+        }
+
+        public void RMSE_Algorithm()
         {
             image = new Image<Bgr, byte>(image.ToBitmap());
             double mean = 0;
             double totalRms;
-            int n= imageOut.Width * imageOut.Height*3; // how many points shoudl I use.. ?
+            int n= imageOut.Width * imageOut.Height*3;
             int orgVal;
             int newVal;
             byte[,,] Data = image.Data;
@@ -67,11 +105,24 @@ namespace ImageCrusher
                 }
             }
              totalRms = Math.Sqrt(mean/n);
-             QualityMSE MSE = new QualityMSE(image);
-             double mseEmgu = MSE.Compute(imageOut).V0 + MSE.Compute(imageOut).V1 + MSE.Compute(imageOut).V2;
-             string msrE = Math.Sqrt(mseEmgu / 3).ToString(); 
-             return msrE; // totalRms;
         }
+
+        public double RMSE()
+        {
+            QualityMSE MSE = new QualityMSE(image);
+            double mSE = MSE.Compute(imageOut).V0 + MSE.Compute(imageOut).V1 + MSE.Compute(imageOut).V2;
+            double rMSE = Math.Sqrt(mSE / 3);
+            return rMSE;        
+        }
+
+        public double[] PNSR() 
+        {
+            QualityPSNR PSNR = new QualityPSNR(image);
+            double[] pSNR = new double[4]; 
+            pSNR = PSNR.Compute(imageOut).ToArray(); 
+            return pSNR;
+        }
+
         public Image<Bgr, byte> MakeStarsNoise(int trackBarValue, int noiseRange)  // "Stars" Noise
         {
             imageOut = new Image<Bgr, byte>(image.ToBitmap());
@@ -147,5 +198,6 @@ namespace ImageCrusher
             }
             return imageOut;
         }
+
     }
 }

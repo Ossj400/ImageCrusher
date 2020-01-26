@@ -60,10 +60,10 @@
             // TrBarNoiseController
             // 
             this.TrBarNoiseController.LargeChange = 1;
-            this.TrBarNoiseController.Location = new System.Drawing.Point(291, 669);
+            this.TrBarNoiseController.Location = new System.Drawing.Point(220, 678);
             this.TrBarNoiseController.Maximum = 11;
             this.TrBarNoiseController.Name = "TrBarNoiseController";
-            this.TrBarNoiseController.Size = new System.Drawing.Size(146, 56);
+            this.TrBarNoiseController.Size = new System.Drawing.Size(185, 56);
             this.TrBarNoiseController.TabIndex = 0;
             this.TrBarNoiseController.ValueChanged += new System.EventHandler(this.TrBarNoiseController_ValueChanged);
             // 
@@ -91,7 +91,7 @@
             // 
             // BtLoadImg
             // 
-            this.BtLoadImg.Location = new System.Drawing.Point(69, 567);
+            this.BtLoadImg.Location = new System.Drawing.Point(12, 573);
             this.BtLoadImg.Name = "BtLoadImg";
             this.BtLoadImg.Size = new System.Drawing.Size(108, 30);
             this.BtLoadImg.TabIndex = 3;
@@ -112,34 +112,34 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(270, 649);
+            this.label1.Location = new System.Drawing.Point(232, 655);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(206, 17);
+            this.label1.Size = new System.Drawing.Size(123, 17);
             this.label1.TabIndex = 5;
-            this.label1.Text = "Make some noise and no undo ";
+            this.label1.Text = "Pick noise amount";
             // 
             // LblRangeNoise
             // 
             this.LblRangeNoise.AutoSize = true;
-            this.LblRangeNoise.Location = new System.Drawing.Point(507, 649);
+            this.LblRangeNoise.Location = new System.Drawing.Point(466, 655);
             this.LblRangeNoise.Name = "LblRangeNoise";
-            this.LblRangeNoise.Size = new System.Drawing.Size(199, 17);
+            this.LblRangeNoise.Size = new System.Drawing.Size(154, 17);
             this.LblRangeNoise.TabIndex = 7;
-            this.LblRangeNoise.Text = "How big should be noise signs";
+            this.LblRangeNoise.Text = "Pick size of noise signs";
             // 
             // TrBarRangeNoise
             // 
             this.TrBarRangeNoise.LargeChange = 1;
-            this.TrBarRangeNoise.Location = new System.Drawing.Point(529, 669);
+            this.TrBarRangeNoise.Location = new System.Drawing.Point(458, 678);
             this.TrBarRangeNoise.Maximum = 100;
             this.TrBarRangeNoise.Name = "TrBarRangeNoise";
-            this.TrBarRangeNoise.Size = new System.Drawing.Size(146, 56);
+            this.TrBarRangeNoise.Size = new System.Drawing.Size(169, 56);
             this.TrBarRangeNoise.TabIndex = 6;
             // 
             // BtScratches
             // 
             this.BtScratches.AutoSize = true;
-            this.BtScratches.Location = new System.Drawing.Point(529, 566);
+            this.BtScratches.Location = new System.Drawing.Point(473, 567);
             this.BtScratches.Name = "BtScratches";
             this.BtScratches.Size = new System.Drawing.Size(135, 21);
             this.BtScratches.TabIndex = 8;
@@ -151,7 +151,7 @@
             // BtStarNoise
             // 
             this.BtStarNoise.AutoSize = true;
-            this.BtStarNoise.Location = new System.Drawing.Point(529, 593);
+            this.BtStarNoise.Location = new System.Drawing.Point(473, 594);
             this.BtStarNoise.Name = "BtStarNoise";
             this.BtStarNoise.Size = new System.Drawing.Size(118, 21);
             this.BtStarNoise.TabIndex = 9;
@@ -164,7 +164,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.8F);
-            this.label2.Location = new System.Drawing.Point(286, 572);
+            this.label2.Location = new System.Drawing.Point(230, 573);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(175, 25);
             this.label2.TabIndex = 10;
@@ -172,7 +172,7 @@
             // 
             // BtCalcRMSerror
             // 
-            this.BtCalcRMSerror.Location = new System.Drawing.Point(745, 642);
+            this.BtCalcRMSerror.Location = new System.Drawing.Point(650, 641);
             this.BtCalcRMSerror.Name = "BtCalcRMSerror";
             this.BtCalcRMSerror.Size = new System.Drawing.Size(163, 31);
             this.BtCalcRMSerror.TabIndex = 11;
@@ -182,14 +182,14 @@
             // 
             // TxtBoxRMSerror
             // 
-            this.TxtBoxRMSerror.Location = new System.Drawing.Point(951, 646);
+            this.TxtBoxRMSerror.Location = new System.Drawing.Point(856, 645);
             this.TxtBoxRMSerror.Name = "TxtBoxRMSerror";
             this.TxtBoxRMSerror.Size = new System.Drawing.Size(107, 22);
             this.TxtBoxRMSerror.TabIndex = 12;
             // 
             // TxtBoxPSNRRed
             // 
-            this.TxtBoxPSNRRed.Location = new System.Drawing.Point(951, 683);
+            this.TxtBoxPSNRRed.Location = new System.Drawing.Point(856, 682);
             this.TxtBoxPSNRRed.Name = "TxtBoxPSNRRed";
             this.TxtBoxPSNRRed.Size = new System.Drawing.Size(107, 22);
             this.TxtBoxPSNRRed.TabIndex = 14;
@@ -197,7 +197,7 @@
             // 
             // BtCalcPSNRerror
             // 
-            this.BtCalcPSNRerror.Location = new System.Drawing.Point(745, 679);
+            this.BtCalcPSNRerror.Location = new System.Drawing.Point(650, 678);
             this.BtCalcPSNRerror.Name = "BtCalcPSNRerror";
             this.BtCalcPSNRerror.Size = new System.Drawing.Size(163, 31);
             this.BtCalcPSNRerror.TabIndex = 13;
@@ -207,7 +207,7 @@
             // 
             // TxtBoxPSNRGreen
             // 
-            this.TxtBoxPSNRGreen.Location = new System.Drawing.Point(1086, 683);
+            this.TxtBoxPSNRGreen.Location = new System.Drawing.Point(991, 682);
             this.TxtBoxPSNRGreen.Name = "TxtBoxPSNRGreen";
             this.TxtBoxPSNRGreen.Size = new System.Drawing.Size(107, 22);
             this.TxtBoxPSNRGreen.TabIndex = 15;
@@ -215,7 +215,7 @@
             // 
             // TxtBoxPSNRBlue
             // 
-            this.TxtBoxPSNRBlue.Location = new System.Drawing.Point(1216, 683);
+            this.TxtBoxPSNRBlue.Location = new System.Drawing.Point(1121, 682);
             this.TxtBoxPSNRBlue.Name = "TxtBoxPSNRBlue";
             this.TxtBoxPSNRBlue.Size = new System.Drawing.Size(107, 22);
             this.TxtBoxPSNRBlue.TabIndex = 16;
@@ -244,7 +244,7 @@
             // 
             // BtLoadMask
             // 
-            this.BtLoadMask.Location = new System.Drawing.Point(897, 567);
+            this.BtLoadMask.Location = new System.Drawing.Point(903, 568);
             this.BtLoadMask.Name = "BtLoadMask";
             this.BtLoadMask.Size = new System.Drawing.Size(108, 30);
             this.BtLoadMask.TabIndex = 19;
@@ -254,7 +254,7 @@
             // 
             // BtInpaintTelea
             // 
-            this.BtInpaintTelea.Location = new System.Drawing.Point(1474, 566);
+            this.BtInpaintTelea.Location = new System.Drawing.Point(1460, 567);
             this.BtInpaintTelea.Name = "BtInpaintTelea";
             this.BtInpaintTelea.Size = new System.Drawing.Size(163, 31);
             this.BtInpaintTelea.TabIndex = 20;

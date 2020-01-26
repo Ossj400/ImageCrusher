@@ -14,23 +14,28 @@ namespace ImageCrusher.ImageController
 {
     class Noise
     {
-        Image<Rgb, byte> image;
+        Image<Rgb, byte> img;
         Image<Gray, byte> mask;
         Image<Gray, byte> maskLoaded;
         Image<Rgb, byte> imageOut;
+
+        public Image<Rgb, byte> ImageOut { get => imageOut; set => imageOut = value; }
+        public Image<Gray, byte> MaskLoaded { get => maskLoaded; set => maskLoaded = value; }
+        public Image<Gray, byte> Mask { get => mask; set => mask = value; }
+
         public Noise(ImageMenu image)
         {
-            this.image = image.GetImageIn();
-            maskLoaded = image.GetMask();          
+            this.img = image.Img;
+            MaskLoaded = image.Mask;          
         }
       
         public Image<Rgb, byte> MakeStarsNoise(int trackBarValue, int noiseRange)  // "Stars" Noise
         {
-            imageOut = new Image<Rgb, byte>(image.ToBitmap());
-            byte[,,] Data = imageOut.Data;
+            ImageOut = new Image<Rgb, byte>(img.ToBitmap());
+            byte[,,] Data = ImageOut.Data;
             Random random = new Random();
-            int xPixels = imageOut.Size.Width;
-            int yPixels = imageOut.Size.Height;
+            int xPixels = ImageOut.Size.Width;
+            int yPixels = ImageOut.Size.Height;
 
             for (int r = 0; r <= (Math.Pow(trackBarValue, trackBarValue / 2) / 2); r++)
             {
@@ -62,15 +67,15 @@ namespace ImageCrusher.ImageController
                     }
                 }
             }
-            return imageOut;
+            return ImageOut;
         }
         public Image<Rgb, byte> VerticalScratches(int trackBarValue, int noiseRange)
         {
-            imageOut = new Image<Rgb, byte>(image.ToBitmap());
-            byte[,,] Data = imageOut.Data;
+            ImageOut = new Image<Rgb, byte>(img.ToBitmap());
+            byte[,,] Data = ImageOut.Data;
             Random random = new Random();
-            int xPixels = imageOut.Size.Width;
-            int yPixels = imageOut.Size.Height;
+            int xPixels = ImageOut.Size.Width;
+            int yPixels = ImageOut.Size.Height;
 
             for (int r = 0; r <= (Math.Pow(trackBarValue, trackBarValue / 2) / 2); r++)
             {
@@ -97,16 +102,16 @@ namespace ImageCrusher.ImageController
                     }
                 }
             }
-            return imageOut;
+            return ImageOut;
         }
         public Image<Gray, byte> GetMask()
         {
-            if (imageOut != null)
-                mask = image.AbsDiff(imageOut).Convert<Gray, byte>();
+            if (ImageOut != null && MaskLoaded == null)
+                Mask = img.AbsDiff(ImageOut).Convert<Gray, byte>();
             else
-                mask = maskLoaded;
+                Mask = MaskLoaded;
 
-            return mask;
+            return Mask;
         }
     }
 }

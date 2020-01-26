@@ -19,19 +19,16 @@ namespace ImageCrusher.ImageController
         Image<Rgb, byte> imageIn;
         Image<Gray, byte> mask;
 
-        public Image<Rgb, byte> InpaintNav(ImageMenu image, Noise mask)
-        {
-            imageIn = image.GetImageIn();
-            imageOutNav = new Image<Rgb, byte>(image.GetImageIn().ToBitmap());
-            this.mask = mask.GetMask(); 
-            CvInvoke.Inpaint(imageIn, this.mask, imageOutNav, 1, 0);
-            
-            return imageOutNav;
-        }
-        public Image<Rgb, byte> GetImage()
-        {
-           return imageOutNav;
-        }
+        public Image<Rgb, byte> ImageOutNav { get => imageOutNav; set => imageOutNav = value; }
 
+        public Image<Rgb, byte> InpaintNav(ImageMenu image, Noise mask, double radius)
+        {
+            imageIn = image.Img;
+            ImageOutNav = new Image<Rgb, byte>(image.Img.ToBitmap());
+            this.mask = mask.GetMask(); 
+            CvInvoke.Inpaint(imageIn, this.mask, ImageOutNav, 1, 0);
+            
+            return ImageOutNav;
+        }
     }
 }

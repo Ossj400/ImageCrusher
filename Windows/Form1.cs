@@ -17,14 +17,18 @@ namespace ImageCrusher
 {
     public partial class MainWindow : Form
     {
-        private static ImageMenu MenuImg = new ImageMenu();     
-        private static NavierStokesInpaint navierStokes = new NavierStokesInpaint();
-        private static AlexandruTeleaInpaint alexandruTelea = new AlexandruTeleaInpaint();
-        Noise NoiseImg = new Noise(MenuImg);
+        ImageMenu MenuImg;   
+        NavierStokesInpaint navierStokes;
+        AlexandruTeleaInpaint alexandruTelea;
+        Noise NoiseImg;
 
         public MainWindow()
         {
             InitializeComponent();
+            MenuImg = new ImageMenu();
+            navierStokes = new NavierStokesInpaint();
+            alexandruTelea = new AlexandruTeleaInpaint();
+            NoiseImg = new Noise(MenuImg);
         }
 
         private void BtLoadImg_Click(object sender, EventArgs e)
@@ -42,8 +46,10 @@ namespace ImageCrusher
         {
             try
             {
+                NoiseImg = new Noise(MenuImg);
+                NoiseImg.MaskLoaded = null;
                 NoiseMethod(TrBarRangeNoise.Value);
-                PicBox2Editedmg.Image = MenuImg.GetImageOut().ToBitmap();
+                PicBox2Editedmg.Image = NoiseImg.ImageOut.ToBitmap();
             }
             catch
             {
@@ -73,7 +79,6 @@ namespace ImageCrusher
 
         private void NoiseMethod(int range)
         {
-            NoiseImg = new Noise(MenuImg);
             if (BtStarNoise.Checked == true)
             {
                 BtScratches.Checked = false;
@@ -90,11 +95,11 @@ namespace ImageCrusher
 
         private void BtSaveImg_Click(object sender, EventArgs e)
         {
-            Image<Rgb, byte> img = new Image<Rgb, byte>(MenuImg.GetImageIn().ToBitmap());
-            if (alexandruTelea.GetImage()!= null)
-                img = alexandruTelea.GetImage();
-            if (navierStokes.GetImage()!= null)
-                img = navierStokes.GetImage();
+            Image<Rgb, byte> img = new Image<Rgb, byte>(MenuImg.Img.ToBitmap());
+            if (alexandruTelea.ImageOutTelea!= null)
+                img = alexandruTelea.ImageOutTelea;
+            if (navierStokes.ImageOutNav != null)
+                img = navierStokes.ImageOutNav;
 
             MenuImg.SaveImage(img.ToBitmap());
         }
@@ -141,19 +146,20 @@ namespace ImageCrusher
         private void BtLoadMask_Click(object sender, EventArgs e)
         {
             PicBox2Editedmg.Image = MenuImg.LoadMask();
-            PicBox2Editedmg.Image = MenuImg.GetMask().ToBitmap();
+            PicBox2Editedmg.Image = MenuImg.Mask.ToBitmap();
+            NoiseImg.MaskLoaded = MenuImg.Mask;
         }
         private void BtInpaintNavierStokes_Click(object sender, EventArgs e)
         {
             alexandruTelea = null;
             navierStokes = new NavierStokesInpaint();
-            PicBox3InPainted.Image = navierStokes.InpaintNav(MenuImg, NoiseImg).ToBitmap();
+            PicBox3InPainted.Image = navierStokes.InpaintNav(MenuImg, NoiseImg, 1).ToBitmap();
         }
         private void BtInpaintTelea_Click(object sender, EventArgs e)
         {
             navierStokes = null;
             alexandruTelea = new AlexandruTeleaInpaint();
-            PicBox3InPainted.Image = alexandruTelea.InpaintTel(MenuImg, NoiseImg).ToBitmap();
+            PicBox3InPainted.Image = alexandruTelea.InpaintTel(MenuImg, NoiseImg, 1).ToBitmap();
         }
     }
 }

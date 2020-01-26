@@ -19,18 +19,16 @@ namespace ImageCrusher.Inpainting
         Image<Rgb, byte> imageIn;
         Image<Gray, byte> mask;
 
-        public Image<Rgb, byte> InpaintTel(ImageMenu image, Noise mask)
-        {
-            imageIn = image.GetImageIn();
-            imageOutTelea = new Image<Rgb, byte>(image.GetImageIn().ToBitmap());
-            this.mask = mask.GetMask();
-            CvInvoke.Inpaint(imageIn, this.mask, imageOutTelea, 1, Emgu.CV.CvEnum.InpaintType.Telea);
+        public Image<Rgb, byte> ImageOutTelea { get => imageOutTelea; set => imageOutTelea = value; }
 
-            return imageOutTelea;
-        }
-        public Image<Rgb, byte> GetImage()
+        public Image<Rgb, byte> InpaintTel(ImageMenu image, Noise mask, double radius)
         {
-            return imageOutTelea;
+            imageIn = image.Img;
+            ImageOutTelea = new Image<Rgb, byte>(image.Img.ToBitmap());
+            this.mask = mask.GetMask();
+            CvInvoke.Inpaint(imageIn, this.mask, ImageOutTelea, 1, Emgu.CV.CvEnum.InpaintType.Telea);
+
+            return ImageOutTelea;
         }
 
     }

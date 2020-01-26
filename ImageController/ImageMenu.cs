@@ -28,26 +28,31 @@ namespace ImageCrusher.ImageController
 {
     class ImageMenu
     {
-        Image<Rgb, byte> image;
+        Image<Rgb, byte> img;
         Image<Rgb, byte> imageOut;
-        Image<Gray, byte> mask;  // delete this ?
+        Image<Gray, byte> mask;
+
+        public Image<Rgb, byte> Img { get => img; set => img = value; }
+        public Image<Rgb, byte> ImageOut { get => imageOut; set => imageOut = value; }
+        public Image<Gray, byte> Mask { get => mask; set => mask = value; }
+
         public Bitmap LoadImage()
         {
             OpenFileDialog OpenFile = new OpenFileDialog();
             if (OpenFile.ShowDialog() == DialogResult.OK)
             {
-                image = new Image<Rgb, byte>(OpenFile.FileName);
+                Img = new Image<Rgb, byte>(OpenFile.FileName);
             }
-            return image.ToBitmap();
+            return Img.ToBitmap();
         }
         public Bitmap LoadMask()
         {
             OpenFileDialog OpenFile = new OpenFileDialog();
             if (OpenFile.ShowDialog() == DialogResult.OK)
             {
-                mask = new Image<Gray, byte>(OpenFile.FileName);
+                Mask = new Image<Gray, byte>(OpenFile.FileName);
             }
-            return mask.ToBitmap();
+            return Mask.ToBitmap();
         }
         public void SaveImage(Bitmap img)
         {
@@ -58,18 +63,6 @@ namespace ImageCrusher.ImageController
             {
                 img.Save(saveFile.FileName);
             }
-        }
-        public Image<Rgb, Byte> GetImageOut()
-        {
-            return imageOut;
-        }
-        public Image<Rgb, Byte> GetImageIn()
-        {
-            return image;
-        }
-        public Image<Gray, Byte> GetMask()
-        {
-            return mask;
         }
     }
 }

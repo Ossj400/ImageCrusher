@@ -15,34 +15,37 @@ namespace ImageCrusher.Inpainting
 {
     class Indicator
     {
-        private Image<Rgb, byte> image;
+        private Image<Rgb, byte> img;
         private Image<Rgb, byte> imageOut;
 
-       public Indicator (ImageMenu image, NavierStokesInpaint navierStokesInpaint)
+        public Image<Rgb, byte> Img { get => img; set => img = value; }
+        public Image<Rgb, byte> ImageOut { get => imageOut; set => imageOut = value; }
+
+        public Indicator (ImageMenu image, NavierStokesInpaint navierStokesInpaint)
         {
-            this.image = image.GetImageIn();
-            this.imageOut = navierStokesInpaint.GetImage();
+            this.Img = image.Img;
+            this.ImageOut = navierStokesInpaint.ImageOutNav;
         }
         public Indicator(ImageMenu image, AlexandruTeleaInpaint alexandruTeleaInpaint)
         {
-            this.image = image.GetImageIn();
-            this.imageOut = alexandruTeleaInpaint.GetImage();
+            this.Img = image.Img;
+            this.ImageOut = alexandruTeleaInpaint.ImageOutTelea;
         }
 
         public void RMSE_Algorithm()
         {
-            image = new Image<Rgb, byte>(image.ToBitmap());
+            Img = new Image<Rgb, byte>(Img.ToBitmap());
             double mean = 0;
             double totalRms;
-            int n = imageOut.Width * imageOut.Height * 3;
+            int n = ImageOut.Width * ImageOut.Height * 3;
             int orgVal;
             int newVal;
-            byte[,,] Data = image.Data;
-            byte[,,] Data2 = imageOut.Data;
+            byte[,,] Data = Img.Data;
+            byte[,,] Data2 = ImageOut.Data;
 
-            for (int i = 0; i < (image.Height); i++)
+            for (int i = 0; i < (Img.Height); i++)
             {
-                for (int j = 0; j < (image.Width); j++)
+                for (int j = 0; j < (Img.Width); j++)
                 {
                     orgVal = Data[i, j, 0];
                     newVal = Data2[i, j, 0];
@@ -59,17 +62,17 @@ namespace ImageCrusher.Inpainting
         }
         public double RMSE()
         {
-            QualityMSE MSE = new QualityMSE(image);
-            double mSE = MSE.Compute(imageOut).V0 + MSE.Compute(imageOut).V1 + MSE.Compute(imageOut).V2;
+            QualityMSE MSE = new QualityMSE(Img);
+            double mSE = MSE.Compute(ImageOut).V0 + MSE.Compute(ImageOut).V1 + MSE.Compute(ImageOut).V2;
             double rMSE = Math.Sqrt(mSE / 3);
             return rMSE;
         }
 
         public double[] PNSR()
         {
-            QualityPSNR PSNR = new QualityPSNR(image);
+            QualityPSNR PSNR = new QualityPSNR(Img);
             double[] pSNR = new double[4];
-            pSNR = PSNR.Compute(imageOut).ToArray();
+            pSNR = PSNR.Compute(ImageOut).ToArray();
             return pSNR;
         }
     }

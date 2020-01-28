@@ -14,7 +14,7 @@ namespace ImageCrusher.ImageController
 {
     class Noise
     {
-        Image<Rgb, byte> img;
+        readonly Image<Rgb, byte> img;
         Image<Gray, byte> mask;
         Image<Gray, byte> maskLoaded;
         Image<Rgb, byte> imageOut;
@@ -104,6 +104,38 @@ namespace ImageCrusher.ImageController
             }
             return ImageOut;
         }
+
+        public Image<Rgb, byte> Square(int noiseRange)
+        {
+            noiseRange = 3 * noiseRange;
+            ImageOut = new Image<Rgb, byte>(img.ToBitmap());
+            byte[,,] Data = ImageOut.Data;
+            Random random = new Random();
+            int xPixels = ImageOut.Size.Width;
+            int yPixels = ImageOut.Size.Height;
+            int randPixX = random.Next(0, (xPixels -1 + noiseRange));  // picking pixel for in good boundaries for x axis   |  from 0-max Size - 1
+            int randPixY = random.Next(0, (yPixels - 1 + 2*noiseRange));  // same for y axis
+
+            for (int r = noiseRange; r <= Math.Abs(noiseRange); r++)
+            {
+                randPixY++;
+
+                int pixNoiseRange = noiseRange;     // make a new variable from noiseRange to use new variable in loop
+                int absPixNoiseRange = Math.Abs(pixNoiseRange); // for good loop conditioning
+                for (; pixNoiseRange <= absPixNoiseRange; pixNoiseRange++)  // counting from -range to range
+                {
+                    if (randPixY < yPixels && randPixX + pixNoiseRange < xPixels) // if random number and range is in boundaries of array loop is going
+                    {
+                        Data[randPixY, randPixX + pixNoiseRange, 0] = 0;
+                        Data[randPixY, randPixX + pixNoiseRange, 1] = 0;
+                        Data[randPixY, randPixX + pixNoiseRange, 2] = 0;
+                    }
+                }
+
+            }
+            return ImageOut;
+        }
+
         public Image<Gray, byte> GetMask()
         {
             if (ImageOut != null && MaskLoaded == null)

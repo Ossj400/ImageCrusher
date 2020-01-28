@@ -26,7 +26,7 @@ namespace ImageCrusher.ImageController
             imageIn = image.Img;
             ImageOutNav = new Image<Rgb, byte>(image.Img.ToBitmap());
             this.mask = mask.GetMask(); 
-            CvInvoke.Inpaint(imageIn, this.mask, ImageOutNav, 1, 0);
+            CvInvoke.Inpaint(imageIn, this.mask, ImageOutNav, radius, 0);
             
             return ImageOutNav;
         }

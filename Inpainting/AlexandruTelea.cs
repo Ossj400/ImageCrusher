@@ -26,7 +26,7 @@ namespace ImageCrusher.Inpainting
             imageIn = image.Img;
             ImageOutTelea = new Image<Rgb, byte>(image.Img.ToBitmap());
             this.mask = mask.GetMask();
-            CvInvoke.Inpaint(imageIn, this.mask, ImageOutTelea, 1, Emgu.CV.CvEnum.InpaintType.Telea);
+            CvInvoke.Inpaint(imageIn, this.mask, ImageOutTelea, radius, Emgu.CV.CvEnum.InpaintType.Telea);
 
             return ImageOutTelea;
         }

@@ -50,6 +50,7 @@
             this.BtInpaintNavierStokes = new System.Windows.Forms.Button();
             this.BtLoadMask = new System.Windows.Forms.Button();
             this.BtInpaintTelea = new System.Windows.Forms.Button();
+            this.BtSquare = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.TrBarNoiseController)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PicBox2Editedmg)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PicBox1OrgImg)).BeginInit();
@@ -91,7 +92,7 @@
             // 
             // BtLoadImg
             // 
-            this.BtLoadImg.Location = new System.Drawing.Point(12, 573);
+            this.BtLoadImg.Location = new System.Drawing.Point(24, 573);
             this.BtLoadImg.Name = "BtLoadImg";
             this.BtLoadImg.Size = new System.Drawing.Size(108, 30);
             this.BtLoadImg.TabIndex = 3;
@@ -101,11 +102,11 @@
             // 
             // BtSaveImg
             // 
-            this.BtSaveImg.Location = new System.Drawing.Point(1278, 614);
+            this.BtSaveImg.Location = new System.Drawing.Point(1290, 624);
             this.BtSaveImg.Name = "BtSaveImg";
-            this.BtSaveImg.Size = new System.Drawing.Size(135, 31);
+            this.BtSaveImg.Size = new System.Drawing.Size(205, 31);
             this.BtSaveImg.TabIndex = 4;
-            this.BtSaveImg.Text = "Save Image";
+            this.BtSaveImg.Text = "Save Inpainted Image";
             this.BtSaveImg.UseVisualStyleBackColor = true;
             this.BtSaveImg.Click += new System.EventHandler(this.BtSaveImg_Click);
             // 
@@ -172,7 +173,7 @@
             // 
             // BtCalcRMSerror
             // 
-            this.BtCalcRMSerror.Location = new System.Drawing.Point(650, 641);
+            this.BtCalcRMSerror.Location = new System.Drawing.Point(662, 641);
             this.BtCalcRMSerror.Name = "BtCalcRMSerror";
             this.BtCalcRMSerror.Size = new System.Drawing.Size(163, 31);
             this.BtCalcRMSerror.TabIndex = 11;
@@ -182,14 +183,14 @@
             // 
             // TxtBoxRMSerror
             // 
-            this.TxtBoxRMSerror.Location = new System.Drawing.Point(856, 645);
+            this.TxtBoxRMSerror.Location = new System.Drawing.Point(868, 645);
             this.TxtBoxRMSerror.Name = "TxtBoxRMSerror";
             this.TxtBoxRMSerror.Size = new System.Drawing.Size(107, 22);
             this.TxtBoxRMSerror.TabIndex = 12;
             // 
             // TxtBoxPSNRRed
             // 
-            this.TxtBoxPSNRRed.Location = new System.Drawing.Point(856, 682);
+            this.TxtBoxPSNRRed.Location = new System.Drawing.Point(868, 682);
             this.TxtBoxPSNRRed.Name = "TxtBoxPSNRRed";
             this.TxtBoxPSNRRed.Size = new System.Drawing.Size(107, 22);
             this.TxtBoxPSNRRed.TabIndex = 14;
@@ -197,7 +198,7 @@
             // 
             // BtCalcPSNRerror
             // 
-            this.BtCalcPSNRerror.Location = new System.Drawing.Point(650, 678);
+            this.BtCalcPSNRerror.Location = new System.Drawing.Point(662, 678);
             this.BtCalcPSNRerror.Name = "BtCalcPSNRerror";
             this.BtCalcPSNRerror.Size = new System.Drawing.Size(163, 31);
             this.BtCalcPSNRerror.TabIndex = 13;
@@ -207,7 +208,7 @@
             // 
             // TxtBoxPSNRGreen
             // 
-            this.TxtBoxPSNRGreen.Location = new System.Drawing.Point(991, 682);
+            this.TxtBoxPSNRGreen.Location = new System.Drawing.Point(1003, 682);
             this.TxtBoxPSNRGreen.Name = "TxtBoxPSNRGreen";
             this.TxtBoxPSNRGreen.Size = new System.Drawing.Size(107, 22);
             this.TxtBoxPSNRGreen.TabIndex = 15;
@@ -215,7 +216,7 @@
             // 
             // TxtBoxPSNRBlue
             // 
-            this.TxtBoxPSNRBlue.Location = new System.Drawing.Point(1121, 682);
+            this.TxtBoxPSNRBlue.Location = new System.Drawing.Point(1133, 682);
             this.TxtBoxPSNRBlue.Name = "TxtBoxPSNRBlue";
             this.TxtBoxPSNRBlue.Size = new System.Drawing.Size(107, 22);
             this.TxtBoxPSNRBlue.TabIndex = 16;
@@ -234,7 +235,7 @@
             // 
             // BtInpaintNavierStokes
             // 
-            this.BtInpaintNavierStokes.Location = new System.Drawing.Point(1278, 567);
+            this.BtInpaintNavierStokes.Location = new System.Drawing.Point(1290, 567);
             this.BtInpaintNavierStokes.Name = "BtInpaintNavierStokes";
             this.BtInpaintNavierStokes.Size = new System.Drawing.Size(163, 31);
             this.BtInpaintNavierStokes.TabIndex = 18;
@@ -244,7 +245,7 @@
             // 
             // BtLoadMask
             // 
-            this.BtLoadMask.Location = new System.Drawing.Point(903, 568);
+            this.BtLoadMask.Location = new System.Drawing.Point(906, 573);
             this.BtLoadMask.Name = "BtLoadMask";
             this.BtLoadMask.Size = new System.Drawing.Size(108, 30);
             this.BtLoadMask.TabIndex = 19;
@@ -254,7 +255,7 @@
             // 
             // BtInpaintTelea
             // 
-            this.BtInpaintTelea.Location = new System.Drawing.Point(1460, 567);
+            this.BtInpaintTelea.Location = new System.Drawing.Point(1472, 567);
             this.BtInpaintTelea.Name = "BtInpaintTelea";
             this.BtInpaintTelea.Size = new System.Drawing.Size(163, 31);
             this.BtInpaintTelea.TabIndex = 20;
@@ -262,13 +263,28 @@
             this.BtInpaintTelea.UseVisualStyleBackColor = true;
             this.BtInpaintTelea.Click += new System.EventHandler(this.BtInpaintTelea_Click);
             // 
+            // BtSquare
+            // 
+            this.BtSquare.AutoSize = true;
+            this.BtSquare.Location = new System.Drawing.Point(614, 567);
+            this.BtSquare.Name = "BtSquare";
+            this.BtSquare.Size = new System.Drawing.Size(75, 21);
+            this.BtSquare.TabIndex = 21;
+            this.BtSquare.TabStop = true;
+            this.BtSquare.Text = "Square";
+            this.BtSquare.UseVisualStyleBackColor = true;
+            this.BtSquare.CheckedChanged += new System.EventHandler(this.BtSquare_CheckedChanged);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
+            this.CausesValidation = false;
             this.ClientSize = new System.Drawing.Size(1887, 740);
+            this.Controls.Add(this.BtSquare);
             this.Controls.Add(this.BtInpaintTelea);
             this.Controls.Add(this.BtLoadMask);
             this.Controls.Add(this.BtInpaintNavierStokes);
@@ -327,6 +343,7 @@
         private System.Windows.Forms.Button BtInpaintNavierStokes;
         private System.Windows.Forms.Button BtLoadMask;
         private System.Windows.Forms.Button BtInpaintTelea;
+        private System.Windows.Forms.RadioButton BtSquare;
     }
 }
 

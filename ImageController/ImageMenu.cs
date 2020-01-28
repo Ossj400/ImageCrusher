@@ -36,23 +36,35 @@ namespace ImageCrusher.ImageController
         public Image<Rgb, byte> ImageOut { get => imageOut; set => imageOut = value; }
         public Image<Gray, byte> Mask { get => mask; set => mask = value; }
 
-        public Bitmap LoadImage()
+        public void LoadImage()
         {
             OpenFileDialog OpenFile = new OpenFileDialog();
             if (OpenFile.ShowDialog() == DialogResult.OK)
             {
-                Img = new Image<Rgb, byte>(OpenFile.FileName);
+                try
+                {
+                    Img = new Image<Rgb, byte>(OpenFile.FileName);
+                }
+                catch (ArgumentException e)
+                {
+                    MessageBox.Show("Wrong format. Error: " + '\n' + e.ToString());   ///////////////// ???????
+                }
             }
-            return Img.ToBitmap();
         }
-        public Bitmap LoadMask()
+        public void LoadMask()
         {
             OpenFileDialog OpenFile = new OpenFileDialog();
             if (OpenFile.ShowDialog() == DialogResult.OK)
             {
-                Mask = new Image<Gray, byte>(OpenFile.FileName);
+                try
+                {
+                    Mask = new Image<Gray, byte>(OpenFile.FileName);
+                }
+                catch (ArgumentException e)
+                {
+                    MessageBox.Show("Wrong format. Error: " + '\n' + e.ToString());   ///////////////// ???????
+                }
             }
-            return Mask.ToBitmap();
         }
         public void SaveImage(Bitmap img)
         {

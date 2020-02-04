@@ -1,28 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Drawing;
-using System.Threading.Tasks;
 using Emgu.CV.Structure;
 using Emgu.CV;
 using System.Windows.Forms;
-using Emgu.CV.Quality;
-using System.Drawing.Imaging;
 
 /// <summary>
-///  Podzielic na klasy. 
-///  1. Do ładowania obrazu i przechowywania
-///  2. Do zaszumiania
-///  3. Do oceny 
-///  4. Do inpaintaingu
-///  
-/// SZUM
-/// Pojedyncze piksele szum i dziury kwadratowe na objętności %
-///  
-/// Przetestować te metody inpaintingu (można opisać)
+/// inpaint NaNs zaimplementować w C#
 /// 
-/// 
+/// zrobić samo MSE i z tego RMSE i PSNR
 /// </summary>
 namespace ImageCrusher.ImageController
 {

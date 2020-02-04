@@ -29,7 +29,7 @@ namespace ImageCrusher.ImageController
             MaskLoaded = image.Mask;          
         }
       
-        public Image<Rgb, byte> MakeStarsNoise(int trackBarValue, int noiseRange)  // "Stars" Noise
+        public Image<Rgb, byte> SaltAndPepperNoise(int trackBarValue, int noiseRange)  // Salt&Pepper Noise
         {
             ImageOut = new Image<Rgb, byte>(img.ToBitmap());
             byte[,,] Data = ImageOut.Data;
@@ -39,31 +39,18 @@ namespace ImageCrusher.ImageController
 
             for (int r = 0; r <= (Math.Pow(trackBarValue, trackBarValue / 2) / 2); r++)
             {
-                int randPixX = random.Next(0, (xPixels - 1));  // picking pixel for x axis, from 0-max Size - 1
-                int randPixY = random.Next(0, (yPixels - 1));  // same for y axis
                 int pixNoiseRange = noiseRange;
                 int absPixNoiseRange = Math.Abs(pixNoiseRange); // for good loop conditioning
                 for (; pixNoiseRange <= absPixNoiseRange; pixNoiseRange++)  // counting from -range to range
                 {
-                    if ((randPixX + pixNoiseRange >= 0) && (randPixX + pixNoiseRange < xPixels) && (randPixY + pixNoiseRange >= 0) && (randPixY + pixNoiseRange < yPixels)) // if random number and range is in boundaries of array loop is going
+                    int randPixX = random.Next(0, (xPixels - 1));  // picking pixel for x axis, from 0-max Size - 1
+                    int randPixY = random.Next(0, (yPixels - 1));  // same for y axis
+                    if ((randPixX >= 0) && (randPixX < xPixels) && (randPixY >= 0) && (randPixY < yPixels)) // if random number and range is in boundaries of array loop is going
                     {
                         int rand = random.Next(0, 255);
-                        Data[randPixY, randPixX + pixNoiseRange, 0] = (byte)rand;
-                        Data[randPixY, randPixX + pixNoiseRange, 1] = (byte)rand;
-                        Data[randPixY, randPixX + pixNoiseRange, 2] = (byte)rand;
-
-                        Data[randPixY + pixNoiseRange, randPixX + pixNoiseRange, 0] = (byte)rand;
-                        Data[randPixY + pixNoiseRange, randPixX + pixNoiseRange, 1] = (byte)rand;
-                        Data[randPixY + pixNoiseRange, randPixX + pixNoiseRange, 2] = (byte)rand;
-
-                        Data[randPixY + pixNoiseRange, randPixX, 0] = (byte)rand;
-                        Data[randPixY + pixNoiseRange, randPixX, 1] = (byte)rand;
-                        Data[randPixY + pixNoiseRange, randPixX, 2] = (byte)rand;
-                    }
-                    else
-                    {
-                        randPixX = random.Next(0, (xPixels - 1));  // new randoms for same pixNoise range
-                        randPixY = random.Next(0, (yPixels - 1));
+                        Data[randPixY, randPixX, 0] = (byte)rand;
+                        Data[randPixY, randPixX, 1] = (byte)rand;
+                        Data[randPixY, randPixX, 2] = (byte)rand;
                     }
                 }
             }

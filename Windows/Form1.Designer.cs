@@ -38,7 +38,7 @@
             this.LblRangeNoise = new System.Windows.Forms.Label();
             this.TrBarRangeNoise = new System.Windows.Forms.TrackBar();
             this.BtScratches = new System.Windows.Forms.RadioButton();
-            this.BtStarNoise = new System.Windows.Forms.RadioButton();
+            this.BtSaltNPepperNoise = new System.Windows.Forms.RadioButton();
             this.label2 = new System.Windows.Forms.Label();
             this.BtCalcRMSerror = new System.Windows.Forms.Button();
             this.TxtBoxRMSerror = new System.Windows.Forms.TextBox();
@@ -51,6 +51,7 @@
             this.BtLoadMask = new System.Windows.Forms.Button();
             this.BtInpaintTelea = new System.Windows.Forms.Button();
             this.BtSquare = new System.Windows.Forms.RadioButton();
+            this.BtInpaintNans = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.TrBarNoiseController)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PicBox2Editedmg)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PicBox1OrgImg)).BeginInit();
@@ -102,7 +103,7 @@
             // 
             // BtSaveImg
             // 
-            this.BtSaveImg.Location = new System.Drawing.Point(1290, 624);
+            this.BtSaveImg.Location = new System.Drawing.Point(1290, 636);
             this.BtSaveImg.Name = "BtSaveImg";
             this.BtSaveImg.Size = new System.Drawing.Size(205, 31);
             this.BtSaveImg.TabIndex = 4;
@@ -149,17 +150,17 @@
             this.BtScratches.UseVisualStyleBackColor = true;
             this.BtScratches.CheckedChanged += new System.EventHandler(this.BtScratches_CheckedChanged);
             // 
-            // BtStarNoise
+            // BtSaltNPepperNoise
             // 
-            this.BtStarNoise.AutoSize = true;
-            this.BtStarNoise.Location = new System.Drawing.Point(473, 594);
-            this.BtStarNoise.Name = "BtStarNoise";
-            this.BtStarNoise.Size = new System.Drawing.Size(118, 21);
-            this.BtStarNoise.TabIndex = 9;
-            this.BtStarNoise.TabStop = true;
-            this.BtStarNoise.Text = "Star like noise";
-            this.BtStarNoise.UseVisualStyleBackColor = true;
-            this.BtStarNoise.CheckedChanged += new System.EventHandler(this.BtStarNoise_CheckedChanged);
+            this.BtSaltNPepperNoise.AutoSize = true;
+            this.BtSaltNPepperNoise.Location = new System.Drawing.Point(473, 594);
+            this.BtSaltNPepperNoise.Name = "BtSaltNPepperNoise";
+            this.BtSaltNPepperNoise.Size = new System.Drawing.Size(134, 21);
+            this.BtSaltNPepperNoise.TabIndex = 9;
+            this.BtSaltNPepperNoise.TabStop = true;
+            this.BtSaltNPepperNoise.Text = "Salt and pepper ";
+            this.BtSaltNPepperNoise.UseVisualStyleBackColor = true;
+            this.BtSaltNPepperNoise.CheckedChanged += new System.EventHandler(this.BtSaltNPepperNoise_CheckedChanged);
             // 
             // label2
             // 
@@ -255,7 +256,7 @@
             // 
             // BtInpaintTelea
             // 
-            this.BtInpaintTelea.Location = new System.Drawing.Point(1472, 567);
+            this.BtInpaintTelea.Location = new System.Drawing.Point(1502, 567);
             this.BtInpaintTelea.Name = "BtInpaintTelea";
             this.BtInpaintTelea.Size = new System.Drawing.Size(163, 31);
             this.BtInpaintTelea.TabIndex = 20;
@@ -275,6 +276,16 @@
             this.BtSquare.UseVisualStyleBackColor = true;
             this.BtSquare.CheckedChanged += new System.EventHandler(this.BtSquare_CheckedChanged);
             // 
+            // BtInpaintNans
+            // 
+            this.BtInpaintNans.Location = new System.Drawing.Point(1712, 567);
+            this.BtInpaintNans.Name = "BtInpaintNans";
+            this.BtInpaintNans.Size = new System.Drawing.Size(163, 31);
+            this.BtInpaintNans.TabIndex = 22;
+            this.BtInpaintNans.Text = "Inpaint NaNs";
+            this.BtInpaintNans.UseVisualStyleBackColor = true;
+            this.BtInpaintNans.Click += new System.EventHandler(this.BtInpaintNans_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -284,6 +295,7 @@
             this.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
             this.CausesValidation = false;
             this.ClientSize = new System.Drawing.Size(1887, 740);
+            this.Controls.Add(this.BtInpaintNans);
             this.Controls.Add(this.BtSquare);
             this.Controls.Add(this.BtInpaintTelea);
             this.Controls.Add(this.BtLoadMask);
@@ -296,7 +308,7 @@
             this.Controls.Add(this.TxtBoxRMSerror);
             this.Controls.Add(this.BtCalcRMSerror);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.BtStarNoise);
+            this.Controls.Add(this.BtSaltNPepperNoise);
             this.Controls.Add(this.BtScratches);
             this.Controls.Add(this.LblRangeNoise);
             this.Controls.Add(this.TrBarRangeNoise);
@@ -331,7 +343,7 @@
         private System.Windows.Forms.Label LblRangeNoise;
         private System.Windows.Forms.TrackBar TrBarRangeNoise;
         private System.Windows.Forms.RadioButton BtScratches;
-        private System.Windows.Forms.RadioButton BtStarNoise;
+        private System.Windows.Forms.RadioButton BtSaltNPepperNoise;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button BtCalcRMSerror;
         private System.Windows.Forms.TextBox TxtBoxRMSerror;
@@ -344,6 +356,7 @@
         private System.Windows.Forms.Button BtLoadMask;
         private System.Windows.Forms.Button BtInpaintTelea;
         private System.Windows.Forms.RadioButton BtSquare;
+        private System.Windows.Forms.Button BtInpaintNans;
     }
 }
 

@@ -11,16 +11,18 @@ namespace ImageCrusher
     public partial class MainWindow : Form
     {
         ImageMenu MenuImg;   
-        NavierStokesInpaint navierStokes;
-        AlexandruTeleaInpaint alexandruTelea;
+        NavierStokesInpaint NavierStokes;
+        AlexandruTeleaInpaint AlexandruTelea;
+        Nans NansAlg;
         Noise NoiseImg;
 
         public MainWindow()
         {
             InitializeComponent();
             MenuImg = new ImageMenu();
-            navierStokes = new NavierStokesInpaint();
-            alexandruTelea = new AlexandruTeleaInpaint();
+            NavierStokes = new NavierStokesInpaint();
+            AlexandruTelea = new AlexandruTeleaInpaint();
+            NansAlg = new Nans();
             NoiseImg = new Noise(MenuImg);
         }
 
@@ -35,7 +37,34 @@ namespace ImageCrusher
             {
             }
         }
-
+        private void BtSaveImg_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Image<Rgb, byte> img = new Image<Rgb, byte>(MenuImg.Img.ToBitmap());
+                if (AlexandruTelea != null)
+                    img = AlexandruTelea.ImageOutTelea;
+                if (NavierStokes != null)
+                    img = NavierStokes.ImageOutNav;
+                MenuImg.SaveImage(img.ToBitmap());
+            }
+            catch (NullReferenceException)
+            {
+                MessageBox.Show("Nothing to save.");
+            }
+        }
+        private void BtLoadMask_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                MenuImg.LoadMask();
+                PicBox2Editedmg.Image = MenuImg.Mask.ToBitmap();
+                NoiseImg.MaskLoaded = MenuImg.Mask;
+            }
+            catch
+            {
+            }
+        }
         private void TrBarNoiseController_ValueChanged(object sender, EventArgs e)
         {
             try
@@ -60,7 +89,7 @@ namespace ImageCrusher
             {
             }
         }
-        private void BtStarNoise_CheckedChanged(object sender, EventArgs e)
+        private void BtSaltNPepperNoise_CheckedChanged(object sender, EventArgs e)
         {
             try
             {
@@ -83,16 +112,16 @@ namespace ImageCrusher
 
         private void NoiseMethod(int range)
         {
-            if (BtStarNoise.Checked == true)
+            if (BtSaltNPepperNoise.Checked == true)
             {
                 BtScratches.Checked = false;
                 BtSquare.Checked = false;
                 int val = TrBarNoiseController.Value;
-                PicBox2Editedmg.Image = NoiseImg.MakeStarsNoise(val, -range).ToBitmap();
+                PicBox2Editedmg.Image = NoiseImg.SaltAndPepperNoise(val, -range).ToBitmap();
             }
             if (BtScratches.Checked == true)
             {
-                BtStarNoise.Checked = false;
+                BtSaltNPepperNoise.Checked = false;
                 BtSquare.Checked = false;
                 int val = TrBarNoiseController.Value;
                 PicBox2Editedmg.Image = NoiseImg.VerticalScratches(val, -range).ToBitmap();
@@ -100,54 +129,60 @@ namespace ImageCrusher
             if (BtSquare.Checked == true)
             {
                 BtScratches.Checked = false;
-                BtStarNoise.Checked = false;
+                BtSaltNPepperNoise.Checked = false;
                 PicBox2Editedmg.Image = NoiseImg.Square(-range).ToBitmap();
             }
         }
-
-        private void BtSaveImg_Click(object sender, EventArgs e)
+        private void BtInpaintNavierStokes_Click(object sender, EventArgs e)
         {
-            Image<Rgb, byte> img = new Image<Rgb, byte>(MenuImg.Img.ToBitmap());
-            if (alexandruTelea != null)
-                img = alexandruTelea.ImageOutTelea;
-            if (navierStokes != null)
-                img = navierStokes.ImageOutNav;
             try
             {
-                MenuImg.SaveImage(img.ToBitmap());
+                AlexandruTelea = null;
+                NavierStokes = new NavierStokesInpaint();
+                PicBox3InPainted.Image = NavierStokes.InpaintNav(MenuImg, NoiseImg, 1).ToBitmap();
             }
             catch (NullReferenceException)
             {
-                MessageBox.Show("Nothing to save. Error: ");
+                MessageBox.Show("Nothing to inpaint.");
             }
         }
-
-
+        private void BtInpaintTelea_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                NavierStokes = null;
+                AlexandruTelea = new AlexandruTeleaInpaint();
+                PicBox3InPainted.Image = AlexandruTelea.InpaintTel(MenuImg, NoiseImg, 1).ToBitmap();
+            }
+            catch (NullReferenceException)
+            {
+                MessageBox.Show("Nothing to inpaint.");
+            }
+        }
         private void BtCalcRMSError_Click(object sender, EventArgs e)
         {
             Indicator indicate = null;
-            if (navierStokes != null)
-                indicate = new Indicator(MenuImg, navierStokes);
-            if (alexandruTelea != null)
-            {
-                indicate = new Indicator(MenuImg, alexandruTelea);
-            }
+            if (NavierStokes != null)
+                indicate = new Indicator(MenuImg, NavierStokes);
+            if (AlexandruTelea != null)
+                indicate = new Indicator(MenuImg, AlexandruTelea);
+
             try
             {
                 TxtBoxRMSerror.Text = indicate.RMSE().DisplayDouble(3);
             }
             catch (NullReferenceException)
             {
-                MessageBox.Show("Insert images to compare");
+                MessageBox.Show("Insert images to compare.");
             }
         }
         private void BtCalcPSNRerror_Click(object sender, EventArgs e)
         {
             Indicator indicate=null;
-            if (navierStokes != null)
-                 indicate = new Indicator(MenuImg, navierStokes);
-            if (alexandruTelea != null)
-                indicate = new Indicator(MenuImg, alexandruTelea); 
+            if (NavierStokes != null)
+                 indicate = new Indicator(MenuImg, NavierStokes);
+            if (AlexandruTelea != null)
+                indicate = new Indicator(MenuImg, AlexandruTelea); 
 
             try
             {
@@ -158,48 +193,24 @@ namespace ImageCrusher
             }
             catch (NullReferenceException)
             {
-                MessageBox.Show("Insert images to compare");
+                MessageBox.Show("Insert images to compare.");
             }
         }
 
-        private void BtLoadMask_Click(object sender, EventArgs e)
+        private void BtInpaintNans_Click(object sender, EventArgs e)
         {
             try
             {
-                MenuImg.LoadMask();
-                PicBox2Editedmg.Image = MenuImg.Mask.ToBitmap();
-                NoiseImg.MaskLoaded = MenuImg.Mask;
-            }
-            catch
-            { 
-            }
-        }
-        private void BtInpaintNavierStokes_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                alexandruTelea = null;
-                navierStokes = new NavierStokesInpaint();
-                PicBox3InPainted.Image = navierStokes.InpaintNav(MenuImg, NoiseImg, 1).ToBitmap();
+                NavierStokes = null;
+                AlexandruTelea = null;
+                NansAlg = new Nans(MenuImg, NoiseImg);
+                NansAlg.Compute();
+               // PicBox3InPainted.Image = AlexandruTelea.InpaintTel(MenuImg, NoiseImg, 1).ToBitmap();
             }
             catch (NullReferenceException)
             {
-                MessageBox.Show("Nothing to inpaint");
+                MessageBox.Show("Nothing to inpaint.");
             }
         }
-        private void BtInpaintTelea_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                navierStokes = null;
-                alexandruTelea = new AlexandruTeleaInpaint();
-                PicBox3InPainted.Image = alexandruTelea.InpaintTel(MenuImg, NoiseImg, 1).ToBitmap();
-            }
-            catch (NullReferenceException)
-            {
-                MessageBox.Show("Nothing to inpaint");
-            }
-        }
-
     }
 }

@@ -59,6 +59,7 @@
   <ItemGroup>
     <Compile Include="Inpainting\AlexandruTelea.cs" />
     <Compile Include="Inpainting\Indicator.cs" />
+    <Compile Include="Inpainting\Nans.cs" />
     <Compile Include="Inpainting\NavierStokes.cs" />
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="Windows\Form1.cs">

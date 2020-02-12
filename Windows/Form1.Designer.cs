@@ -52,6 +52,8 @@
             this.BtInpaintTelea = new System.Windows.Forms.Button();
             this.BtSquare = new System.Windows.Forms.RadioButton();
             this.BtInpaintNans = new System.Windows.Forms.Button();
+            this.BtSaveMask = new System.Windows.Forms.Button();
+            this.BtRGB_Mask = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.TrBarNoiseController)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PicBox2Editedmg)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PicBox1OrgImg)).BeginInit();
@@ -62,7 +64,7 @@
             // TrBarNoiseController
             // 
             this.TrBarNoiseController.LargeChange = 1;
-            this.TrBarNoiseController.Location = new System.Drawing.Point(220, 678);
+            this.TrBarNoiseController.Location = new System.Drawing.Point(178, 678);
             this.TrBarNoiseController.Maximum = 11;
             this.TrBarNoiseController.Name = "TrBarNoiseController";
             this.TrBarNoiseController.Size = new System.Drawing.Size(185, 56);
@@ -76,7 +78,7 @@
             this.PicBox2Editedmg.Location = new System.Drawing.Point(650, 12);
             this.PicBox2Editedmg.Name = "PicBox2Editedmg";
             this.PicBox2Editedmg.Size = new System.Drawing.Size(597, 532);
-            this.PicBox2Editedmg.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.PicBox2Editedmg.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.PicBox2Editedmg.TabIndex = 1;
             this.PicBox2Editedmg.TabStop = false;
             // 
@@ -87,13 +89,13 @@
             this.PicBox1OrgImg.Location = new System.Drawing.Point(12, 12);
             this.PicBox1OrgImg.Name = "PicBox1OrgImg";
             this.PicBox1OrgImg.Size = new System.Drawing.Size(608, 532);
-            this.PicBox1OrgImg.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.PicBox1OrgImg.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.PicBox1OrgImg.TabIndex = 2;
             this.PicBox1OrgImg.TabStop = false;
             // 
             // BtLoadImg
             // 
-            this.BtLoadImg.Location = new System.Drawing.Point(24, 573);
+            this.BtLoadImg.Location = new System.Drawing.Point(12, 573);
             this.BtLoadImg.Name = "BtLoadImg";
             this.BtLoadImg.Size = new System.Drawing.Size(108, 30);
             this.BtLoadImg.TabIndex = 3;
@@ -103,9 +105,9 @@
             // 
             // BtSaveImg
             // 
-            this.BtSaveImg.Location = new System.Drawing.Point(1290, 636);
+            this.BtSaveImg.Location = new System.Drawing.Point(1278, 636);
             this.BtSaveImg.Name = "BtSaveImg";
-            this.BtSaveImg.Size = new System.Drawing.Size(205, 31);
+            this.BtSaveImg.Size = new System.Drawing.Size(163, 31);
             this.BtSaveImg.TabIndex = 4;
             this.BtSaveImg.Text = "Save Inpainted Image";
             this.BtSaveImg.UseVisualStyleBackColor = true;
@@ -114,7 +116,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(232, 655);
+            this.label1.Location = new System.Drawing.Point(190, 655);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(123, 17);
             this.label1.TabIndex = 5;
@@ -123,7 +125,7 @@
             // LblRangeNoise
             // 
             this.LblRangeNoise.AutoSize = true;
-            this.LblRangeNoise.Location = new System.Drawing.Point(466, 655);
+            this.LblRangeNoise.Location = new System.Drawing.Point(424, 655);
             this.LblRangeNoise.Name = "LblRangeNoise";
             this.LblRangeNoise.Size = new System.Drawing.Size(154, 17);
             this.LblRangeNoise.TabIndex = 7;
@@ -132,7 +134,7 @@
             // TrBarRangeNoise
             // 
             this.TrBarRangeNoise.LargeChange = 1;
-            this.TrBarRangeNoise.Location = new System.Drawing.Point(458, 678);
+            this.TrBarRangeNoise.Location = new System.Drawing.Point(416, 678);
             this.TrBarRangeNoise.Maximum = 100;
             this.TrBarRangeNoise.Name = "TrBarRangeNoise";
             this.TrBarRangeNoise.Size = new System.Drawing.Size(169, 56);
@@ -141,7 +143,7 @@
             // BtScratches
             // 
             this.BtScratches.AutoSize = true;
-            this.BtScratches.Location = new System.Drawing.Point(473, 567);
+            this.BtScratches.Location = new System.Drawing.Point(399, 572);
             this.BtScratches.Name = "BtScratches";
             this.BtScratches.Size = new System.Drawing.Size(135, 21);
             this.BtScratches.TabIndex = 8;
@@ -153,7 +155,7 @@
             // BtSaltNPepperNoise
             // 
             this.BtSaltNPepperNoise.AutoSize = true;
-            this.BtSaltNPepperNoise.Location = new System.Drawing.Point(473, 594);
+            this.BtSaltNPepperNoise.Location = new System.Drawing.Point(399, 599);
             this.BtSaltNPepperNoise.Name = "BtSaltNPepperNoise";
             this.BtSaltNPepperNoise.Size = new System.Drawing.Size(134, 21);
             this.BtSaltNPepperNoise.TabIndex = 9;
@@ -166,7 +168,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.8F);
-            this.label2.Location = new System.Drawing.Point(230, 573);
+            this.label2.Location = new System.Drawing.Point(188, 578);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(175, 25);
             this.label2.TabIndex = 10;
@@ -174,7 +176,7 @@
             // 
             // BtCalcRMSerror
             // 
-            this.BtCalcRMSerror.Location = new System.Drawing.Point(662, 641);
+            this.BtCalcRMSerror.Location = new System.Drawing.Point(650, 641);
             this.BtCalcRMSerror.Name = "BtCalcRMSerror";
             this.BtCalcRMSerror.Size = new System.Drawing.Size(163, 31);
             this.BtCalcRMSerror.TabIndex = 11;
@@ -184,14 +186,14 @@
             // 
             // TxtBoxRMSerror
             // 
-            this.TxtBoxRMSerror.Location = new System.Drawing.Point(868, 645);
+            this.TxtBoxRMSerror.Location = new System.Drawing.Point(842, 646);
             this.TxtBoxRMSerror.Name = "TxtBoxRMSerror";
             this.TxtBoxRMSerror.Size = new System.Drawing.Size(107, 22);
             this.TxtBoxRMSerror.TabIndex = 12;
             // 
             // TxtBoxPSNRRed
             // 
-            this.TxtBoxPSNRRed.Location = new System.Drawing.Point(868, 682);
+            this.TxtBoxPSNRRed.Location = new System.Drawing.Point(842, 683);
             this.TxtBoxPSNRRed.Name = "TxtBoxPSNRRed";
             this.TxtBoxPSNRRed.Size = new System.Drawing.Size(107, 22);
             this.TxtBoxPSNRRed.TabIndex = 14;
@@ -199,7 +201,7 @@
             // 
             // BtCalcPSNRerror
             // 
-            this.BtCalcPSNRerror.Location = new System.Drawing.Point(662, 678);
+            this.BtCalcPSNRerror.Location = new System.Drawing.Point(650, 678);
             this.BtCalcPSNRerror.Name = "BtCalcPSNRerror";
             this.BtCalcPSNRerror.Size = new System.Drawing.Size(163, 31);
             this.BtCalcPSNRerror.TabIndex = 13;
@@ -209,7 +211,7 @@
             // 
             // TxtBoxPSNRGreen
             // 
-            this.TxtBoxPSNRGreen.Location = new System.Drawing.Point(1003, 682);
+            this.TxtBoxPSNRGreen.Location = new System.Drawing.Point(977, 683);
             this.TxtBoxPSNRGreen.Name = "TxtBoxPSNRGreen";
             this.TxtBoxPSNRGreen.Size = new System.Drawing.Size(107, 22);
             this.TxtBoxPSNRGreen.TabIndex = 15;
@@ -217,7 +219,7 @@
             // 
             // TxtBoxPSNRBlue
             // 
-            this.TxtBoxPSNRBlue.Location = new System.Drawing.Point(1133, 682);
+            this.TxtBoxPSNRBlue.Location = new System.Drawing.Point(1107, 683);
             this.TxtBoxPSNRBlue.Name = "TxtBoxPSNRBlue";
             this.TxtBoxPSNRBlue.Size = new System.Drawing.Size(107, 22);
             this.TxtBoxPSNRBlue.TabIndex = 16;
@@ -230,13 +232,13 @@
             this.PicBox3InPainted.Location = new System.Drawing.Point(1278, 12);
             this.PicBox3InPainted.Name = "PicBox3InPainted";
             this.PicBox3InPainted.Size = new System.Drawing.Size(597, 532);
-            this.PicBox3InPainted.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.PicBox3InPainted.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.PicBox3InPainted.TabIndex = 17;
             this.PicBox3InPainted.TabStop = false;
             // 
             // BtInpaintNavierStokes
             // 
-            this.BtInpaintNavierStokes.Location = new System.Drawing.Point(1290, 567);
+            this.BtInpaintNavierStokes.Location = new System.Drawing.Point(1278, 567);
             this.BtInpaintNavierStokes.Name = "BtInpaintNavierStokes";
             this.BtInpaintNavierStokes.Size = new System.Drawing.Size(163, 31);
             this.BtInpaintNavierStokes.TabIndex = 18;
@@ -246,7 +248,7 @@
             // 
             // BtLoadMask
             // 
-            this.BtLoadMask.Location = new System.Drawing.Point(906, 573);
+            this.BtLoadMask.Location = new System.Drawing.Point(828, 567);
             this.BtLoadMask.Name = "BtLoadMask";
             this.BtLoadMask.Size = new System.Drawing.Size(108, 30);
             this.BtLoadMask.TabIndex = 19;
@@ -267,7 +269,7 @@
             // BtSquare
             // 
             this.BtSquare.AutoSize = true;
-            this.BtSquare.Location = new System.Drawing.Point(614, 567);
+            this.BtSquare.Location = new System.Drawing.Point(540, 572);
             this.BtSquare.Name = "BtSquare";
             this.BtSquare.Size = new System.Drawing.Size(75, 21);
             this.BtSquare.TabIndex = 21;
@@ -286,6 +288,27 @@
             this.BtInpaintNans.UseVisualStyleBackColor = true;
             this.BtInpaintNans.Click += new System.EventHandler(this.BtInpaintNans_Click);
             // 
+            // BtSaveMask
+            // 
+            this.BtSaveMask.Location = new System.Drawing.Point(977, 567);
+            this.BtSaveMask.Name = "BtSaveMask";
+            this.BtSaveMask.Size = new System.Drawing.Size(108, 30);
+            this.BtSaveMask.TabIndex = 23;
+            this.BtSaveMask.Text = "Save Mask";
+            this.BtSaveMask.UseVisualStyleBackColor = true;
+            this.BtSaveMask.Click += new System.EventHandler(this.BtSaveMask_Click);
+            // 
+            // BtRGB_Mask
+            // 
+            this.BtRGB_Mask.BackColor = System.Drawing.Color.LightCoral;
+            this.BtRGB_Mask.Location = new System.Drawing.Point(828, 603);
+            this.BtRGB_Mask.Name = "BtRGB_Mask";
+            this.BtRGB_Mask.Size = new System.Drawing.Size(257, 30);
+            this.BtRGB_Mask.TabIndex = 24;
+            this.BtRGB_Mask.Text = "Load RBG Image As Mask";
+            this.BtRGB_Mask.UseVisualStyleBackColor = false;
+            this.BtRGB_Mask.Click += new System.EventHandler(this.BtRGB_Mask_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -295,6 +318,8 @@
             this.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
             this.CausesValidation = false;
             this.ClientSize = new System.Drawing.Size(1887, 740);
+            this.Controls.Add(this.BtRGB_Mask);
+            this.Controls.Add(this.BtSaveMask);
             this.Controls.Add(this.BtInpaintNans);
             this.Controls.Add(this.BtSquare);
             this.Controls.Add(this.BtInpaintTelea);
@@ -357,6 +382,8 @@
         private System.Windows.Forms.Button BtInpaintTelea;
         private System.Windows.Forms.RadioButton BtSquare;
         private System.Windows.Forms.Button BtInpaintNans;
+        private System.Windows.Forms.Button BtSaveMask;
+        private System.Windows.Forms.Button BtRGB_Mask;
     }
 }
 

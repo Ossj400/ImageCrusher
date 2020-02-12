@@ -10,7 +10,7 @@ namespace ImageCrusher
 {
     public partial class MainWindow : Form
     {
-        ImageMenu MenuImg;   
+        ImageMenu MenuImg;
         NavierStokesInpaint NavierStokes;
         AlexandruTeleaInpaint AlexandruTelea;
         Nans NansAlg;
@@ -57,7 +57,7 @@ namespace ImageCrusher
         {
             try
             {
-                MenuImg.LoadMask();
+                MenuImg.LoadMaskGray();
                 PicBox2Editedmg.Image = MenuImg.Mask.ToBitmap();
                 NoiseImg.MaskLoaded = MenuImg.Mask;
             }
@@ -83,7 +83,7 @@ namespace ImageCrusher
         {
             try
             {
-            NoiseMethod(TrBarRangeNoise.Value);
+                NoiseMethod(TrBarRangeNoise.Value);
             }
             catch
             {
@@ -93,7 +93,7 @@ namespace ImageCrusher
         {
             try
             {
-            NoiseMethod(TrBarRangeNoise.Value);
+                NoiseMethod(TrBarRangeNoise.Value);
             }
             catch
             {
@@ -178,11 +178,11 @@ namespace ImageCrusher
         }
         private void BtCalcPSNRerror_Click(object sender, EventArgs e)
         {
-            Indicator indicate=null;
+            Indicator indicate = null;
             if (NavierStokes != null)
-                 indicate = new Indicator(MenuImg, NavierStokes);
+                indicate = new Indicator(MenuImg, NavierStokes);
             if (AlexandruTelea != null)
-                indicate = new Indicator(MenuImg, AlexandruTelea); 
+                indicate = new Indicator(MenuImg, AlexandruTelea);
 
             try
             {
@@ -203,13 +203,42 @@ namespace ImageCrusher
             {
                 NavierStokes = null;
                 AlexandruTelea = null;
-                NansAlg = new Nans(MenuImg, NoiseImg);
-                NansAlg.Compute();
-               // PicBox3InPainted.Image = AlexandruTelea.InpaintTel(MenuImg, NoiseImg, 1).ToBitmap();
+                if(MenuImg.ImageOut==null)
+                    NansAlg = new Nans(MenuImg, NoiseImg);
+
+                if(MenuImg.ImageOut!=null)
+                    NansAlg = new Nans(MenuImg);
+
+                NansAlg.Compute(0);
+               // NansAlg.Compute(1);
+               // NansAlg.Compute(2);
             }
             catch (NullReferenceException)
             {
                 MessageBox.Show("Nothing to inpaint.");
+            }
+        }
+
+        private void BtSaveMask_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                MenuImg.SaveMask(NoiseImg.GetMask());
+            }
+            catch
+            {
+            }
+        }
+
+        private void BtRGB_Mask_Click(object sender, EventArgs e)    /// THIS BUTTON IS JUST TO TRY SOMETHING AND CAN BE PROBLEMATIC FOR PROJECT
+        {
+            try
+            {
+                MenuImg.LoadRGB_ImageAsMask();
+                PicBox2Editedmg.Image = MenuImg.ImageOut.ToBitmap();
+            }
+            catch
+            {
             }
         }
     }

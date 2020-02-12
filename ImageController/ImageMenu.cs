@@ -36,7 +36,7 @@ namespace ImageCrusher.ImageController
                 }
             }
         }
-        public void LoadMask()
+        public void LoadMaskGray()
         {
             OpenFileDialog OpenFile = new OpenFileDialog();
             if (OpenFile.ShowDialog() == DialogResult.OK)
@@ -51,6 +51,34 @@ namespace ImageCrusher.ImageController
                 }
             }
         }
+
+        public void LoadRGB_ImageAsMask()
+        {
+            OpenFileDialog OpenFile = new OpenFileDialog();
+            if (OpenFile.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    ImageOut = new Image<Rgb, byte>(OpenFile.FileName);
+                }
+                catch (ArgumentException e)
+                {
+                    MessageBox.Show("Wrong format. Error: " + '\n' + e.ToString());   ///////////////// ???????
+                }
+            }
+        }
+
+        public void SaveMask(Image<Gray, byte> mask)
+        {
+            SaveFileDialog saveFile = new SaveFileDialog();
+            saveFile.Filter = "Image Files ( *.bmp)| *.bmp";
+
+            if (saveFile.ShowDialog() == DialogResult.OK)
+            {
+                mask.Save(saveFile.FileName);
+            }
+        }
+
         public void SaveImage(Bitmap img)
         {
             SaveFileDialog saveFile = new SaveFileDialog();

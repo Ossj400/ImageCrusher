@@ -8,47 +8,64 @@ namespace ImageCrusher.Inpainting
     class Nans
     {
         Image<Rgb, byte> imageOutNans;
+        Image<Rgb, byte> imageOut;
         Image<Rgb, byte> imageIn;
-        Image<Gray, byte> mask;
+
         public Image<Rgb, byte> ImageOutNans { get => imageOutNans; set => imageOutNans = value; }
 
-        public Nans(ImageMenu image, Noise mask)
+        public Nans(ImageMenu image, Noise noise)
         {
             imageIn = image.Img;
+            imageOut = noise.ImageOut;
             ImageOutNans = new Image<Rgb, byte>(image.Img.ToBitmap());
-            this.mask = mask.GetMask();
+        }
+        public Nans(ImageMenu image)
+        {
+            imageIn = image.Img;
+            imageOut = image.ImageOut;
+            ImageOutNans = new Image<Rgb, byte>(image.Img.ToBitmap());
         }
 
         public Nans()
         {
         }
 
-        public void Compute()
+        public void Compute(int channel) //  channel = 0-2; // red=0, green=1, blue=2
         {
             int i = 0;
             int j = 0;
+            int ij = 0;
+           
+
+            int nan_count = 0;
             
-            var A = imageIn;
-            var mas = mask;
-            int n = A.Height;
-            int m = A.Width+1;
-            int c = 1;
-            int nmc = n*m*c;
+            int n = imageIn.Height;   // Data[x,y,channel]   x = n = rows     y = m = columns   
+            int m = imageIn.Width;
+            int nm = n*m;
 
-            int[,] nan_rc = new int[mas.Height, mas.Width + 1];
-            int[] k = new int[nmc]; //Any value in mask is "failure"/NaN so mask values can be 'k' values but converted in 1 dim arr
-            foreach (int item in mas.Data)  // convert to 1 dim and sets where are Nans in rows and cols.
+            int[] k = new int[nm]; 
+
+            for (int item = 0; item < nm; item++)  //// new ~~~~~~~~~~~~ !!!!!!!!!!!!!!!!!
             {
-                k[i] = item;
+                if (imageOut.Data[ij, j, channel] != imageIn.Data[ij, j, channel])
+                {
+                    k[i] = i;
+                    nan_count++;                   
+                }
                 i++;
+                ij++;
+                if (ij == imageOut.Rows)
+                {
+                    ij = 0;
+                    j++;
+
+                    if (j == imageOut.Cols)
+                        j = 0;
+                }
             }
-            i = 0;
 
-            string nan_list_string = mas.CountNonzero().GetValue(0).ToString();
-            Int32.TryParse(nan_list_string, out int nan_list_1);   // nan_list_1 is int value of NaNs
-
-            int[] nan_list_2 = new int[nan_list_1];  // clean list of NaN pixels
-            int[] known_list = new int[nmc-nan_list_1];
+            int[] nan_list_2 = new int[nan_count];  // clean list of NaN pixels  BUT + 1 to index wont go out of range ...
+            int[] known_list = new int[nm-nan_count + 1];   // +1 beacuse is array = 0 and there can be item == 0 and error xD
             foreach(int item in k)
             {
                 if(item > 0)
@@ -59,9 +76,10 @@ namespace ImageCrusher.Inpainting
                 i++;
             }
             i = 0; j = 0;
+
             foreach (int item in k)
             {
-                if (item == 0)
+                if (known_list.Length > 0 && item == 0)
                 {
                     known_list[j] = i;
                     j++;
@@ -70,40 +88,35 @@ namespace ImageCrusher.Inpainting
             }
             i = 0;j = 0;
 
-            int nan_count = nan_list_1;
-
-            int[,] nan_list = new int[nan_count+1,3]; 
+            int[,] nan_list = new int[nan_count,3];    //// nan+1 
             int col = 0;
             int row = 0;
             foreach (int item in k)
             {
-                if (mas.Height == col)
+                //if (i > 3 && row < imageIn.Height && col == imageIn.Width)
+                //{
+                //    // if((i+1) % imageIn.Height == 1)
+                //    row++;
+                //}
+                if (imageIn.Height == col)
                 {
+                    row++;
                     col = 0;
                 }
-                if (i>3)
+
+                if(item != 0)
                 {
-                    if((i+1) % mas.Width == 1)
-                    row++;
-                }
-              if(item != 0)
-                {
-                    nan_list[j, 0] = item;    // dobrze ?
+                    nan_list[j, 0] = item;  
+                    nan_list[j, 1] = col;   // w matlabie zle opisano, columna to row. więc col = row, row = col
+                    nan_list[j, 2] = row;
                     j++;
-                    {
-                        nan_list[j, 1] = row;
-                    }
-                    {
-                        nan_list[j, 2] = col;
-                    }
                 }
-               i++;
-               col++;
-            }
+                i++;
+                col++;
+            }   
             i = 0;j = 0;row = 0;col = 0;
 
-
-            int[,] talks_to = new int[4,2] { { -1, 0 },{ 0, -1 }, { -1, 1 }, { 0, 1 } };  // dobrze ?
+            int[,] talks_to = new int[4,2] { { -1, 0 },{ 0, -1 }, { -1, 1 }, { 0, 1 } };
 
             IdentifyNeighbours(n, m, nan_list, talks_to);
         }
@@ -114,16 +127,20 @@ namespace ImageCrusher.Inpainting
             {
                 int nan_count = nan_list.GetLength(0);
                 int talk_count = talks_to.GetLength(0);
-                int[,] nn = new int[(nan_count * talk_count), 1]; 
-                int[] j = new int[] {1,nan_count};
-
+                int[,] nn = new int[(nan_count * talk_count), 2];  
+                int[] j = new int[] {0,nan_count};
+                int ij = 0;
                 for(int i=0; i< talk_count;i++)
                 {
-                   // nn[j[0],j[1]] = nan_list(            //co to za zapis, co to ten repmat i co to te przecinki?  nn(j(1):j(2),:)=nan_list(:,2:3) + repmat(talks_to(i,:),nan_count,1);    >>>  A(:,2:3) bierze kolumny 2 i 3 z Tab A
+                    int ik = 0;
+                    for(int z=j[0]; z<j[1]; z++)
+                    {
+                        nn[z,0] = nan_list[ik, 1];        //co to za zapis, co to ten repmat i co to te przecinki?  nn(j(1):j(2),:)=nan_list(:,2:3) + repmat(talks_to(i,:),nan_count,1);    >>>  A(:,2:3) bierze kolumny 2 i 3 z Tab A
+                        nn[z, 1] = nan_list[ik, 2];    
+                        ik++;
+                    }
 
-
-
-                    j[0]= (j[0] + nan_count);
+                    j[0]= j[0]+ nan_count;
                     j[1]= j[1]+nan_count;
                 }
             }   

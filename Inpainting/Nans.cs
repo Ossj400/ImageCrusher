@@ -34,11 +34,8 @@ namespace ImageCrusher.Inpainting
         {
             int i = 0;
             int j = 0;
-            int ij = 0;
-           
-
-            int nan_count = 0;
-            
+            int ij = 0;         
+            int nan_count = 0;           
             int n = imageIn.Height;   // Data[x,y,channel]   x = n = rows     y = m = columns   
             int m = imageIn.Width;
             int nm = n*m;
@@ -64,8 +61,8 @@ namespace ImageCrusher.Inpainting
                 }
             }
 
-            int[] nan_list_2 = new int[nan_count];  // clean list of NaN pixels  BUT + 1 to index wont go out of range ...
-            int[] known_list = new int[nm-nan_count + 1];   // +1 beacuse is array = 0 and there can be item == 0 and error xD
+            int[] nan_list_2 = new int[nan_count];  // clean list of NaN pixels 
+            int[] known_list = new int[nm-nan_count];   
             foreach(int item in k)
             {
                 if(item > 0)
@@ -88,16 +85,11 @@ namespace ImageCrusher.Inpainting
             }
             i = 0;j = 0;
 
-            int[,] nan_list = new int[nan_count,3];    //// nan+1 
+            int[,] nan_list = new int[nan_count, 3];
             int col = 0;
             int row = 0;
             foreach (int item in k)
             {
-                //if (i > 3 && row < imageIn.Height && col == imageIn.Width)
-                //{
-                //    // if((i+1) % imageIn.Height == 1)
-                //    row++;
-                //}
                 if (imageIn.Height == col)
                 {
                     row++;
@@ -117,33 +109,113 @@ namespace ImageCrusher.Inpainting
             i = 0;j = 0;row = 0;col = 0;
 
             int[,] talks_to = new int[4,2] { { -1, 0 },{ 0, -1 }, { -1, 1 }, { 0, 1 } };
-
-            IdentifyNeighbours(n, m, nan_list, talks_to);
+           // IdentifyNeighbours(n, m, nan_list, talks_to);
+            var Nn = IdentifyNeighbours(n, m, nan_list, talks_to).Item1;
+            var io = IdentifyNeighbours(n, m, nan_list, talks_to).Item2;
         }
 
-        public void IdentifyNeighbours(int n, int m, int[,] nan_list, int[,] talks_to)
+        public Tuple<int[,],int> IdentifyNeighbours(int n, int m, int[,] nan_list, int[,] talks_to)
         {
-            if(nan_list!=null)
-            {
+           // if(nan_list!=null)
+            //{
                 int nan_count = nan_list.GetLength(0);
                 int talk_count = talks_to.GetLength(0);
                 int[,] nn = new int[(nan_count * talk_count), 2];  
                 int[] j = new int[] {0,nan_count};
                 int ij = 0;
-                for(int i=0; i< talk_count;i++)
-                {
-                    int ik = 0;
-                    for(int z=j[0]; z<j[1]; z++)
+                int i = 0;
+                int ik = 0;
+                int row= 0;
+                int col = 0;
+                ///// Few If's for replicate matrix with additional +1/-1 values for "row" or "column"  and count ones out of boudaries of original matrix (image)
+                #region
+                if (i <= talk_count)
+                { 
+                    for (int z = j[0]; z < j[1]; z++)
                     {
-                        nn[z,0] = nan_list[ik, 1];        //co to za zapis, co to ten repmat i co to te przecinki?  nn(j(1):j(2),:)=nan_list(:,2:3) + repmat(talks_to(i,:),nan_count,1);    >>>  A(:,2:3) bierze kolumny 2 i 3 z Tab A
-                        nn[z, 1] = nan_list[ik, 2];    
+                        nn[z, 0] = nan_list[ik, 1] - 1;
+                        nn[z, 1] = nan_list[ik, 2];
+
+                        if ((nan_list[ik, 1] - 1) == -1)
+                            ij++;
+                        
+                        ik++;                      
+                    }
+                    j[0] = j[0] + nan_count;
+                    j[1] = j[1] + nan_count;
+                }
+                if (i <= talk_count)
+                {
+                    ik = 0;
+                    for (int z = j[0]; z < j[1]; z++)
+                    {
+                        nn[z, 0] = nan_list[ik, 1];
+                        nn[z, 1] = nan_list[ik, 2]-1;
+
+                        if ((nan_list[ik, 2] - 1) == -1)
+                            ij++;
+
                         ik++;
                     }
-
-                    j[0]= j[0]+ nan_count;
-                    j[1]= j[1]+nan_count;
+                    j[0] = j[0] + nan_count;
+                    j[1] = j[1] + nan_count;
                 }
-            }   
+                if (i <= talk_count)
+                {
+                    ik = 0;
+                    for (int z = j[0]; z < j[1]; z++)
+                    {
+                        nn[z, 0] = nan_list[ik, 1] + 1;
+                        if ((nan_list[ik, 2] + 1) > 10)
+                            col++;
+
+                        nn[z, 1] = nan_list[ik, 2];
+
+                        ik++;
+                    }
+                    j[0] = j[0] + nan_count;
+                    j[1] = j[1] + nan_count;
+                }
+                if (i <= talk_count)
+                {
+                    ik = 0;
+                    for (int z = j[0]; z < j[1]; z++)
+                    {
+                        nn[z, 0] = nan_list[ik, 1];
+
+                        nn[z, 1] = nan_list[ik, 2]+1;
+                        if ((nan_list[ik, 1] + 1) > 8)
+                            row++;
+
+                        ik++;
+                    }
+                    j[0] = j[0] + nan_count;
+                    j[1] = j[1] + nan_count;
+                }
+                #endregion
+
+                // removing ones which are not matching to original matrix boundaries
+                int nn_length = nn.GetLength(0) - (row + col + ij);
+                int[,] nn1 = new int[nn_length, 2];
+                i = 0; ik = 0;
+
+                for(; ik < nn.Length/2; ik++)
+                {
+                    if(nn[ik, 0]>= 0 && nn[ik, 1] >=0 && nn[ik, 0] < 9 && nn[ik, 1] < 11 ) 
+                    {
+                        nn1[i, 0] = nn[ik, 0];
+                        nn1[i, 1] = nn[ik, 1];
+                        i++;
+                    }
+                }
+
+
+
+
+
+           // }
+            return new Tuple<int[,], int>(nn1, i);
+
         }
 
     }

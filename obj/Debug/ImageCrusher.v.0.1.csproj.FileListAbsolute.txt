@@ -37,3 +37,5 @@ C:\Users\Artur\source\repos\WindowsFormsApp1\bin\Debug\zh-tw\ZedGraph.resources.
 C:\Users\Artur\source\repos\WindowsFormsApp1\obj\Debug\ImageCrusher.v.0.1.csproj.CopyComplete
 C:\Users\Artur\source\repos\WindowsFormsApp1\obj\Debug\ImageCrusher.v.0.1.csprojAssemblyReference.cache
 C:\Users\Artur\source\repos\WindowsFormsApp1\obj\Debug\ImageCrusher.MainWindow.resources
+C:\Users\Artur\source\repos\WindowsFormsApp1\bin\Debug\MathNet.Numerics.dll
+C:\Users\Artur\source\repos\WindowsFormsApp1\bin\Debug\MathNet.Numerics.xml

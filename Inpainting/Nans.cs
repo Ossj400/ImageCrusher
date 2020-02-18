@@ -5,6 +5,9 @@ using ImageCrusher.ImageController;
 using ExtensionMethodsSpace;
 using System.Collections.Generic;
 using System.Linq;
+using MathNet.Numerics;
+using MNET = MathNet.Numerics.LinearAlgebra.Double;
+
 
 namespace ImageCrusher.Inpainting
 {
@@ -46,7 +49,7 @@ namespace ImageCrusher.Inpainting
 
             int[] k = new int[nm]; 
 
-            for (int item = 0; item < nm; item++)  //// new ~~~~~~~~~~~~ !!!!!!!!!!!!!!!!!
+            for (int item = 0; item < nm; item++) 
             {
                 if (imageOut.Data[ij, j, channel] != imageIn.Data[ij, j, channel])
                 {
@@ -68,7 +71,7 @@ namespace ImageCrusher.Inpainting
             }
             i = 0; j = 0;
 
-            int[] nanList2 = new int[nanCount];  // clean list of NaN pixels 
+            int[] nanList2 = new int[nanCount];                  // clean list of NaN pixels 
             int[] knownList = new int[nm-nanCount];
             bool zero0 = zero;
             foreach (int item in k)
@@ -118,7 +121,6 @@ namespace ImageCrusher.Inpainting
                     row++;
                     col = 0;
                 }
-
                 if(item != 0)
                 {
                     nanList[j, 0] = item;  
@@ -136,15 +138,22 @@ namespace ImageCrusher.Inpainting
             var identifyNeighs = IdentifyNeighbours(n, m, nanList, talks_to);
             var nn = identifyNeighs.Item1;
             var neighboursList = identifyNeighs.Item2;
-            // setting all_list 
+                                                                            // setting all_list 
             int[,] allList = new int[nanCount + neighboursList.GetLength(0), 3];
+            int lCounter = 0;
+            int[] lCounterArr = new int[nanCount + neighboursList.GetLength(0)];  // will be array for L - array with indices of rows
 
-            for(; i < nanList.GetLength(0); i++)
+            for (; i < nanList.GetLength(0); i++)
             {
                 allList[i, 0] = nanList[i, 0];
                 allList[i, 1] = nanList[i, 1];
                 allList[i, 2] = nanList[i, 2];
                 ij = i;
+                if (allList[i, 1] > 0 && allList[i, 1] < n - 1)
+                {
+                    lCounterArr[lCounter] = i;
+                    lCounter++;
+                }
             }
             for (; i <= ij + neighboursList.GetLength(0); i++)
             {
@@ -152,6 +161,60 @@ namespace ImageCrusher.Inpainting
                 allList[i, 1] = neighboursList[j, 1];
                 allList[i, 2] = neighboursList[j, 2];
                 j++;
+                if (allList[i, 1] > 0 && allList[i, 1] < n-1)
+                {
+                    lCounterArr[lCounter] = i;
+                    lCounter++;
+                }
+            }
+            i = 0;j = 0;
+
+                                                 // array L with only defined rows, 0 > row < n
+            int[] L = new int[lCounter];
+            for(; i < lCounter; i++)
+                    L[i] = lCounterArr[i];
+            i = 0;
+
+                                                  //rep. matrices for sparse matrix
+            int[,] r1 = new int[lCounter, 3];    
+            for(; i<lCounter;   i++)
+            {
+                r1[i,0] = allList[L[i], 0];
+                r1[i, 1] = allList[L[i], 0];
+                r1[i, 2] = allList[L[i], 0];
+            }
+
+
+            int[,] r4 = new int[lCounter, 3];
+            for(i=0;i<lCounter;i++)
+            {
+                r4[i, 0] = r1[i, 2] - 1;
+                r4[i, 1] = r1[i, 2];
+                r4[i, 2] = r1[i, 2] + 1;
+            }
+
+            int[,] r5 = new int[lCounter, 3];
+            for (i = 0; i < lCounter; i++)
+            { 
+                r5[i, 0] =  1;
+                r5[i, 1] = -2;
+                r5[i, 2] =  1;
+            }
+
+                                  //~~~~~~!!!v             sparse matrix
+            string sparseString;
+            int nL = L.Length;
+            if(nL>0)
+            {
+                MNET.SparseMatrix M = new MNET.SparseMatrix(m*n);
+                for(i=0;i<lCounter;i++)  //maybe change columns to rows ?
+                {
+                    M[r1[i, 0], r4[i, 0]] = r5[i, 0];
+                    M[r1[i, 1], r4[i, 1]] = r5[i, 1];
+                    M[r1[i, 2], r4[i, 2]] = r5[i, 2];
+                }
+
+               sparseString = M.ToString();
             }
 
         }
@@ -250,7 +313,8 @@ namespace ImageCrusher.Inpainting
                      i++;
                  }
              }
-
+            // creating list of neighbours
+            #region
             int[,] neigboursList = new int[nn1.GetLength(0), 3];
             col = 0; row = 0; ij = 0; ik = 0;
             i = nn1[0, 0];
@@ -284,16 +348,18 @@ namespace ImageCrusher.Inpainting
                 i++;
                 col++;
             }
+            #endregion
             // }
-            int[,] neigboursListTemp= new int[nn1.GetLength(0), 3];
 
             //removing duplicates from neighs list
-            for (int item = 0; item < nn1.GetLength(0); item++)
+            #region
+            int[,] neigboursListTemp = new int[neigboursList.GetLength(0), 3];
+            for (int item = 0; item < neigboursList.GetLength(0); item++)
             {
                 int val = neigboursList[item, 0];
                 int originalOrDup = 0;
 
-                for (int s=0; s<nn1.GetLength(0); s++)
+                for (int s=0; s< neigboursList.GetLength(0); s++)
                 {
                     if (neigboursList[s, 0] == val)
                     {
@@ -313,7 +379,9 @@ namespace ImageCrusher.Inpainting
                     }
                 }
             }
+            #endregion
             // removing duplicates compared to nanlist
+            #region
             int dupCounter = 0;
             for (int item = 0; item < nanList.GetLength(0); item++)
             {
@@ -330,7 +398,9 @@ namespace ImageCrusher.Inpainting
                     }
                 }
             }
-
+            #endregion
+            //making proper neighs list
+            #region
             dupCounter = 0;
             i = 0;
             for (int item = 0; item < nn1.GetLength(0); item++)
@@ -351,7 +421,8 @@ namespace ImageCrusher.Inpainting
                 }
             }
             i = 0; ij = 0;
-
+            #endregion
+            // making another arroy just for clean, non duplicated neigboursList
             int[,] neigboursListUnique = new int[nn1.GetLength(0) - dupCounter, 3];            
             for(;   i<neigboursListUnique.GetLength(0); i++)
             { 

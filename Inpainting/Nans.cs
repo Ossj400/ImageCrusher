@@ -48,7 +48,6 @@ namespace ImageCrusher.Inpainting
             bool zero = false;
 
             int[] k = new int[nm]; 
-
             for (int item = 0; item < nm; item++) 
             {
                 if (imageOut.Data[ij, j, channel] != imageIn.Data[ij, j, channel])
@@ -109,8 +108,6 @@ namespace ImageCrusher.Inpainting
             }
             i = 0; j = 0;
 
-
-
             int[,] nanList = new int[nanCount, 3];
             int col = 0;
             int row = 0;
@@ -138,22 +135,14 @@ namespace ImageCrusher.Inpainting
             var identifyNeighs = IdentifyNeighbours(n, m, nanList, talks_to);
             var nn = identifyNeighs.Item1;
             var neighboursList = identifyNeighs.Item2;
-                                                                            // setting all_list 
+                                                                            // setting all_list - list of corrupted pix and yheir neighbours
             int[,] allList = new int[nanCount + neighboursList.GetLength(0), 3];
-            int lCounter = 0;
-            int[] lCounterArr = new int[nanCount + neighboursList.GetLength(0)];  // will be array for L - array with indices of rows
-
             for (; i < nanList.GetLength(0); i++)
             {
                 allList[i, 0] = nanList[i, 0];
                 allList[i, 1] = nanList[i, 1];
                 allList[i, 2] = nanList[i, 2];
                 ij = i;
-                if (allList[i, 1] > 0 && allList[i, 1] < n - 1)
-                {
-                    lCounterArr[lCounter] = i;
-                    lCounter++;
-                }
             }
             for (; i <= ij + neighboursList.GetLength(0); i++)
             {
@@ -161,60 +150,40 @@ namespace ImageCrusher.Inpainting
                 allList[i, 1] = neighboursList[j, 1];
                 allList[i, 2] = neighboursList[j, 2];
                 j++;
-                if (allList[i, 1] > 0 && allList[i, 1] < n-1)
-                {
-                    lCounterArr[lCounter] = i;
-                    lCounter++;
-                }
             }
             i = 0;j = 0;
 
-                                                 // array L with only defined rows, 0 > row < n
-            int[] L = new int[lCounter];
-            for(; i < lCounter; i++)
-                    L[i] = lCounterArr[i];
-            i = 0;
-
-                                                  //rep. matrices for sparse matrix
-            int[,] r1 = new int[lCounter, 3];    
-            for(; i<lCounter;   i++)
-            {
-                r1[i,0] = allList[L[i], 0];
-                r1[i, 1] = allList[L[i], 0];
-                r1[i, 2] = allList[L[i], 0];
-            }
-
-
-            int[,] r4 = new int[lCounter, 3];
-            for(i=0;i<lCounter;i++)
-            {
-                r4[i, 0] = r1[i, 2] - 1;
-                r4[i, 1] = r1[i, 2];
-                r4[i, 2] = r1[i, 2] + 1;
-            }
-
-            int[,] r5 = new int[lCounter, 3];
-            for (i = 0; i < lCounter; i++)
-            { 
-                r5[i, 0] =  1;
-                r5[i, 1] = -2;
-                r5[i, 2] =  1;
-            }
-
-                                  //~~~~~~!!!v             sparse matrix
+            var InpRows = CreateInputsForSparseM(allList, n, 1);
+            var InpCols = CreateInputsForSparseM(allList, m, 2);
+            var r1 = InpRows.Item1;
+            var r2 = InpRows.Item2;
+            var r3 = InpRows.Item3;
+            var c1 = InpCols.Item1;
+            var c2 = InpCols.Item2;
+            var c3 = InpCols.Item3;
+                         //~~~!~~~~~~~~~~~~~!!!v                   ~~~~~~~~~~~~~~~~~~~~           sparse matrix
             string sparseString;
-            int nL = L.Length;
+            int nL = r1.GetLength(0);
             if(nL>0)
             {
-                MNET.SparseMatrix M = new MNET.SparseMatrix(m*n);
-                for(i=0;i<lCounter;i++)  //maybe change columns to rows ?
+                MNET.SparseMatrix M = new MNET.SparseMatrix(m * n);
+                for (i = 0; i < r1.GetLength(0); i++) 
                 {
-                    M[r1[i, 0], r4[i, 0]] = r5[i, 0];
-                    M[r1[i, 1], r4[i, 1]] = r5[i, 1];
-                    M[r1[i, 2], r4[i, 2]] = r5[i, 2];
+                    M[r1[i, 0], r2[i, 0]] = r3[i, 0];
+                    M[r1[i, 1], r2[i, 1]] = r3[i, 1];
+                    M[r1[i, 2], r2[i, 2]] = r3[i, 2];
                 }
+                sparseString = M.ToString();
 
-               sparseString = M.ToString();
+                var M1 = MNET.SparseMatrix.OfMatrix(M);
+                for (i = 0; i < c1.GetLength(0); i++)
+                {
+                    M1[c1[i, 0], c2[i, 0]] = c3[i, 0];
+                    M1[c1[i, 1], c2[i, 1]] = c3[i, 1];
+                    M1[c1[i, 2], c2[i, 2]] = c3[i, 2];
+                }
+                sparseString = M1.ToString();
+
             }
 
         }
@@ -437,6 +406,54 @@ namespace ImageCrusher.Inpainting
 
         }
 
+        public Tuple<int[,], int[,], int[,]> CreateInputsForSparseM(int[,] allList, int n_or_m, int row_or_cols)  // int n_or_m = n || m   int row_or_cols = 1 || 2 for rows 1 for cols 2  (if n then 1, if m then 2)
+        {
+            int n = 1;
+            if (row_or_cols>1)
+                n = imageIn.Height;
+
+            int lCounter=0;
+            int i;
+            int[] lCounterArr = new int[allList.GetLength(0)];
+
+            for (i =0; i<allList.GetLength(0); i++)
+            {
+                if (allList[i, row_or_cols] > 0 && allList[i, row_or_cols] < n_or_m - 1)
+                {
+                    lCounterArr[lCounter] = i;
+                    lCounter++;
+                }
+            }
+
+            int[] L = new int[lCounter];                            
+            for (i=0; i < lCounter; i++)
+                L[i] = lCounterArr[i];
+
+            int[,] inp1 = new int[lCounter, 3];
+            for (i=0; i < lCounter; i++)
+            {
+                inp1[i, 0] = allList[L[i], 0];
+                inp1[i, 1] = allList[L[i], 0];
+                inp1[i, 2] = allList[L[i], 0];
+            }
+
+            int[,] inp2 = new int[lCounter, 3];
+            for (i = 0; i < lCounter; i++)
+            {
+                inp2[i, 0] = inp1[i, 2] - n;
+                inp2[i, 1] = inp1[i, 2];
+                inp2[i, 2] = inp1[i, 2] + n;
+            }
+
+            int[,] inp3 = new int[lCounter, 3];
+            for (i = 0; i < lCounter; i++)
+            {
+                inp3[i, 0] = 1;
+                inp3[i, 1] = -2;
+                inp3[i, 2] = 1;
+            }
+            return new Tuple<int[,], int[,], int[,]>(inp1, inp2, inp3);
+        }
 
     }
 }

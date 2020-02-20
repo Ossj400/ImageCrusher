@@ -47,9 +47,25 @@ namespace ImageCrusher.Inpainting
             int nm = n*m;
             bool zero = false;
 
+            int[] a = new int[nm];
             int[] k = new int[nm]; 
-            for (int item = 0; item < nm; item++) 
+            for(;i<nm; i++)
             {
+                a[i] = imageOut.Data[ij, j, channel];
+                ij++;
+                if (ij == imageOut.Rows)
+                {
+                    ij = 0;
+                    j++;
+
+                    if (j == imageOut.Cols)
+                        j = 0;
+                }
+            }
+            i = 0; j = 0; ij = 0;
+
+            for (int item = 0; item < nm; item++) 
+            {   
                 if (imageOut.Data[ij, j, channel] != imageIn.Data[ij, j, channel])
                 {
                     k[i] = i;
@@ -164,27 +180,107 @@ namespace ImageCrusher.Inpainting
                          //~~~!~~~~~~~~~~~~~!!!v                   ~~~~~~~~~~~~~~~~~~~~           sparse matrix
             string sparseString;
             int nL = r1.GetLength(0);
-            if(nL>0)
+            MNET.SparseMatrix M = new MNET.SparseMatrix(m * n);    // = fda
+            
+            for (i = 0; i < r1.GetLength(0); i++) 
             {
-                MNET.SparseMatrix M = new MNET.SparseMatrix(m * n);
-                for (i = 0; i < r1.GetLength(0); i++) 
-                {
-                    M[r1[i, 0], r2[i, 0]] = r3[i, 0];
-                    M[r1[i, 1], r2[i, 1]] = r3[i, 1];
-                    M[r1[i, 2], r2[i, 2]] = r3[i, 2];
-                }
-                sparseString = M.ToString();
-
-                var M1 = MNET.SparseMatrix.OfMatrix(M);
-                for (i = 0; i < c1.GetLength(0); i++)
-                {
-                    M1[c1[i, 0], c2[i, 0]] = c3[i, 0];
-                    M1[c1[i, 1], c2[i, 1]] = c3[i, 1];
-                    M1[c1[i, 2], c2[i, 2]] = c3[i, 2];
-                }
-                sparseString = M1.ToString();
-
+                M[r1[i, 0], r2[i, 0]] = r3[i, 0];
+                M[r1[i, 1], r2[i, 1]] = r3[i, 1];
+                M[r1[i, 2], r2[i, 2]] = r3[i, 2];
             }
+            sparseString = M.ToString();
+            var fda = MNET.SparseMatrix.OfMatrix(M);        // = fda
+            for (i = 0; i < c1.GetLength(0); i++)
+            {
+                fda[c1[i, 0], c2[i, 0]] = c3[i, 0];
+                fda[c1[i, 1], c2[i, 1]] = c3[i, 1];
+                fda[c1[i, 2], c2[i, 2]] = c3[i, 2];
+            }
+            sparseString = fda.ToString();  // just for comparing with matlab
+            i = 0;
+            
+            int[] myRhsa = new int[knownList.Length];   // = A(known_List)
+            foreach(int item in knownList)
+            {
+                myRhsa[i] = a[item];
+                i++;
+            }
+
+            var rhsSparse = fda.SubMatrix(0, m * n, 0, knownList.Length);  // to make a minus : -M1.SubMatrix(0, m * n, 0, knownList.Length);
+            rhsSparse.Clear();
+            for(i=0; i<rhsSparse.RowCount*rhsSparse.ColumnCount; i++)
+            {
+                rhsSparse[i,j] = fda[i, knownList[j]];
+                if(i==rhsSparse.RowCount-1)
+                {
+                    i = 0;
+                    j++;
+                    if (j == rhsSparse.ColumnCount)
+                        break;
+                }
+            }
+            j = 0; col = 0; row = 0;
+
+            double value = 0;
+            var rhsSparseArr = rhsSparse.ToArray();
+            int[] rhs = new int[nm];
+            for (i = 0; i < nm; i++)
+            {
+                for(; row<rhsSparseArr.GetLength(1); row++)
+                {
+                    value += (-rhsSparseArr[col, row]) * myRhsa[row];
+                    if (row == rhsSparseArr.GetLength(1)-1)
+                        col++;
+                }
+                rhs[i] = (int)value;
+                value = 0; row = 0;
+            }
+            i = 0;j = 0;
+
+            MNET.SparseMatrix fdaNan = new MNET.SparseMatrix(nm, nanList2.Length);    
+            for (; i < fda.RowCount * fda.ColumnCount; i++)
+            {
+                fdaNan[i, j] = fda[i, nanList2[j]];
+                if (i == fdaNan.RowCount - 1)
+                {
+                    i = 0;
+                    j++;
+                    if (j == nanList2.Length)
+                        break;
+                }
+            }
+            i = 0; j = 0; ij = 0;
+
+            MNET.SparseMatrix fdaAny = new MNET.SparseMatrix(nm, 1);
+            for (; i < fdaNan.RowCount * fdaNan.ColumnCount ; i++)
+            {
+                if (i == fdaNan.RowCount - 1)
+                {
+                    i = 0;
+                    j++;
+                    if (j == nanList2.Length)
+                        break;
+                }
+                if(fdaNan[i, j] !=0)
+                {
+                    fdaAny[i, 0] = 1;
+                        ij++;
+                }
+            }
+            j = 0;
+
+            int[] kNew = new int[fdaAny.NonZerosCount];
+            for(i=0; i<fdaAny.RowCount; i++)
+            {
+                if (fdaAny[i, 0] > 0)
+                {
+                    kNew[j] = i;
+                    j++;
+                }
+            }
+
+            var B = a;
+
 
         }
 

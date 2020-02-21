@@ -223,7 +223,7 @@ namespace ImageCrusher.Inpainting
 
             double value = 0;
             var rhsSparseArr = rhsSparse.ToArray();
-            int[] rhs = new int[nm];
+            double[] rhs = new double[nm];
             for (i = 0; i < nm; i++)
             {
                 for(; row<rhsSparseArr.GetLength(1); row++)
@@ -232,7 +232,7 @@ namespace ImageCrusher.Inpainting
                     if (row == rhsSparseArr.GetLength(1)-1)
                         col++;
                 }
-                rhs[i] = (int)value;
+                rhs[i] = value;                                                                   
                 value = 0; row = 0;
             }
             i = 0;j = 0;
@@ -278,8 +278,33 @@ namespace ImageCrusher.Inpainting
                     j++;
                 }
             }
+            j = 0;
+            double value1;
+            double value2;
+            double[] b = new double[a.Length];
+            a.CopyTo(b,0);
 
-            var B = a;
+            var solvingInputA = new MNET.SparseMatrix(kNew.Length, nanCount);
+
+            for(i=0; j<solvingInputA.RowCount ;i++)
+            {
+                solvingInputA[i,j] = fda[kNew[i], nanList[j, 0]];
+                if(i==solvingInputA.RowCount-1)
+                {
+                    i = -1;                                        /// <<<<<<<--------------- for (.. i++ ) change, i = -1 not i = 0
+                    if (j == solvingInputA.ColumnCount - 1)
+                        break;
+                    j++;
+                }
+            }
+            (solvingInputA.Transpose() * solvingInputA).Inverse();
+
+            int[] solvingInputB = new int[kNew.Length]; 
+            for (i=0; i<kNew.Length;i++)
+            {
+                solvingInputB[i] = (int)rhs[kNew[i]];                  /// cast int is ok coz all rhs are Integers   
+            }
+
 
 
         }

@@ -210,8 +210,10 @@ namespace ImageCrusher
                     NansAlg = new Nans(MenuImg);
 
                 NansAlg.Compute(0);
-               // NansAlg.Compute(1);
-               // NansAlg.Compute(2);
+                PicBox3InPainted.Image = NansAlg.ImageOutNans.ToBitmap();
+
+                // NansAlg.Compute(1);
+                // NansAlg.Compute(2);
             }
             catch (NullReferenceException)
             {

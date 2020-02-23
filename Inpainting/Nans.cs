@@ -178,7 +178,7 @@ namespace ImageCrusher.Inpainting
             var c2 = InpCols.Item2;
             var c3 = InpCols.Item3;
                          //~~~!~~~~~~~~~~~~~!!!v                   ~~~~~~~~~~~~~~~~~~~~           sparse matrix
-            string sparseString;
+            string sparseString;  // for compare
             int nL = r1.GetLength(0);
             MNET.SparseMatrix M = new MNET.SparseMatrix(m * n);    // = fda
             
@@ -196,44 +196,61 @@ namespace ImageCrusher.Inpainting
                 fda[c1[i, 1], c2[i, 1]] = c3[i, 1];
                 fda[c1[i, 2], c2[i, 2]] = c3[i, 2];
             }
-            sparseString = fda.ToString();  // just for comparing with matlab
-            i = 0;
-            
-            int[] myRhsa = new int[knownList.Length];   // = A(known_List)
-            foreach(int item in knownList)
-            {
-                myRhsa[i] = a[item];
-                i++;
-            }
+            row = 0; col = 0;
 
+            var fdaReal = new MNET.SparseMatrix(nm);
+            for(row=0; row<fdaReal.ColumnCount*fdaReal.RowCount;row++)
+            {
+                if (fda[row,col] ==-2 && M[row, col] ==-2 && row>n && row<fda.RowCount - n) 
+                {                   
+                    fda[row,col]= M[row, col] + fda[row, col];
+                }
+                if (row == fdaReal.RowCount - 1)
+                {
+                    row = 0; col++;
+                    if (col == fdaReal.ColumnCount - 1)
+                        break;
+                }
+            }
+            i = 0;
+            sparseString = fda.ToString();  // just for comparing with matlab
+            
+            
+            //int[] myRhsa = new int[knownList.Length];   // = A(known_List)
+            //foreach(int item in knownList)
+            //{
+            //    myRhsa[i] = a[item];
+            //    i++;
+            //}
+            var fdaArr = fda.ToArray();
             var rhsSparse = fda.SubMatrix(0, m * n, 0, knownList.Length);  // to make a minus : -M1.SubMatrix(0, m * n, 0, knownList.Length);
             rhsSparse.Clear();
-            for(i=0; i<rhsSparse.RowCount*rhsSparse.ColumnCount; i++)
+            var rhsSparseArr = rhsSparse.ToArray();
+            for (i=0; i<rhsSparse.RowCount; i++)
             {
-                rhsSparse[i,j] = fda[i, knownList[j]];
+                rhsSparseArr[i,j] = fda[i, knownList[j]];    
                 if(i==rhsSparse.RowCount-1)
                 {
-                    i = 0;
+                    i = -1;
                     j++;
                     if (j == rhsSparse.ColumnCount)
                         break;
                 }
             }
             j = 0; col = 0; row = 0;
-
             double value = 0;
-            var rhsSparseArr = rhsSparse.ToArray();
+            
             double[] rhs = new double[nm];
             for (i = 0; i < nm; i++)
             {
-                for(; row<rhsSparseArr.GetLength(1); row++)
+                for(row = 0; row<rhsSparseArr.GetLength(1); row++)
                 {
-                    value += (-rhsSparseArr[col, row]) * myRhsa[row];
+                    value += (-rhsSparseArr[col, row]) *a[knownList[row]];
                     if (row == rhsSparseArr.GetLength(1)-1)
-                        col++;
+                        col++; 
                 }
-                rhs[i] = value;                                                                   
-                value = 0; row = 0;
+                rhs[i] = value;                                
+                value = 0; 
             }
             i = 0;j = 0;
 
@@ -243,7 +260,7 @@ namespace ImageCrusher.Inpainting
                 fdaNan[i, j] = fda[i, nanList2[j]];
                 if (i == fdaNan.RowCount - 1)
                 {
-                    i = 0;
+                    i = -1;
                     j++;
                     if (j == nanList2.Length)
                         break;
@@ -279,40 +296,69 @@ namespace ImageCrusher.Inpainting
                 }
             }
             j = 0;
-            double value1;
-            double value2;
-            double[] b = new double[a.Length];
-            a.CopyTo(b,0);
 
             var solvingInputA = new MNET.SparseMatrix(kNew.Length, nanCount);
-
             for(i=0; j<solvingInputA.RowCount ;i++)
             {
                 solvingInputA[i,j] = fda[kNew[i], nanList[j, 0]];
                 if(i==solvingInputA.RowCount-1)
                 {
-                    i = -1;                                        /// <<<<<<<--------------- for (.. i++ ) change, i = -1 not i = 0
+                    i = -1;                                       
                     if (j == solvingInputA.ColumnCount - 1)
                         break;
                     j++;
                 }
             }
-            (solvingInputA.Transpose() * solvingInputA).Inverse();
 
+           // same as pseudoinverse (solvingInputA.Transpose() * solvingInputA).Inverse();
+            var solvingInputA_Arr = solvingInputA.PseudoInverse().ToArray(); 
             int[] solvingInputB = new int[kNew.Length]; 
             for (i=0; i<kNew.Length;i++)
             {
-                solvingInputB[i] = (int)rhs[kNew[i]];                  /// cast int is ok coz all rhs are Integers   
+                solvingInputB[i] = (int)rhs[kNew[i]];                  /// cast int is ok coz all rhs are Integers 
             }
+            //solve
+            for (i = 0; i < kNew.Length; i++)
+            {
+                solvingInputB[i] = (int)rhs[kNew[i]];                  /// cast int is ok coz all rhs are Integers 
+            }
+            value = 0; row = 0; col = 0; ij = 0;
 
+            int[] solve = new int[a.Length];
+            for (i = 0; i < a.Length; i++)
+            {
+                solve[i] = a[i];
+                if (a[i] == 0)
+                {
+                    for (row = 0; row < solvingInputB.Length; row++)
+                    {
+                        value += solvingInputA_Arr[ij, row] * solvingInputB[row];
+                    }
+                    ij++;
+                    solve[i] = (int)Math.Round(value, MidpointRounding.ToEven);
+                    value = 0;
+                }
+            }
+            ij = 0; j = 0;
+                          // ~!!!!!!!!!! ~~~~~~~~~~~~~~~~~~~~~~~~~~~ Creating new image with new data
+            for (i=0; i < nm; i++)
+            {
+                solve[i] = imageOutNans.Data[ij, j, channel];
+                ij++;
+                if (ij == imageOutNans.Rows)
+                {
+                    ij = 0;
+                    j++;
 
+                    if (j == imageOutNans.Cols)
+                        j = 0;
+                }
+            }
 
         }
 
         public Tuple<int[,], int[,]> IdentifyNeighbours(int n, int m, int[,] nanList, int[,] talks_to)
         {
-           // if(nan_list!=null)
-            //{
              int nanCount = nanList.GetLength(0);
              int talkCount = talks_to.GetLength(0);
              int[,] nn = new int[(nanCount * talkCount), 2];  
@@ -425,7 +471,7 @@ namespace ImageCrusher.Inpainting
                     neigboursList[ik, 1] = nn1[ik, 0];
                     neigboursList[ik, 2] = nn1[ik, 1];
                     ik++;
-                    if (ik == nn1.Length / 2)
+                    if (ik == nn1.GetLength(0))
                         break;
                 }
                 if (nn1[ik, 1] < 1)
@@ -575,6 +621,6 @@ namespace ImageCrusher.Inpainting
             }
             return new Tuple<int[,], int[,], int[,]>(inp1, inp2, inp3);
         }
-
+       
     }
 }

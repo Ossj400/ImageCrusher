@@ -7,7 +7,8 @@ using System.Collections.Generic;
 using System.Linq;
 using MathNet.Numerics;
 using MNET = MathNet.Numerics.LinearAlgebra.Double;
-
+using ACMATH = Accord.Math;
+using System.Threading.Tasks;
 
 namespace ImageCrusher.Inpainting
 {
@@ -23,20 +24,20 @@ namespace ImageCrusher.Inpainting
         {
             imageIn = image.Img;
             imageOut = noise.ImageOut;
-            ImageOutNans = new Image<Rgb, byte>(image.Img.ToBitmap());
+            ImageOutNans = new Image<Rgb, byte>(noise.ImageOut.ToBitmap());
         }
         public Nans(ImageMenu image)
         {
             imageIn = image.Img;
             imageOut = image.ImageOut;
-            ImageOutNans = new Image<Rgb, byte>(image.Img.ToBitmap());
+            ImageOutNans = new Image<Rgb, byte>(image.ImageOut.ToBitmap());
         }
 
         public Nans()
         {
         }
 
-        public void Compute(int channel) //  channel = 0-2; // red=0, green=1, blue=2
+        public async Task Compute(int channel) //  channel = 0-2; // red=0, green=1, blue=2
         {
             int i = 0;
             int j = 0;
@@ -213,16 +214,8 @@ namespace ImageCrusher.Inpainting
                 }
             }
             i = 0;
-            sparseString = fda.ToString();  // just for comparing with matlab
-            
-            
-            //int[] myRhsa = new int[knownList.Length];   // = A(known_List)
-            //foreach(int item in knownList)
-            //{
-            //    myRhsa[i] = a[item];
-            //    i++;
-            //}
-            var fdaArr = fda.ToArray();
+            sparseString = fda.ToString();  // just for comparing with matlab         
+           
             var rhsSparse = fda.SubMatrix(0, m * n, 0, knownList.Length);  // to make a minus : -M1.SubMatrix(0, m * n, 0, knownList.Length);
             rhsSparse.Clear();
             var rhsSparseArr = rhsSparse.ToArray();
@@ -310,8 +303,9 @@ namespace ImageCrusher.Inpainting
                 }
             }
 
-           // same as pseudoinverse (solvingInputA.Transpose() * solvingInputA).Inverse();
-            var solvingInputA_Arr = solvingInputA.PseudoInverse().ToArray(); 
+            // same as pseudoinverse (solvingInputA.Transpose() * solvingInputA).Inverse();
+               //var solvingInputA_Arr = solvingInputA.PseudoInverse().ToArray();
+            var solvingInputA_Arr = ACMATH.Matrix.PseudoInverse(solvingInputA.ToArray());
             int[] solvingInputB = new int[kNew.Length]; 
             for (i=0; i<kNew.Length;i++)
             {
@@ -323,12 +317,12 @@ namespace ImageCrusher.Inpainting
                 solvingInputB[i] = (int)rhs[kNew[i]];                  /// cast int is ok coz all rhs are Integers 
             }
             value = 0; row = 0; col = 0; ij = 0;
-
+            
             int[] solve = new int[a.Length];
             for (i = 0; i < a.Length; i++)
             {
                 solve[i] = a[i];
-                if (a[i] == 0)
+                if (k[i] > 0)
                 {
                     for (row = 0; row < solvingInputB.Length; row++)
                     {
@@ -339,18 +333,18 @@ namespace ImageCrusher.Inpainting
                     value = 0;
                 }
             }
+
             ij = 0; j = 0;
-                          // ~!!!!!!!!!! ~~~~~~~~~~~~~~~~~~~~~~~~~~~ Creating new image with new data
             for (i=0; i < nm; i++)
             {
-                solve[i] = imageOutNans.Data[ij, j, channel];
+                imageOutNans.Data[ij, j, channel] = (byte) solve[i];
                 ij++;
-                if (ij == imageOutNans.Rows)
+                if (ij == imageOut.Rows)
                 {
                     ij = 0;
                     j++;
 
-                    if (j == imageOutNans.Cols)
+                    if (j == imageOut.Cols)
                         j = 0;
                 }
             }
@@ -465,14 +459,15 @@ namespace ImageCrusher.Inpainting
                         row = 0;
                     }
                 }
+                if (ik == nn1.GetLength(0))                   // added -1
+                    break;
                 if (nn1[ik, 1] > 0)
                 {
                     neigboursList[ik, 0] = ((nn1[ik, 1]+1) * (n) + (nn1[ik, 0] - (n)));
                     neigboursList[ik, 1] = nn1[ik, 0];
                     neigboursList[ik, 2] = nn1[ik, 1];
                     ik++;
-                    if (ik == nn1.GetLength(0))
-                        break;
+                    
                 }
                 if (nn1[ik, 1] < 1)
                 {

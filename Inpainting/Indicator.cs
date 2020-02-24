@@ -24,6 +24,11 @@ namespace ImageCrusher.Inpainting
             this.Img = image.Img;
             this.ImageOut = alexandruTeleaInpaint.ImageOutTelea;
         }
+        public Indicator(ImageMenu image, Nans NansAlg)
+        {
+            this.Img = image.Img;
+            this.ImageOut = NansAlg.ImageOutNans;
+        }
 
         public void RMSE_Algorithm()
         {

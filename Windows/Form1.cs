@@ -5,6 +5,7 @@ using ExtensionMethodsSpace;
 using ImageCrusher.Inpainting;
 using ImageCrusher.ImageController;
 using Emgu.CV.Structure;
+using System.Threading.Tasks;
 
 namespace ImageCrusher
 {
@@ -46,6 +47,9 @@ namespace ImageCrusher
                     img = AlexandruTelea.ImageOutTelea;
                 if (NavierStokes != null)
                     img = NavierStokes.ImageOutNav;
+                if (NansAlg != null)
+                    img = NansAlg.ImageOutNans;
+
                 MenuImg.SaveImage(img.ToBitmap());
             }
             catch (NullReferenceException)
@@ -138,6 +142,7 @@ namespace ImageCrusher
             try
             {
                 AlexandruTelea = null;
+                NansAlg = null;
                 NavierStokes = new NavierStokesInpaint();
                 PicBox3InPainted.Image = NavierStokes.InpaintNav(MenuImg, NoiseImg, 1).ToBitmap();
             }
@@ -151,6 +156,7 @@ namespace ImageCrusher
             try
             {
                 NavierStokes = null;
+                NansAlg = null;
                 AlexandruTelea = new AlexandruTeleaInpaint();
                 PicBox3InPainted.Image = AlexandruTelea.InpaintTel(MenuImg, NoiseImg, 1).ToBitmap();
             }
@@ -166,6 +172,8 @@ namespace ImageCrusher
                 indicate = new Indicator(MenuImg, NavierStokes);
             if (AlexandruTelea != null)
                 indicate = new Indicator(MenuImg, AlexandruTelea);
+            if (NansAlg != null)
+                indicate = new Indicator(MenuImg, NansAlg);
 
             try
             {
@@ -183,6 +191,8 @@ namespace ImageCrusher
                 indicate = new Indicator(MenuImg, NavierStokes);
             if (AlexandruTelea != null)
                 indicate = new Indicator(MenuImg, AlexandruTelea);
+            if (NansAlg != null)
+                indicate = new Indicator(MenuImg, NansAlg);
 
             try
             {
@@ -197,7 +207,7 @@ namespace ImageCrusher
             }
         }
 
-        private void BtInpaintNans_Click(object sender, EventArgs e)
+        private async void BtInpaintNans_Click(object sender, EventArgs e)
         {
             try
             {
@@ -210,10 +220,22 @@ namespace ImageCrusher
                     NansAlg = new Nans(MenuImg);
 
                 NansAlg.Compute(0);
+                NansAlg.Compute(1);
+                NansAlg.Compute(2);
+                //Task.Run(async () =>
+                //{
+                //    await NansAlg.Compute(0);
+                //});
+                //Task.Run(async () =>
+                //{
+                //    await NansAlg.Compute(1);
+                //});
+                //Task.Run(async () =>
+                //{
+                //    await NansAlg.Compute(2);
+                //}).Wait();
                 PicBox3InPainted.Image = NansAlg.ImageOutNans.ToBitmap();
 
-                // NansAlg.Compute(1);
-                // NansAlg.Compute(2);
             }
             catch (NullReferenceException)
             {

@@ -207,10 +207,10 @@ namespace ImageCrusher
             }
         }
 
-        private async void BtInpaintNans_Click(object sender, EventArgs e)
+        private void BtInpaintNans_Click(object sender, EventArgs e)  // private asnyc void..
         {
-            try
-            {
+            //try
+            //{
                 NavierStokes = null;
                 AlexandruTelea = null;
                 if(MenuImg.ImageOut==null)
@@ -219,28 +219,28 @@ namespace ImageCrusher
                 if(MenuImg.ImageOut!=null)
                     NansAlg = new Nans(MenuImg);
 
-                NansAlg.Compute(0);
-                NansAlg.Compute(1);
-                NansAlg.Compute(2);
-                //Task.Run(async () =>
-                //{
-                //    await NansAlg.Compute(0);
-                //});
-                //Task.Run(async () =>
-                //{
-                //    await NansAlg.Compute(1);
-                //});
-                //Task.Run(async () =>
-                //{
-                //    await NansAlg.Compute(2);
-                //}).Wait();
-                PicBox3InPainted.Image = NansAlg.ImageOutNans.ToBitmap();
+            NansAlg.Compute(0);
+            NansAlg.Compute(1);
+            NansAlg.Compute(2);
+            //Task.Run(async () =>
+            //{
+            //    await NansAlg.Compute(0);
+            //});
+            //Task.Run(async () =>
+            //{
+            //    await NansAlg.Compute(1);
+            //});
+            //Task.Run(async () =>
+            //{
+            //    await NansAlg.Compute(2);
+            //}).Wait();
+            PicBox3InPainted.Image = NansAlg.ImageOutNans.ToBitmap();
 
-            }
-            catch (NullReferenceException)
-            {
-                MessageBox.Show("Nothing to inpaint.");
-            }
+            //}
+            //catch (NullReferenceException)
+            //{
+            //    MessageBox.Show("Nothing to inpaint.");
+            //}
         }
 
         private void BtSaveMask_Click(object sender, EventArgs e)

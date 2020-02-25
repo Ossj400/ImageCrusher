@@ -24,7 +24,7 @@ namespace ImageCrusher.Inpainting
         {
             imageIn = image.Img;
             imageOut = noise.ImageOut;
-            ImageOutNans = new Image<Rgb, byte>(noise.ImageOut.ToBitmap());
+            ImageOutNans = new Image<Rgb, byte>(image.Img.ToBitmap());
         }
         public Nans(ImageMenu image)
         {
@@ -37,7 +37,7 @@ namespace ImageCrusher.Inpainting
         {
         }
 
-        public async Task Compute(int channel) //  channel = 0-2; // red=0, green=1, blue=2
+        public void Compute(int channel) //  channel = 0-2; // red=0, green=1, blue=2     public async Task Compute(int channel)
         {
             int i = 0;
             int j = 0;
@@ -80,7 +80,6 @@ namespace ImageCrusher.Inpainting
                 {
                     ij = 0;
                     j++;
-
                     if (j == imageOut.Cols)
                         j = 0;
                 }
@@ -218,6 +217,8 @@ namespace ImageCrusher.Inpainting
            
             var rhsSparse = fda.SubMatrix(0, m * n, 0, knownList.Length);  // to make a minus : -M1.SubMatrix(0, m * n, 0, knownList.Length);
             rhsSparse.Clear();
+            
+            
             var rhsSparseArr = rhsSparse.ToArray();
             for (i=0; i<rhsSparse.RowCount; i++)
             {
@@ -329,7 +330,7 @@ namespace ImageCrusher.Inpainting
                         value += solvingInputA_Arr[ij, row] * solvingInputB[row];
                     }
                     ij++;
-                    solve[i] = (int)Math.Round(value, MidpointRounding.ToEven);
+                    solve[i] = (int)Math.Round(value,MidpointRounding.ToEven);
                     value = 0;
                 }
             }
@@ -459,7 +460,7 @@ namespace ImageCrusher.Inpainting
                         row = 0;
                     }
                 }
-                if (ik == nn1.GetLength(0))                   // added -1
+                if (ik == nn1.GetLength(0))                  
                     break;
                 if (nn1[ik, 1] > 0)
                 {
@@ -469,6 +470,8 @@ namespace ImageCrusher.Inpainting
                     ik++;
                     
                 }
+                if (ik == nn1.GetLength(0))                  
+                    break;
                 if (nn1[ik, 1] < 1)
                 {
                     neigboursList[ik, 0] = nn1[ik, 0];

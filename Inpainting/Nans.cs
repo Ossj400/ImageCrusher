@@ -33,6 +33,7 @@ namespace ImageCrusher.Inpainting
             ImageOutNans = new Image<Rgb, byte>(image.ImageOut.ToBitmap());
         }
 
+
         public Nans()
         {
         }
@@ -188,7 +189,7 @@ namespace ImageCrusher.Inpainting
                 M[r1[i, 1], r2[i, 1]] = r3[i, 1];
                 M[r1[i, 2], r2[i, 2]] = r3[i, 2];
             }
-            sparseString = M.ToString();
+           // sparseString = M.ToString();
             var fda = MNET.SparseMatrix.OfMatrix(M);        // = fda
             for (i = 0; i < c1.GetLength(0); i++)
             {
@@ -198,27 +199,24 @@ namespace ImageCrusher.Inpainting
             }
             row = 0; col = 0;
 
-            var fdaReal = new MNET.SparseMatrix(nm);
-            for (row = 0; row < fdaReal.ColumnCount * fdaReal.RowCount; row++)
+            for (row = 0; row < fda.ColumnCount * fda.RowCount; row++)
             {
                 if (fda[row, col] == -2 && M[row, col] == -2 && row > n && row < fda.RowCount - n)
                 {
                     fda[row, col] = M[row, col] + fda[row, col];
                 }
-                if (row == fdaReal.RowCount - 1)
+                if (row == fda.RowCount - 1)
                 {
                     row = 0; col++;
-                    if (col == fdaReal.ColumnCount - 1)
-                        break;
+                    if (col == fda.ColumnCount) //if (col == fdaReal.ColumnCount - 1)
+
+                            break;
                 }
             }
             i = 0;
-            sparseString = fda.ToString();  // just for comparing with matlab         
+            // sparseString = fda.ToString();  // just for comparing with matlab         
 
-            var rhsSparse = fda.SubMatrix(0, m * n, 0, knownList.Length);  // to make a minus : -M1.SubMatrix(0, m * n, 0, knownList.Length);
-            rhsSparse.Clear();
-
-
+            var rhsSparse = new MNET.SparseMatrix(m * n, knownList.Length);  // to make a minus : -M1.SubMatrix(0, m * n, 0, knownList.Length);
             var rhsSparseArr = rhsSparse.ToArray();
             for (i = 0; i < rhsSparse.RowCount; i++)
             {
@@ -307,6 +305,7 @@ namespace ImageCrusher.Inpainting
             // same as pseudoinverse (solvingInputA.Transpose() * solvingInputA).Inverse();
             //var solvingInputA_Arr = solvingInputA.PseudoInverse().ToArray();
             var solvingInputA_Arr = ACMATH.Matrix.PseudoInverse(solvingInputA.ToArray());
+            // rozwiązywanie układu równań procesem gaussa 
             int[] solvingInputB = new int[kNew.Length];
             for (i = 0; i < kNew.Length; i++)
             {
@@ -330,7 +329,7 @@ namespace ImageCrusher.Inpainting
                         value += solvingInputA_Arr[ij, row] * solvingInputB[row];
                     }
                     ij++;
-                    solve[i] = (int)Math.Round(value, MidpointRounding.ToEven);
+                    solve[i] = (int)Math.Round(value);
                     value = 0;
                 }
             }
@@ -350,6 +349,11 @@ namespace ImageCrusher.Inpainting
                         j = 0;
                 }
             }
+
+            /// testing solve
+            /// 
+            solve.SaveArrayAsCSV("C:/Users/Artur/Downloads/zdj/SolvedArrChannel_" + channel + ".csv");
+
 
         }
 
@@ -403,7 +407,7 @@ namespace ImageCrusher.Inpainting
                 for (int z = j[0]; z < j[1]; z++)
                 {
                     nn[z, 0] = nanList[ik, 1] + 1;
-                    if ((nanList[ik, 2] + 1) > 10)
+                    if ((nanList[ik, 2] + 1) > m)
                         col++;
 
                     nn[z, 1] = nanList[ik, 2];
@@ -421,7 +425,7 @@ namespace ImageCrusher.Inpainting
                     nn[z, 0] = nanList[ik, 1];
 
                     nn[z, 1] = nanList[ik, 2] + 1;
-                    if ((nanList[ik, 1] + 1) > 8)
+                    if ((nanList[ik, 1] + 1) > n)
                         row++;
 
                     ik++;
@@ -438,7 +442,7 @@ namespace ImageCrusher.Inpainting
 
             for (; ik < nn.Length / 2; ik++)
             {
-                if (nn[ik, 0] >= 0 && nn[ik, 1] >= 0 && nn[ik, 0] < 9 && nn[ik, 1] < 11)
+                if (nn[ik, 0] >= 0 && nn[ik, 1] >= 0 && nn[ik, 0] < n && nn[ik, 1] < m)
                 {
                     nn1[i, 0] = nn[ik, 0];
                     nn1[i, 1] = nn[ik, 1];
@@ -621,7 +625,7 @@ namespace ImageCrusher.Inpainting
             return new Tuple<int[,], int[,], int[,]>(inp1, inp2, inp3);
         }
 
-        private void Compute2(int channel) //  channel = 0-2; // red=0, green=1, blue=2     public async Task Compute(int channel)
+        public void Compute2(int channel) //  channel = 0-2; // red=0, green=1, blue=2     public async Task Compute(int channel)
         {
             int i = 0;
             int j = 0;

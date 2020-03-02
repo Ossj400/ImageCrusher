@@ -35,5 +35,14 @@ C:\Users\Artur\source\repos\WindowsFormsApp1\bin\Release\sv\ZedGraph.resources.d
 C:\Users\Artur\source\repos\WindowsFormsApp1\bin\Release\tr\ZedGraph.resources.dll
 C:\Users\Artur\source\repos\WindowsFormsApp1\bin\Release\zh-cn\ZedGraph.resources.dll
 C:\Users\Artur\source\repos\WindowsFormsApp1\bin\Release\zh-tw\ZedGraph.resources.dll
-C:\Users\Artur\source\repos\WindowsFormsApp1\obj\Release\ImageCrusher.Form1.resources
 C:\Users\Artur\source\repos\WindowsFormsApp1\obj\Release\ImageCrusher.v.0.1.csproj.CopyComplete
+C:\Users\Artur\source\repos\WindowsFormsApp1\bin\Release\Accord.dll.config
+C:\Users\Artur\source\repos\WindowsFormsApp1\bin\Release\Accord.dll
+C:\Users\Artur\source\repos\WindowsFormsApp1\bin\Release\Accord.Math.Core.dll
+C:\Users\Artur\source\repos\WindowsFormsApp1\bin\Release\Accord.Math.dll
+C:\Users\Artur\source\repos\WindowsFormsApp1\bin\Release\MathNet.Numerics.dll
+C:\Users\Artur\source\repos\WindowsFormsApp1\bin\Release\Accord.xml
+C:\Users\Artur\source\repos\WindowsFormsApp1\bin\Release\Accord.Math.xml
+C:\Users\Artur\source\repos\WindowsFormsApp1\bin\Release\Accord.Math.Core.xml
+C:\Users\Artur\source\repos\WindowsFormsApp1\bin\Release\MathNet.Numerics.xml
+C:\Users\Artur\source\repos\WindowsFormsApp1\obj\Release\ImageCrusher.MainWindow.resources

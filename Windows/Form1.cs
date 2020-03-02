@@ -213,6 +213,7 @@ namespace ImageCrusher
             //{
                 NavierStokes = null;
                 AlexandruTelea = null;
+
                 if(MenuImg.ImageOut==null)
                     NansAlg = new Nans(MenuImg, NoiseImg);
                 if(MenuImg.ImageOut!=null)

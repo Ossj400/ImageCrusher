@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace ExtensionMethodsSpace
 {
@@ -36,6 +37,17 @@ namespace ExtensionMethodsSpace
                 }
                 for (int c = 0; c < temp.Length; c++)
                     array[j, c] = temp[c];
+            }
+        }
+
+        public static void SaveArrayAsCSV(this Array arrayToSave, string filePath)
+        {
+            using (StreamWriter file = new StreamWriter(filePath))
+            {
+                foreach (object item in arrayToSave)
+                {
+                    file.Write(item + "," + Environment.NewLine);
+                }
             }
         }
     }

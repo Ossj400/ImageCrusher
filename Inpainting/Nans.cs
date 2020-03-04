@@ -151,25 +151,9 @@ namespace ImageCrusher.Inpainting
             i = 0; j = 0; row = 0; col = 0; ij = 0;
 
             int[,] talks_to = new int[4, 2] { { -1, 0 }, { 0, -1 }, { -1, 1 }, { 0, 1 } };
-            var neighboursList = IdentifyNeighbours(n, m, nanList, talks_to).Item1;
-            var neighb2 = IdentifyNeighbours(n, m, nanList, talks_to).Item2;
+
             // setting all_list - list of corrupted pix and their neighbours
-            int[,] allList = new int[nanCount + neighboursList.GetLength(0), 3];
-            for (i=0; i < nanList.GetLength(0); i++)
-            {
-                allList[i, 0] = nanList[i, 0];
-                allList[i, 1] = nanList[i, 1];
-                allList[i, 2] = nanList[i, 2];
-                ij = i;
-            }
-            for (; i <= ij + neighboursList.GetLength(0); i++)
-            {
-                allList[i, 0] = neighboursList[j, 0];
-                allList[i, 1] = neighboursList[j, 1];
-                allList[i, 2] = neighboursList[j, 2];
-                j++;
-            }
-            i = 0; j = 0;
+            int[,] allList = IdentifyNeighbours(n, m, nanList, talks_to);
 
             var InpRows = CreateInputsForSparseM(allList, n, 1);
             var InpCols = CreateInputsForSparseM(allList, m, 2);
@@ -374,11 +358,11 @@ namespace ImageCrusher.Inpainting
             a.SaveArrayAsCSV("C:/Users/Artur/Downloads/zdj/A_" + channel + ".csv");
             originalInputImg.SaveArrayAsCSV("C:/Users/Artur/Downloads/zdj/OriginalInpuArray_" + channel + ".csv");
             allList.SaveArrayAsCSV("C:/Users/Artur/Downloads/zdj/AllList" + channel + ".csv");
-            neighb2.SaveArrayAsCSV("C:/Users/Artur/Downloads/zdj/NeighboursAllList" + channel + ".csv");
+           // deleted neighb2.SaveArrayAsCSV("C:/Users/Artur/Downloads/zdj/NeighboursAllList" + channel + ".csv");
 
         }
 
-        public Tuple <int[,], int[,]> IdentifyNeighbours(int n, int m, int[,] nanList, int[,] talks_to)
+        public int[,] IdentifyNeighbours(int n, int m, int[,] nanList, int[,] talks_to)
         {
             Process.GetCurrentProcess().MaxWorkingSet = new IntPtr(2621440000);
             Process.GetCurrentProcess().MinWorkingSet = new IntPtr(2097152000);
@@ -511,92 +495,6 @@ namespace ImageCrusher.Inpainting
                 col++;
             }
             #endregion
-            // }
-
-            //removing duplicates from neighs list
-            #region
-            int[,] neigboursListTemp = new int[neigboursList.GetLength(0), 3];
-            for (int item = 0; item < neigboursList.GetLength(0); item++)
-            {
-                int val = neigboursList[item, 0];
-                int originalOrDup = 0;
-
-                for (int s = 0; s < neigboursList.GetLength(0); s++)
-                {
-                    if (neigboursList[s, 0] == val)
-                    {
-                        originalOrDup++;
-                        if (originalOrDup > 1)
-                        {
-                            neigboursListTemp[s, 0] = -1;
-                            neigboursListTemp[s, 1] = -1;
-                            neigboursListTemp[s, 2] = -1;
-                        }
-                        else
-                        {
-                            neigboursListTemp[s, 0] = neigboursList[s, 0];
-                            neigboursListTemp[s, 1] = neigboursList[s, 1];
-                            neigboursListTemp[s, 2] = neigboursList[s, 2];
-                        }
-                    }
-                }
-            }
-            #endregion
-            // removing duplicates compared to nanlist
-            #region
-            int dupCounter = 0;
-            for (int item = 0; item < nanList.GetLength(0); item++)
-            {
-                int val = nanList[item, 0];
-
-                for (int s = 0; s < neigboursListTemp.GetLength(0); s++)
-                {
-                    if (neigboursListTemp[s, 0] == val)
-                    {
-                        neigboursListTemp[s, 0] = -1;
-                        neigboursListTemp[s, 1] = -1;
-                        neigboursListTemp[s, 2] = -1;
-                        dupCounter++;
-                    }
-                }
-            }
-            #endregion
-            //making proper neighs list
-            #region
-            dupCounter = 0;
-            i = 0;
-            for (int item = 0; item < nn1.GetLength(0); item++)
-            {
-                if (neigboursListTemp[item, 0] >= 0)
-                {
-                    neigboursListTemp[i, 0] = neigboursListTemp[item, 0];
-                    neigboursListTemp[i, 1] = neigboursListTemp[item, 1];
-                    neigboursListTemp[i, 2] = neigboursListTemp[item, 2];
-                    i++;
-                }
-                else
-                {
-                    neigboursListTemp[i, 0] = -1;
-                    neigboursListTemp[i, 1] = -1;
-                    neigboursListTemp[i, 2] = -1;
-                    dupCounter++;
-                }
-            }
-            i = 0; ij = 0;
-            #endregion
-            // making another arroy just for clean, non duplicated neigboursList
-            int[,] neigboursListUnique = new int[nn1.GetLength(0) - dupCounter, 3];
-            for (; i < neigboursListUnique.GetLength(0); i++)
-            {
-                neigboursListUnique[i, 0] = neigboursListTemp[i, 0];
-                neigboursListUnique[i, 1] = neigboursListTemp[i, 1];
-                neigboursListUnique[i, 2] = neigboursListTemp[i, 2];
-            }
-            ///sorting uniqueArray
-            neigboursListUnique.SortByFirstColumn();
-
-
-
 
 
             int[] newNeighs = new int[nn1.GetLength(0)];
@@ -617,7 +515,7 @@ namespace ImageCrusher.Inpainting
                     ij++;
                 }
                 if(i<nanList.GetLength(0))
-                    newNeighs2[i] = nanList[i, 0]; // wszystkie NanList, ponizej posortowany dist0, a pozniej caly arr Distinct
+                    newNeighs2[i] = nanList[i, 0];
             }
             int[] dist2 = newNeighs2.Distinct().ToArray();
 
@@ -652,9 +550,7 @@ namespace ImageCrusher.Inpainting
 
             }
 
-
-            return new Tuple <int[,],int[,]> (neigboursListUnique, neigboursListSorted);
-
+            return neigboursListSorted;
         }
 
         public Tuple<int[,], int[,], int[,]> CreateInputsForSparseM(int[,] allList, int n_or_m, int row_or_cols)  // int n_or_m = n || m   int row_or_cols = 1 || 2 for rows 1 for cols 2  (if n then 1, if m then 2)

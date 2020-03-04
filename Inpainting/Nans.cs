@@ -9,11 +9,13 @@ using MathNet.Numerics;
 using MNET = MathNet.Numerics.LinearAlgebra.Double;
 using ACMATH = Accord.Math;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace ImageCrusher.Inpainting
 {
     class Nans
     {
+
         Image<Rgb, byte> imageOutNans;
         Image<Rgb, byte> imageOut;
         Image<Rgb, byte> imageIn;
@@ -24,15 +26,14 @@ namespace ImageCrusher.Inpainting
         {
             imageIn = image.Img;
             imageOut = noise.ImageOut;
-            ImageOutNans = new Image<Rgb, byte>(image.Img.ToBitmap());
+            ImageOutNans = new Image<Rgb, byte>(imageIn.Width, imageIn.Height);
         }
         public Nans(ImageMenu image)
         {
             imageIn = image.Img;
             imageOut = image.ImageOut;
-            ImageOutNans = new Image<Rgb, byte>(image.ImageOut.ToBitmap());
+            ImageOutNans = new Image<Rgb, byte>(imageIn.Width, imageIn.Height);
         }
-
 
         public Nans()
         {
@@ -40,6 +41,8 @@ namespace ImageCrusher.Inpainting
 
         public void Compute(int channel) //  channel = 0-2; // red=0, green=1, blue=2     public async Task Compute(int channel)
         {
+            Process.GetCurrentProcess().MaxWorkingSet = new IntPtr(2621440000);
+            Process.GetCurrentProcess().MinWorkingSet = new IntPtr(2097152000);
             int i = 0;
             int j = 0;
             int ij = 0;
@@ -55,12 +58,12 @@ namespace ImageCrusher.Inpainting
             {
                 a[i] = imageOut.Data[ij, j, channel];
                 ij++;
-                if (ij == imageOut.Rows)
+                if (ij == imageOut.Height)
                 {
                     ij = 0;
                     j++;
 
-                    if (j == imageOut.Cols)
+                    if (j == imageOut.Width)
                         j = 0;
                 }
             }
@@ -77,11 +80,11 @@ namespace ImageCrusher.Inpainting
                 }
                 i++;
                 ij++;
-                if (ij == imageOut.Rows)
+                if (ij == imageOut.Height)
                 {
                     ij = 0;
                     j++;
-                    if (j == imageOut.Cols)
+                    if (j == imageOut.Width)
                         j = 0;
                 }
             }
@@ -138,7 +141,7 @@ namespace ImageCrusher.Inpainting
                 if (item != 0)
                 {
                     nanList[j, 0] = item;
-                    nanList[j, 1] = col;   // w matlabie zle opisano, columna to row. więc col = row, row = col
+                    nanList[j, 1] = col;   
                     nanList[j, 2] = row;
                     j++;
                 }
@@ -148,13 +151,11 @@ namespace ImageCrusher.Inpainting
             i = 0; j = 0; row = 0; col = 0; ij = 0;
 
             int[,] talks_to = new int[4, 2] { { -1, 0 }, { 0, -1 }, { -1, 1 }, { 0, 1 } };
-
-            var identifyNeighs = IdentifyNeighbours(n, m, nanList, talks_to);
-            var nn = identifyNeighs.Item1;
-            var neighboursList = identifyNeighs.Item2;
+            var neighboursList = IdentifyNeighbours(n, m, nanList, talks_to).Item1;
+            var neighb2 = IdentifyNeighbours(n, m, nanList, talks_to).Item2;
             // setting all_list - list of corrupted pix and their neighbours
             int[,] allList = new int[nanCount + neighboursList.GetLength(0), 3];
-            for (; i < nanList.GetLength(0); i++)
+            for (i=0; i < nanList.GetLength(0); i++)
             {
                 allList[i, 0] = nanList[i, 0];
                 allList[i, 1] = nanList[i, 1];
@@ -208,7 +209,7 @@ namespace ImageCrusher.Inpainting
                 if (row == fda.RowCount - 1)
                 {
                     row = 0; col++;
-                    if (col == fda.ColumnCount) //if (col == fdaReal.ColumnCount - 1)
+                    if (col == fda.ColumnCount)
 
                             break;
                 }
@@ -304,6 +305,7 @@ namespace ImageCrusher.Inpainting
 
             // same as pseudoinverse (solvingInputA.Transpose() * solvingInputA).Inverse();
             //var solvingInputA_Arr = solvingInputA.PseudoInverse().ToArray();
+
             var solvingInputA_Arr = ACMATH.Matrix.PseudoInverse(solvingInputA.ToArray());
             // rozwiązywanie układu równań procesem gaussa 
             int[] solvingInputB = new int[kNew.Length];
@@ -333,32 +335,53 @@ namespace ImageCrusher.Inpainting
                     value = 0;
                 }
             }
-            List<int> solved = solve.ToList();
-            solved.Sort();
+
             ij = 0; j = 0;
             for (i = 0; i < nm; i++)
             {
                 imageOutNans.Data[ij, j, channel] = (byte)solve[i];
                 ij++;
-                if (ij == imageOut.Rows)
+                if (ij == imageOut.Height)
                 {
                     ij = 0;
                     j++;
 
-                    if (j == imageOut.Cols)
+                    if (j == imageOut.Width)
                         j = 0;
                 }
             }
 
             /// testing solve
             /// 
-            solve.SaveArrayAsCSV("C:/Users/Artur/Downloads/zdj/SolvedArrChannel_" + channel + ".csv");
+            
+            i = 0; j = 0; ij = 0;
+            var originalInputImg = a;
+            for (; i < nm; i++)
+            {
+                originalInputImg[i] = imageOut.Data[ij, j, channel];
+                ij++;
+                if (ij == imageOut.Height)
+                {
+                    ij = 0;
+                    j++;
 
+                    if (j == imageOut.Width)
+                        j = 0;
+                }
+            }
+
+            solve.SaveArrayAsCSV("C:/Users/Artur/Downloads/zdj/SolvedArrChannel_" + channel + ".csv");
+            a.SaveArrayAsCSV("C:/Users/Artur/Downloads/zdj/A_" + channel + ".csv");
+            originalInputImg.SaveArrayAsCSV("C:/Users/Artur/Downloads/zdj/OriginalInpuArray_" + channel + ".csv");
+            allList.SaveArrayAsCSV("C:/Users/Artur/Downloads/zdj/AllList" + channel + ".csv");
+            neighb2.SaveArrayAsCSV("C:/Users/Artur/Downloads/zdj/NeighboursAllList" + channel + ".csv");
 
         }
 
-        public Tuple<int[,], int[,]> IdentifyNeighbours(int n, int m, int[,] nanList, int[,] talks_to)
+        public Tuple <int[,], int[,]> IdentifyNeighbours(int n, int m, int[,] nanList, int[,] talks_to)
         {
+            Process.GetCurrentProcess().MaxWorkingSet = new IntPtr(2621440000);
+            Process.GetCurrentProcess().MinWorkingSet = new IntPtr(2097152000);
             int nanCount = nanList.GetLength(0);
             int talkCount = talks_to.GetLength(0);
             int[,] nn = new int[(nanCount * talkCount), 2];
@@ -572,12 +595,72 @@ namespace ImageCrusher.Inpainting
             ///sorting uniqueArray
             neigboursListUnique.SortByFirstColumn();
 
-            return new Tuple<int[,], int[,]>(nn1, neigboursListUnique);
+
+
+
+
+            int[] newNeighs = new int[nn1.GetLength(0)];
+            for (i=0; i < newNeighs.Length; i++)
+            {
+                newNeighs[i] = neigboursList[i, 0];
+            }
+            int[] dist0 = newNeighs.Distinct().ToArray();
+            Array.Sort(dist0);
+
+            int[] newNeighs2 = new int[nn1.GetLength(0)+nanList.GetLength(0)];
+            ij = 0;
+            for (i = 0; i < newNeighs2.Length; i++)
+            {
+                if (i >= nanList.GetLength(0) && ij <dist0.Length)
+                {
+                    newNeighs2[i] = dist0[ij];
+                    ij++;
+                }
+                if(i<nanList.GetLength(0))
+                    newNeighs2[i] = nanList[i, 0]; // wszystkie NanList, ponizej posortowany dist0, a pozniej caly arr Distinct
+            }
+            int[] dist2 = newNeighs2.Distinct().ToArray();
+
+            int[,] neigboursListSorted = new int[dist2.Length, 3];
+            row = 0; col = 0;
+            for (i=0; i < dist2.Length; i++)
+            {
+                if (i >= nanList.GetLength(0))
+                {
+
+                    if (dist2[i] > imageOut.Height)
+                    {
+                        col = (int)dist2[i] / imageOut.Height;
+                    }
+                    if (dist2[i] > imageOut.Height)
+                    {                       
+                        row = Math.Abs((col * imageOut.Height) - dist2[i]);
+                    }
+                    else
+                        row = dist2[i];
+
+                    neigboursListSorted[i, 0] = dist2[i];
+                    neigboursListSorted[i, 1] = row;
+                    neigboursListSorted[i, 2] = col;                
+                }
+                else
+                {
+                    neigboursListSorted[i, 0] = nanList[i, 0];
+                    neigboursListSorted[i, 1] = nanList[i, 1];
+                    neigboursListSorted[i, 2] = nanList[i, 2];
+                }
+
+            }
+
+
+            return new Tuple <int[,],int[,]> (neigboursListUnique, neigboursListSorted);
 
         }
 
         public Tuple<int[,], int[,], int[,]> CreateInputsForSparseM(int[,] allList, int n_or_m, int row_or_cols)  // int n_or_m = n || m   int row_or_cols = 1 || 2 for rows 1 for cols 2  (if n then 1, if m then 2)
         {
+            Process.GetCurrentProcess().MaxWorkingSet = new IntPtr(2621440000);
+            Process.GetCurrentProcess().MinWorkingSet = new IntPtr(2097152000);
             int n = 1;
             if (row_or_cols > 1)
                 n = imageIn.Height;
@@ -643,9 +726,9 @@ namespace ImageCrusher.Inpainting
                 if (imageOut.Data[ij, j, channel] != imageIn.Data[ij, j, channel])
                 {
                     value = 0;
-                    int toBoundCol = imageOut.Cols - j;
-                    int toBoundRow = imageOut.Rows - ij;
-                    if (ij > 0 && ij < imageOut.Rows - 1 && j > 0 && j < imageOut.Cols - 1)
+                    int toBoundCol = imageOut.Width - j;
+                    int toBoundRow = imageOut.Height - ij;
+                    if (ij > 0 && ij < imageOut.Height - 1 && j > 0 && j < imageOut.Width - 1)
                     {
                         int valCount = 1;
                         if ((imageOut.Data[ij + 1, j, channel]) == imageIn.Data[ij + 1, j, channel] && (imageOut.Data[ij - 1, j, channel]) == imageIn.Data[ij - 1, j, channel] && imageOut.Data[ij, 1 + j, channel] == imageIn.Data[ij, 1 + j, channel] && (imageOut.Data[ij, j - 1, channel]) == imageIn.Data[ij, j - 1, channel] && (imageOut.Data[ij-1, j - 1, channel]) == imageIn.Data[ij-1, j - 1, channel] && imageOut.Data[ij + 1, j - 1, channel] == imageIn.Data[ij + 1, j - 1, channel])
@@ -840,11 +923,11 @@ namespace ImageCrusher.Inpainting
                 }
                 i++;
                 ij++;
-                if (ij == imageOut.Rows)
+                if (ij == imageOut.Height)
                 {
                     ij = 0;
                     j++;
-                    if (j == imageOut.Cols)
+                    if (j == imageOut.Width)
                         j = 0;
                 }
             }

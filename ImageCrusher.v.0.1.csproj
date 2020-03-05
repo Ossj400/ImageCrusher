@@ -70,6 +70,9 @@
     <Reference Include="MathNet.Numerics, Version=4.9.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\MathNet.Numerics.4.9.0\lib\net461\MathNet.Numerics.dll</HintPath>
     </Reference>
+    <Reference Include="StarMath, Version=1.0.17.725, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\StarMath.2.0.17.1019\lib\netstandard1.0\StarMath.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
@@ -131,6 +134,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="License-LGPL.txt" />
+    <Content Include="StarMath.XML" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">

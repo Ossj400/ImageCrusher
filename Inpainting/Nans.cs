@@ -41,8 +41,8 @@ namespace ImageCrusher.Inpainting
 
         public void Compute(int channel) //  channel = 0-2; // red=0, green=1, blue=2     public async Task Compute(int channel)
         {
-            Process.GetCurrentProcess().MaxWorkingSet = new IntPtr(2621440000);
-            Process.GetCurrentProcess().MinWorkingSet = new IntPtr(2097152000);
+            Process.GetCurrentProcess().MaxWorkingSet = new IntPtr(262144000);
+            Process.GetCurrentProcess().MinWorkingSet = new IntPtr(209715200);
             int i = 0;
             int j = 0;
             int ij = 0;
@@ -166,6 +166,7 @@ namespace ImageCrusher.Inpainting
             //~~~!~~~~~~~~~~~~~!!!v                   ~~~~~~~~~~~~~~~~~~~~           sparse matrix
             string sparseString;  // for compare
             int nL = r1.GetLength(0);
+            //StarMathLib.SparseMatrix M = new StarMathLib.SparseMatrix(m * n, m* n);
             MNET.SparseMatrix M = new MNET.SparseMatrix(m * n);    // = fda
 
             for (i = 0; i < r1.GetLength(0); i++)
@@ -176,7 +177,7 @@ namespace ImageCrusher.Inpainting
             }
            // sparseString = M.ToString();
             var fda = MNET.SparseMatrix.OfMatrix(M);        // = fda
-            for (i = 0; i < c1.GetLength(0); i++)
+            for (i = 0; i < c1.GetLength(0)-1; i++)
             {
                 fda[c1[i, 0], c2[i, 0]] = c3[i, 0];
                 fda[c1[i, 1], c2[i, 1]] = c3[i, 1];
@@ -202,10 +203,9 @@ namespace ImageCrusher.Inpainting
             // sparseString = fda.ToString();  // just for comparing with matlab         
 
             var rhsSparse = new MNET.SparseMatrix(m * n, knownList.Length);  // to make a minus : -M1.SubMatrix(0, m * n, 0, knownList.Length);
-            var rhsSparseArr = rhsSparse.ToArray();
             for (i = 0; i < rhsSparse.RowCount; i++)
             {
-                rhsSparseArr[i, j] = fda[i, knownList[j]];
+                rhsSparse[i, j] = fda[i, knownList[j]];
                 if (i == rhsSparse.RowCount - 1)
                 {
                     i = -1;
@@ -220,10 +220,10 @@ namespace ImageCrusher.Inpainting
             double[] rhs = new double[nm];
             for (i = 0; i < nm; i++)
             {
-                for (row = 0; row < rhsSparseArr.GetLength(1); row++)
+                for (row = 0; row < rhsSparse.ColumnCount; row++)
                 {
-                    value += (-rhsSparseArr[col, row]) * a[knownList[row]];
-                    if (row == rhsSparseArr.GetLength(1) - 1)
+                    value += (-rhsSparse[col, row]) * a[knownList[row]];
+                    if (row == rhsSparse.ColumnCount - 1)
                         col++;
                 }
                 rhs[i] = value;
@@ -289,7 +289,6 @@ namespace ImageCrusher.Inpainting
 
             // same as pseudoinverse (solvingInputA.Transpose() * solvingInputA).Inverse();
             //var solvingInputA_Arr = solvingInputA.PseudoInverse().ToArray();
-
             var solvingInputA_Arr = ACMATH.Matrix.PseudoInverse(solvingInputA.ToArray());
             // rozwiązywanie układu równań procesem gaussa 
             int[] solvingInputB = new int[kNew.Length];
@@ -364,8 +363,6 @@ namespace ImageCrusher.Inpainting
 
         public int[,] IdentifyNeighbours(int n, int m, int[,] nanList, int[,] talks_to)
         {
-            Process.GetCurrentProcess().MaxWorkingSet = new IntPtr(2621440000);
-            Process.GetCurrentProcess().MinWorkingSet = new IntPtr(2097152000);
             int nanCount = nanList.GetLength(0);
             int talkCount = talks_to.GetLength(0);
             int[,] nn = new int[(nanCount * talkCount), 2];
@@ -555,8 +552,6 @@ namespace ImageCrusher.Inpainting
 
         public Tuple<int[,], int[,], int[,]> CreateInputsForSparseM(int[,] allList, int n_or_m, int row_or_cols)  // int n_or_m = n || m   int row_or_cols = 1 || 2 for rows 1 for cols 2  (if n then 1, if m then 2)
         {
-            Process.GetCurrentProcess().MaxWorkingSet = new IntPtr(2621440000);
-            Process.GetCurrentProcess().MinWorkingSet = new IntPtr(2097152000);
             int n = 1;
             if (row_or_cols > 1)
                 n = imageIn.Height;

@@ -46,3 +46,5 @@ C:\Users\Artur\source\repos\WindowsFormsApp1\bin\Debug\Accord.Math.dll
 C:\Users\Artur\source\repos\WindowsFormsApp1\bin\Debug\Accord.xml
 C:\Users\Artur\source\repos\WindowsFormsApp1\bin\Debug\Accord.Math.xml
 C:\Users\Artur\source\repos\WindowsFormsApp1\bin\Debug\Accord.Math.Core.xml
+C:\Users\Artur\source\repos\WindowsFormsApp1\bin\Debug\StarMath.dll
+C:\Users\Artur\source\repos\WindowsFormsApp1\bin\Debug\StarMath.pdb

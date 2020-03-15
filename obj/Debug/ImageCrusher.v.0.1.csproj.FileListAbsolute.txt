@@ -47,3 +47,4 @@ C:\Users\Artur\source\repos\WindowsFormsApp1\obj\Debug\ImageCrusher.v.0.1.csproj
 C:\Users\Artur\source\repos\WindowsFormsApp1\obj\Debug\ImageCrusher.v.0.1.csproj.CopyComplete
 C:\Users\Artur\source\repos\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.exe
 C:\Users\Artur\source\repos\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.pdb
+C:\Users\Artur\source\repos\WindowsFormsApp1\obj\Debug\ImageCrusher.v.0.1.csprojAssemblyReference.cache

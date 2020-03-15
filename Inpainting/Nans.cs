@@ -51,7 +51,7 @@ namespace ImageCrusher.Inpainting
             int m = imageIn.Width;
             int nm = n * m;
             bool zero = false;
-
+            
             int[] a = new int[nm];
             int[] k = new int[nm];
             for (; i < nm; i++)
@@ -153,6 +153,212 @@ namespace ImageCrusher.Inpainting
             int[,] talks_to = new int[4, 2] { { -1, 0 }, { 0, -1 }, { -1, 1 }, { 0, 1 } };
 
             // setting all_list - list of corrupted pix and their neighbours
+            //int[,] allList = IdentifyNeighbours(n, m, nanList, talks_to);
+
+            //var InpRows = CreateInputsForSparseM(allList, n, 1);
+            //var InpCols = CreateInputsForSparseM(allList, m, 2);
+            //var r1 = InpRows.Item1;
+            //var r2 = InpRows.Item2;
+            //var r3 = InpRows.Item3;
+            //var c1 = InpCols.Item1;
+            //var c2 = InpCols.Item2;
+            //var c3 = InpCols.Item3;
+            ////~~~!~~~~~~~~~~~~~!!!v                   ~~~~~~~~~~~~~~~~~~~~           sparse matrix
+            //string sparseString;  // for compare
+            //int nL = r1.GetLength(0);
+            //StarMathLib.SparseMatrix M = new StarMathLib.SparseMatrix(m * n, m* n);
+            //for (i = 0; i < r1.GetLength(0); i++)
+            //{
+            //    M[r1[i, 0], r2[i, 0]] = r3[i, 0];
+            //    M[r1[i, 1], r2[i, 1]] = r3[i, 1];
+            //    M[r1[i, 2], r2[i, 2]] = r3[i, 2];
+            //}
+
+            //var fda = M;        // = fda
+            //for (i = 0; i < c1.GetLength(0); i++)
+            //{
+            //    fda[c1[i, 0], c2[i, 0]] = c3[i, 0];
+            //    fda[c1[i, 1], c2[i, 1]] = c3[i, 1];
+            //    fda[c1[i, 2], c2[i, 2]] = c3[i, 2];
+            //}
+            //row = 0; col = 0;
+
+            //for (row = 0; row < fda.NumCols * fda.NumRows; row++)
+            //{
+            //    if (fda[row, col] == -2 && M[row, col] == -2 && row > n && row < fda.NumRows - n)
+            //    {
+            //        fda[row, col] = M[row, col] + fda[row, col];
+            //    }
+            //    if (row == fda.NumRows - 1)
+            //    {
+            //        row = 0; col++;
+            //        if (col == fda.NumCols)
+
+            //                break;
+            //    }
+            //}
+            //i = 0;
+
+            //StarMathLib.SparseMatrix rhsSparse = new StarMathLib.SparseMatrix(m * n, knownList.Length);  // to make a minus : -M1.SubMatrix(0, m * n, 0, knownList.Length);
+            //for (i = 0; i < rhsSparse.NumRows; i++)
+            //{
+            //    rhsSparse[i, j] = fda[i, knownList[j]];
+            //    if (i == rhsSparse.NumRows - 1)
+            //    {
+            //        i = -1;
+            //        j++;
+            //        if (j == rhsSparse.NumCols)
+            //            break;
+            //    }
+            //}
+            //j = 0; col = 0; row = 0;
+            //double value = 0;
+
+            //double[] rhs = new double[nm];
+            //for (i = 0; i < nm; i++)
+            //{
+            //    for (row = 0; row < rhsSparse.NumCols; row++)
+            //    {
+            //        value += (-rhsSparse[col, row]) * a[knownList[row]];
+            //        if (row == rhsSparse.NumCols - 1)
+            //            col++;
+            //    }
+            //    rhs[i] = value;
+            //    value = 0;
+            //}
+            //i = 0; j = 0;
+
+            //StarMathLib.SparseMatrix fdaNan = new StarMathLib.SparseMatrix(nm, nanList2.Length);
+            //for (; i < fda.NumRows * fda.NumCols; i++)
+            //{
+            //    fdaNan[i, j] = fda[i, nanList2[j]];
+            //    if (i == fdaNan.NumRows - 1)
+            //    {
+            //        i = -1;
+            //        j++;
+            //        if (j == nanList2.Length)
+            //            break;
+            //    }
+            //}
+            //i = 0; j = 0; ij = 0;
+
+            //StarMathLib.SparseMatrix fdaAny = new StarMathLib.SparseMatrix(nm, 1);
+            //for (; i < fdaNan.NumRows * fdaNan.NumCols; i++)
+            //{
+            //    if (i == fdaNan.NumRows - 1)
+            //    {
+            //        i = 0;
+            //        j++;
+            //        if (j == nanList2.Length)
+            //            break;
+            //    }
+            //    if (fdaNan[i, j] != 0)
+            //    {
+            //        fdaAny[i, 0] = 1;
+            //        ij++;
+            //    }
+            //}
+            //j = 0;
+
+            //int[] kNew = new int[fdaAny.NumNonZero];
+            //for (i = 0; i < fdaAny.NumRows; i++)
+            //{
+            //    if (fdaAny[i, 0] > 0)
+            //    {
+            //        kNew[j] = i;
+            //        j++;
+            //    }
+            //}
+            //j = 0;
+
+            //StarMathLib.SparseMatrix solvingInputA = new StarMathLib.SparseMatrix(kNew.Length, nanCount);
+            //for (i = 0; j < solvingInputA.NumRows; i++)
+            //{
+            //    solvingInputA[i, j] = fda[kNew[i], nanList[j, 0]];
+            //    if (i == solvingInputA.NumRows - 1)
+            //    {
+            //        i = -1;
+            //        if (j == solvingInputA.NumCols - 1)
+            //            break;
+            //        j++;
+            //    }
+            //}
+
+            //// same as pseudoinverse (solvingInputA.Transpose() * solvingInputA).Inverse();
+            ////var solvingInputA_Arr = solvingInputA.PseudoInverse().ToArray();
+            //// var solvingInputA_Arr = ACMATH.Matrix.PseudoInverse(solvingInputA.));
+
+            //// rozwiązywanie układu równań procesem gaussa 
+            //List<double> solvingInputB = new List<double>(kNew.Length);//[kNew.Length];
+            //for (i = 0; i < kNew.Length; i++)
+            //{
+            //    solvingInputB.Insert(i,((int)rhs[kNew[i]]));                  /// cast int is ok coz all rhs are Integers 
+            //}
+            ////solve
+            //value = 0; row = 0; col = 0; ij = 0;
+
+            // solvingInputA.SolveIteratively(solvingInputB.ToList());
+
+            //// solvingInputB[1] = solvingInputA[0,0] * x + ... + solvingInputA[0,n] * x
+
+            //int[] solve = new int[a.Length];
+            //for (i = 0; i < a.Length; i++)
+            //{
+            //    solve[i] = a[i];
+            //    if (k[i] > 0)
+            //    {
+            //        for (row = 0; row < solvingInputB.Count; row++)
+            //        {
+            //            value += solvingInputA[row, ij] * solvingInputB[row];
+            //        }
+            //        ij++;
+            //        solve[i] = (int)Math.Round(value);
+            //        value = 0;
+            //    }
+            //}
+
+            //ij = 0; j = 0;
+            //for (i = 0; i < nm; i++)
+            //{
+            //    imageOutNans.Data[ij, j, channel] = (byte)solve[i];
+            //    ij++;
+            //    if (ij == imageOut.Height)
+            //    {
+            //        ij = 0;
+            //        j++;
+
+            //        if (j == imageOut.Width)
+            //            j = 0;
+            //    }
+            //}
+
+            ///// testing solve
+            ///// 
+
+            //i = 0; j = 0; ij = 0;
+            //var originalInputImg = a;
+            //for (; i < nm; i++)
+            //{
+            //    originalInputImg[i] = imageOut.Data[ij, j, channel];
+            //    ij++;
+            //    if (ij == imageOut.Height)
+            //    {
+            //        ij = 0;
+            //        j++;
+
+            //        if (j == imageOut.Width)
+            //            j = 0;
+            //    }
+            //}
+
+            //solve.SaveArrayAsCSV("C:/Users/Artur/Downloads/zdj/SolvedArrChannel_" + channel + ".csv");
+
+            //a.SaveArrayAsCSV("C:/Users/Artur/Downloads/zdj/A_" + channel + ".csv");
+            //originalInputImg.SaveArrayAsCSV("C:/Users/Artur/Downloads/zdj/OriginalInpuArray_" + channel + ".csv");
+            //allList.SaveArrayAsCSV("C:/Users/Artur/Downloads/zdj/AllList" + channel + ".csv");
+            //// deleted neighb2.SaveArrayAsCSV("C:/Users/Artur/Downloads/zdj/NeighboursAllList" + channel + ".csv");
+
+            //setting all list
             int[,] allList = IdentifyNeighbours(n, m, nanList, talks_to);
 
             var InpRows = CreateInputsForSparseM(allList, n, 1);
@@ -164,53 +370,52 @@ namespace ImageCrusher.Inpainting
             var c2 = InpCols.Item2;
             var c3 = InpCols.Item3;
             //~~~!~~~~~~~~~~~~~!!!v                   ~~~~~~~~~~~~~~~~~~~~           sparse matrix
-            string sparseString;  // for compare
-            int nL = r1.GetLength(0);
-            //StarMathLib.SparseMatrix M = new StarMathLib.SparseMatrix(m * n, m* n);
-            MNET.SparseMatrix M = new MNET.SparseMatrix(m * n);    // = fda
 
+            alglib.sparsematrix M;
+            alglib.sparsecreate(m*n, m*n, out M);
             for (i = 0; i < r1.GetLength(0); i++)
             {
-                M[r1[i, 0], r2[i, 0]] = r3[i, 0];
-                M[r1[i, 1], r2[i, 1]] = r3[i, 1];
-                M[r1[i, 2], r2[i, 2]] = r3[i, 2];
+                alglib.sparseset(M, (r1[i, 0]), (r2[i, 0]), r3[i, 0]);
+                alglib.sparseset(M, (r1[i, 1]), (r2[i, 1]), r3[i, 1]);
+                alglib.sparseset(M, (r1[i, 2]), (r2[i, 2]), r3[i, 2]);
             }
-           // sparseString = M.ToString();
-            var fda = MNET.SparseMatrix.OfMatrix(M);        // = fda
-            for (i = 0; i < c1.GetLength(0)-1; i++)
+
+            alglib.sparsematrix fda;
+            alglib.sparsecopy(M, out fda);
+            for (i = 0; i < c1.GetLength(0); i++)
             {
-                fda[c1[i, 0], c2[i, 0]] = c3[i, 0];
-                fda[c1[i, 1], c2[i, 1]] = c3[i, 1];
-                fda[c1[i, 2], c2[i, 2]] = c3[i, 2];
+                alglib.sparseset(fda, (c1[i, 0]), (c2[i, 0]), c3[i, 0]);
+                alglib.sparseset(fda, (c1[i, 1]), (c2[i, 1]), c3[i, 1]);
+                alglib.sparseset(fda, (c1[i, 2]), (c2[i, 2]), c3[i, 2]);
             }
             row = 0; col = 0;
 
-            for (row = 0; row < fda.ColumnCount * fda.RowCount; row++)
-            {
-                if (fda[row, col] == -2 && M[row, col] == -2 && row > n && row < fda.RowCount - n)
+            for (row = 0; row < fda.innerobj.tablesize; row++)
+            {      
+                if (alglib.sparseget(fda, row, col) == -2 && alglib.sparseget(M, row, col) == -2 && row > n && row < alglib.sparsegetnrows(fda)- n)
                 {
-                    fda[row, col] = M[row, col] + fda[row, col];
+                    alglib.sparseset(fda,(row), col, (alglib.sparseget(M, row, col) + alglib.sparseget(fda, row, col)));
                 }
-                if (row == fda.RowCount - 1)
+                if (row == alglib.sparsegetnrows(fda) - 1)
                 {
                     row = 0; col++;
-                    if (col == fda.ColumnCount)
+                    if (col == alglib.sparsegetncols(fda))
 
-                            break;
+                        break;
                 }
             }
             i = 0;
-            // sparseString = fda.ToString();  // just for comparing with matlab         
 
-            var rhsSparse = new MNET.SparseMatrix(m * n, knownList.Length);  // to make a minus : -M1.SubMatrix(0, m * n, 0, knownList.Length);
-            for (i = 0; i < rhsSparse.RowCount; i++)
+            alglib.sparsematrix rhsSparse;
+            alglib.sparsecreate(m * n, knownList.Length, out rhsSparse);
+            for (i = 0; i < alglib.sparsegetnrows(rhsSparse); i++)
             {
-                rhsSparse[i, j] = fda[i, knownList[j]];
-                if (i == rhsSparse.RowCount - 1)
+                alglib.sparseset(rhsSparse, i, j, alglib.sparseget(fda, i, knownList[j])); 
+                if (i == alglib.sparsegetnrows(rhsSparse) - 1)
                 {
                     i = -1;
                     j++;
-                    if (j == rhsSparse.ColumnCount)
+                    if (j == alglib.sparsegetncols(rhsSparse))
                         break;
                 }
             }
@@ -220,10 +425,10 @@ namespace ImageCrusher.Inpainting
             double[] rhs = new double[nm];
             for (i = 0; i < nm; i++)
             {
-                for (row = 0; row < rhsSparse.ColumnCount; row++)
+                for (row = 0; row < alglib.sparsegetncols(rhsSparse); row++)
                 {
-                    value += (-rhsSparse[col, row]) * a[knownList[row]];
-                    if (row == rhsSparse.ColumnCount - 1)
+                    value +=   a[knownList[row]]* -(alglib.sparseget((rhsSparse), col, row));
+                    if (row == alglib.sparsegetncols(rhsSparse) - 1)
                         col++;
                 }
                 rhs[i] = value;
@@ -231,11 +436,12 @@ namespace ImageCrusher.Inpainting
             }
             i = 0; j = 0;
 
-            MNET.SparseMatrix fdaNan = new MNET.SparseMatrix(nm, nanList2.Length);
-            for (; i < fda.RowCount * fda.ColumnCount; i++)
+            alglib.sparsematrix fdaNan;
+            alglib.sparsecreate(m * n, nanList2.Length, out fdaNan);
+            for (; i < alglib.sparsegetnrows(fda) * alglib.sparsegetncols(fda); i++)
             {
-                fdaNan[i, j] = fda[i, nanList2[j]];
-                if (i == fdaNan.RowCount - 1)
+                alglib.sparseset(fdaNan, i, j, alglib.sparseget(fda, i, nanList2[j]));    
+                if (i == alglib.sparsegetnrows(fdaNan) - 1)
                 {
                     i = -1;
                     j++;
@@ -243,87 +449,131 @@ namespace ImageCrusher.Inpainting
                         break;
                 }
             }
-            i = 0; j = 0; ij = 0;
 
-            MNET.SparseMatrix fdaAny = new MNET.SparseMatrix(nm, 1);
-            for (; i < fdaNan.RowCount * fdaNan.ColumnCount; i++)
+
+            ij = 0; col = 0;
+            for (row = 0; row < fdaNan.innerobj.tablesize; row++)
             {
-                if (i == fdaNan.RowCount - 1)
+                if (alglib.sparseget(fdaNan, row, col) != 0)
+                {
+                    ij++;
+                }
+                if (row == alglib.sparsegetnrows(fdaNan) - 1)
+                {
+                    row = 0; col++;
+                    if (col == alglib.sparsegetncols(fdaNan))
+
+                        break;
+                }
+            }
+            ij = 0;
+
+
+            int fdaNonZero =0;
+            i = 0; j = 0; ij = 0;
+            alglib.sparsematrix fdaAny;
+            alglib.sparsecreate(m * n, 1, out fdaAny);
+            for (; i < alglib.sparsegetnrows(fdaNan) * alglib.sparsegetncols(fdaNan); i++)
+            {
+                if (i == alglib.sparsegetnrows(fdaNan) - 1)
                 {
                     i = 0;
                     j++;
                     if (j == nanList2.Length)
                         break;
                 }
-                if (fdaNan[i, j] != 0)
+                if (alglib.sparseget(fdaNan, i,j) != 0)
                 {
-                    fdaAny[i, 0] = 1;
-                    ij++;
+                    alglib.sparseset(fdaAny, i, 0, 1);             
                 }
             }
-            j = 0;
+           j = 0;
 
-            int[] kNew = new int[fdaAny.NonZerosCount];
-            for (i = 0; i < fdaAny.RowCount; i++)
+            ij = 0; col = 0;
+            for (row = 0; row < fdaAny.innerobj.tablesize; row++)
             {
-                if (fdaAny[i, 0] > 0)
+                if (alglib.sparseget(fdaAny, row, col) != 0)
+                {
+                    fdaNonZero++;
+                }
+                if (row == alglib.sparsegetnrows(fdaAny) - 1)
+                {
+                    row = 0; col++;
+                    if (col == alglib.sparsegetncols(fdaAny))
+                        break;
+                }
+            }
+            ij = 0;
+
+            int[] kNew = new int[fdaNonZero];
+            for (i = 0; i < alglib.sparsegetnrows(fdaAny); i++)
+            {
+                if (alglib.sparseget(fdaAny,i, 0) > 0)
                 {
                     kNew[j] = i;
-                    j++;
+                   j++;
                 }
             }
             j = 0;
 
-            var solvingInputA = new MNET.SparseMatrix(kNew.Length, nanCount);
-            for (i = 0; j < solvingInputA.RowCount; i++)
+            alglib.sparse.sparsematrix solvingInputA = new alglib.sparse.sparsematrix();
+            alglib.sparse.sparsecreate(kNew.Length, nanCount, fdaNonZero, solvingInputA, default);
+            for (i = 0; j < alglib.sparse.sparsegetnrows(solvingInputA, default); i++)
             {
-                solvingInputA[i, j] = fda[kNew[i], nanList[j, 0]];
-                if (i == solvingInputA.RowCount - 1)
+                alglib.sparse.sparseset(solvingInputA, i, j, (alglib.sparseget(fda, kNew[i], nanList[j, 0])), default);
+                if (i == alglib.sparse.sparsegetnrows(solvingInputA, default) - 1)
                 {
                     i = -1;
-                    if (j == solvingInputA.ColumnCount - 1)
+                    if (j == alglib.sparse.sparsegetncols(solvingInputA, default) - 1)
                         break;
                     j++;
                 }
             }
 
-            // same as pseudoinverse (solvingInputA.Transpose() * solvingInputA).Inverse();
-            //var solvingInputA_Arr = solvingInputA.PseudoInverse().ToArray();
-            var solvingInputA_Arr = ACMATH.Matrix.PseudoInverse(solvingInputA.ToArray());
-            // rozwiązywanie układu równań procesem gaussa 
-            int[] solvingInputB = new int[kNew.Length];
+            alglib.sparsematrix solvingInputA1 = new alglib.sparsematrix(solvingInputA);
+            alglib.sparsematrix solvingInputA2 = new alglib.sparsematrix(fda);
+            double[] solvingInputB = new double[kNew.Length];
             for (i = 0; i < kNew.Length; i++)
             {
-                solvingInputB[i] = (int)rhs[kNew[i]];                  /// cast int is ok coz all rhs are Integers 
-            }
-            //solve
-            for (i = 0; i < kNew.Length; i++)
-            {
-                solvingInputB[i] = (int)rhs[kNew[i]];                  /// cast int is ok coz all rhs are Integers 
-            }
-            value = 0; row = 0; col = 0; ij = 0;
-
-            int[] solve = new int[a.Length];
-            for (i = 0; i < a.Length; i++)
-            {
-                solve[i] = a[i];
-                if (k[i] > 0)
-                {
-                    for (row = 0; row < solvingInputB.Length; row++)
-                    {
-                        value += solvingInputA_Arr[ij, row] * solvingInputB[row];
-                    }
-                    ij++;
-                    solve[i] = (int)Math.Round(value);
-                    value = 0;
-                }
+                solvingInputB[i]= rhs[kNew[i]];               
             }
 
+            double[] solve = new double[kNew.Length];
+
+            alglib.linlsqrstate linlsqrstate;
+            alglib.linlsqrcreate(solvingInputA.m, rhs.Length, out linlsqrstate);
+            alglib.xparams _params = default;
+            alglib.sparse.sparseconverttocrs(solvingInputA, default);
+            alglib.sparse.sparseconverttocrs(solvingInputA2, default);
+            alglib.linlsqrsolvesparse(linlsqrstate, solvingInputA2, rhs, _params: _params);
+            alglib.linlsqrreport report = new alglib.linlsqrreport();
+            alglib.linlsqrresults(linlsqrstate, out solve, out report);
+         //   alglib.sparseenumerate()
+            
+
+            i = 0;
+            foreach(double item in solve)
+            {
+                solve[i] = Math.Round(item);
+                if (solve[i] > 255)
+                    solve[i] = 255;
+                i++;
+            }
+
+            double[] finalImgArr = new double[a.Length];
+            int ijk = 0;
             ij = 0; j = 0;
             for (i = 0; i < nm; i++)
             {
-                imageOutNans.Data[ij, j, channel] = (byte)solve[i];
-                ij++;
+               
+                if (i != nanList2[ijk])
+                {
+                    imageOutNans.Data[ij, j, channel] = imageOut.Data[ij, j, channel];
+                    finalImgArr[i] = imageOutNans.Data[ij, j, channel];                       
+                    ij++;
+                }
+
+
                 if (ij == imageOut.Height)
                 {
                     ij = 0;
@@ -332,16 +582,35 @@ namespace ImageCrusher.Inpainting
                     if (j == imageOut.Width)
                         j = 0;
                 }
+                if (i == nanList2[ijk])
+                {
+                    imageOutNans.Data[ij, j, channel] = (byte)solve[ijk];
+                    finalImgArr[i] = imageOutNans.Data[ij, j, channel];
+                    ij++;
+                    ijk++;
+                    if (ijk == nanList2.Length)
+                        ijk = 0;
+                }
+
+                if (ij == imageOut.Height)
+                {
+                    ij = 0;
+                    j++;
+
+                    if (j == imageOut.Width)
+                        j = 0;
+                }
+
             }
 
-            /// testing solve
-            /// 
-            
+            ///// testing solve
+            ///// 
+
             i = 0; j = 0; ij = 0;
-            var originalInputImg = a;
+            double[] originalInputImg = new double[a.Length];
             for (; i < nm; i++)
             {
-                originalInputImg[i] = imageOut.Data[ij, j, channel];
+                originalInputImg[i] = imageIn.Data[ij, j, channel];
                 ij++;
                 if (ij == imageOut.Height)
                 {
@@ -354,10 +623,11 @@ namespace ImageCrusher.Inpainting
             }
 
             solve.SaveArrayAsCSV("C:/Users/Artur/Downloads/zdj/SolvedArrChannel_" + channel + ".csv");
+            finalImgArr.SaveArrayAsCSV("C:/Users/Artur/Downloads/zdj/FinalImgArray" + channel + ".csv");
             a.SaveArrayAsCSV("C:/Users/Artur/Downloads/zdj/A_" + channel + ".csv");
             originalInputImg.SaveArrayAsCSV("C:/Users/Artur/Downloads/zdj/OriginalInpuArray_" + channel + ".csv");
-            allList.SaveArrayAsCSV("C:/Users/Artur/Downloads/zdj/AllList" + channel + ".csv");
-           // deleted neighb2.SaveArrayAsCSV("C:/Users/Artur/Downloads/zdj/NeighboursAllList" + channel + ".csv");
+            //allList.SaveArrayAsCSV("C:/Users/Artur/Downloads/zdj/AllList" + channel + ".csv");
+            //// deleted neighb2.SaveArrayAsCSV("C:/Users/Artur/Downloads/zdj/NeighboursAllList" + channel + ".csv");
 
         }
 

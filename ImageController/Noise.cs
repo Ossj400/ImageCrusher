@@ -47,7 +47,7 @@ namespace ImageCrusher.ImageController
                     int randPixY = random.Next(0, (yPixels - 1));  // same for y axis
                     if ((randPixX >= 0) && (randPixX < xPixels) && (randPixY >= 0) && (randPixY < yPixels)) // if random number and range is in boundaries of array loop is going
                     {
-                        int rand = random.Next(0, 255);
+                        int rand = random.Next(1, 255);
                         Data[randPixY, randPixX, 0] = (byte)rand;
                         Data[randPixY, randPixX, 1] = (byte)rand;
                         Data[randPixY, randPixX, 2] = (byte)rand;
@@ -74,18 +74,18 @@ namespace ImageCrusher.ImageController
                 {
                     if ((randPixX + pixNoiseRange >= 0) && (randPixX - pixNoiseRange >= 0) && (randPixX - pixNoiseRange < xPixels) && (randPixX + pixNoiseRange < xPixels) && (randPixY + (pixNoiseRange + 1) < yPixels) && (randPixY + (pixNoiseRange + 1) >= 0) && (randPixY - (pixNoiseRange + 1) >= 0) && (randPixY - (pixNoiseRange + 1) < yPixels) && (randPixY + (pixNoiseRange + 1) >= 0)) // if random number and range is in boundaries of array loop is going
                     {
-                        Data[randPixY + (1 + pixNoiseRange), randPixX + pixNoiseRange, 0] = (byte)random.Next(0, 255);
-                        Data[randPixY + (1 + pixNoiseRange), randPixX + pixNoiseRange, 1] = (byte)random.Next(0, 255);
+                        Data[randPixY + (1 + pixNoiseRange), randPixX + pixNoiseRange, 0] = (byte)random.Next(1, 255);
+                        Data[randPixY + (1 + pixNoiseRange), randPixX + pixNoiseRange, 1] = (byte)random.Next(1, 255);
                         Data[randPixY + (1 + pixNoiseRange), randPixX + pixNoiseRange, 2] = (byte)random.Next(0, 255);
 
-                        Data[randPixY - (1 + pixNoiseRange), randPixX - pixNoiseRange, 0] = (byte)random.Next(0, 255);
-                        Data[randPixY - (1 + pixNoiseRange), randPixX - pixNoiseRange, 1] = (byte)random.Next(0, 255);
-                        Data[randPixY - (1 + pixNoiseRange), randPixX - pixNoiseRange, 2] = (byte)random.Next(0, 255);
+                        Data[randPixY - (1 + pixNoiseRange), randPixX - pixNoiseRange, 0] = (byte)random.Next(1, 255);
+                        Data[randPixY - (1 + pixNoiseRange), randPixX - pixNoiseRange, 1] = (byte)random.Next(1, 255);
+                        Data[randPixY - (1 + pixNoiseRange), randPixX - pixNoiseRange, 2] = (byte)random.Next(1, 255);
                     }
                     else
                     {
-                        randPixX = random.Next(0, (xPixels - 1));  // new randoms for same pixNoise range
-                        randPixY = random.Next(0, (yPixels - 1));
+                        randPixX = random.Next(1, (xPixels - 1));  // new randoms for same pixNoise range
+                        randPixY = random.Next(1, (yPixels - 1));
                     }
                 }
             }

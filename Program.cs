@@ -15,4 +15,14 @@ namespace ImageCrusher
             Application.Run(new MainWindow());
         }
     }
+
+    class Auto
+    {
+        public Opony rodzaj { get; set; }
+    }
+
+    class Opony
+    {
+       public int rozmiar = 6;
+    }
 }

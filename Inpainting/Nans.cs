@@ -184,47 +184,19 @@ namespace ImageCrusher.Inpainting
             }
             row = 0; col = 0;
 
-            //for (row = 0; row < fda.innerobj.tablesize; row++)
-            //{      
-            //    if (alglib.sparseget(fda, row, col) == -2 && alglib.sparseget(M, row, col) == -2 && row > n && row < alglib.sparsegetnrows(fda)- n)
-            //    {
-            //        alglib.sparseset(fda,(row), col, (alglib.sparseget(M, row, col) + alglib.sparseget(fda, row, col)));
-            //    }
-            //    if (row == alglib.sparsegetnrows(fda) - 1)
-            //    {
-            //        row = 0; col++;
-            //        if (col == alglib.sparsegetncols(fda))
-
-            //            break;
-            //    }
-            //}
-            //i = 0;
-
-            row = 0; col = 0;
-
-            int chuj1 = 0;
-            int chujwazne2 = 0;
+            int uselessCounter1 = 0;
+            int uselessCounter2 = 0;
             row = 0;
             col = 0;
-            double numb;
-            alglib.sparsematrix fda2;
-            alglib.sparsecopy(fda, out fda2);
-            for (i = 0; i < 100000; i++)
-            {
-               if(alglib.sparseenumerate(fda, ref chuj1, ref chujwazne2, out row, out col, out numb) == true)
-                {
+            double uselessNumb;
+
+               while(alglib.sparseenumerate(fda, ref uselessCounter1, ref uselessCounter2, out row, out col, out uselessNumb) == true)
+               {
                     if (alglib.sparseget(fda, row, col) == -2 && alglib.sparseget(M, row, col) == -2 && row > n && row < alglib.sparsegetnrows(fda) - n)
-                    {
-                        alglib.sparseset(fda2, (row), col, (alglib.sparseget(M, row, col) + alglib.sparseget(fda, row, col)));
-                        ij++;
-                    }
-                }
-                else
-                {
-                    break;
-                }
-            }
-            ij = 0;
+                        {
+                            alglib.sparseset(fda, (row), col, (alglib.sparseget(M, row, col) + alglib.sparseget(fda, row, col)));
+                        }
+               }
 
             alglib.sparsematrix rhsSparse;
             alglib.sparsecreate(m * n, knownList.Length, out rhsSparse);

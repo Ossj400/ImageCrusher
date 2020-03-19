@@ -198,29 +198,79 @@ namespace ImageCrusher.Inpainting
                         }
                }
 
-            alglib.sparsematrix rhsSparse;
-            alglib.sparsecreate(m * n, knownList.Length, out rhsSparse);
-            for (i = 0; i < alglib.sparsegetnrows(rhsSparse); i++)
-            {
-                alglib.sparseset(rhsSparse, i, j, alglib.sparseget(fda, i, knownList[j])); 
-                if (i == alglib.sparsegetnrows(rhsSparse) - 1)
-                {
-                    i = -1;
-                    j++;
-                    if (j == alglib.sparsegetncols(rhsSparse))
-                        break;
-                }
-            }
-            j = 0; col = 0; row = 0;
+            //alglib.sparsematrix rhsSparse;
+            //alglib.sparsecreate(m * n, knownList.Length, out rhsSparse);
+            //for (i = 0; i < alglib.sparsegetnrows(rhsSparse); i++)
+            //{
+            //    alglib.sparseset(rhsSparse, i, j, alglib.sparseget(fda, i, knownList[j])); 
+            //    if (i == alglib.sparsegetnrows(rhsSparse) - 1)
+            //    {
+            //        i = -1;
+            //        j++;
+            //        if (j == alglib.sparsegetncols(rhsSparse))
+            //            break;
+            //    }
+            //}
+            //j = 0; col = 0; row = 0;
+            //
+
+
+            //List<double> rhsL1 = new List<double>();
+            //while (alglib.sparseenumerate(fda, ref uselessCounter1, ref uselessCounter2, out row, out col, out uselessNumb) == true)
+            //{
+            //    rhsL1.Add(uselessNumb);
+            //    j++;   // non0 counter for tests
+            //}
+            //rhsL1.Clear();
+            //j = 0;
+            //alglib.sparsematrix rhsSparse2;
+            //alglib.sparsecreate(m * n, knownList.Length, out rhsSparse2);
+            //for(i=0;i<knownList.Length;i++)
+            //{
+            //    uselessCounter1 = 0; uselessCounter2 = 0;
+            //    while (alglib.sparseenumerate(fda, ref uselessCounter1, ref uselessCounter2, out row, out col, out uselessNumb) == true)
+            //   {
+            //        if( col < knownList.Length)
+            //        if (alglib.sparseget(fda, row, knownList[col]) != 0  && col < knownList.Length)
+            //          {
+            //            alglib.sparseset(rhsSparse2, row, col, alglib.sparseget(fda, row, knownList[col]));
+            //            j++;
+            //          }
+            //    }
+            //}
+            //j = 0;
+            //while (alglib.sparseenumerate(rhsSparse2, ref uselessCounter1, ref uselessCounter2, out row, out col, out uselessNumb) == true)
+            //{
+            //    rhsL1.Add(uselessNumb);
+            //    j++;   // non0 counter for tests
+            //}
+            //rhsL1.Clear();
+            bool f = false;
+
+            //double[] rhs = new double[nm];
+            //for (i = 0; i < nm; i++) 
+            //{
+            //    for (row = 0; row < alglib.sparsegetncols(rhsSparse); row++)
+            //    {
+            //        value +=   a[knownList[row]]* -(alglib.sparseget((rhsSparse), col, row));
+            //        if (row == alglib.sparsegetncols(rhsSparse) - 1)
+            //            col++;
+            //    }
+            //    rhs[i] = value;
+            //    value = 0;
+            //}
+
+            i = 0; j = 0;
             double value = 0;
+            row = 0; col = 0;
 
             double[] rhs = new double[nm];
             for (i = 0; i < nm; i++)
             {
-                for (row = 0; row < alglib.sparsegetncols(rhsSparse); row++)
+                for (row = 0; row < knownList.Length; row++)
                 {
-                    value +=   a[knownList[row]]* -(alglib.sparseget((rhsSparse), col, row));
-                    if (row == alglib.sparsegetncols(rhsSparse) - 1)
+                    value += a[knownList[row]] * -(alglib.sparseget((fda), col, knownList[row]));
+                    if (row == knownList.Length - 1)
                         col++;
                 }
                 rhs[i] = value;

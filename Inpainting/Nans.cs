@@ -36,7 +36,7 @@ namespace ImageCrusher.Inpainting
         {
         }
 
-        public /*async Task*/ void Compute(int channel) //  channel = 0-2; // red=0, green=1, blue=2    
+        public async Task /*void*/ Compute(int channel) //  channel = 0-2; // red=0, green=1, blue=2    
         {
             Process.GetCurrentProcess().MaxWorkingSet = new IntPtr(262144000);
             Process.GetCurrentProcess().MinWorkingSet = new IntPtr(209715200);
@@ -48,7 +48,8 @@ namespace ImageCrusher.Inpainting
             int m = imageIn.Width;
             int nm = n * m;
             bool zero = false;
-            
+
+            int[] differences = new int[nm];               //// FOr Ml Builder - delete this !!!!!!!!!!!!!!!!!!!!!!!!!!
             int[] a = new int[nm];
             int[] k = new int[nm];
             for (; i < nm; i++)
@@ -68,8 +69,10 @@ namespace ImageCrusher.Inpainting
 
             for (int item = 0; item < nm; item++)
             {
+                differences[item] = imageIn.Data[ij, j, channel];  //// FOr Ml Builder - delete this !!!!!!!!!!!!!!!!!!!!!!!!!!
                 if (imageOut.Data[ij, j, channel] != imageIn.Data[ij, j, channel])
                 {
+                    differences[item] = 0; //// FOr Ml Builder - delete this !!!!!!!!!!!!!!!!!!!!!!!!!!
                     k[i] = i;
                     nanCount++;
                     if (imageOut.Data[0, 0, channel] != imageIn.Data[0, 0, channel])
@@ -196,19 +199,17 @@ namespace ImageCrusher.Inpainting
 
             double value = 0;
             row = 0; col = 0;
+            int nCols = alglib.sparsegetncols(fda);
             double[] rhs = new double[nm];
-            for (i = 0; i < nm; i++)
+            for (col = 0; col < nCols; col++)
             {
                 for (row = 0; row < knownList.Length; row++)
                 {
-                    value += a[knownList[row]] * -(alglib.sparseget((fda), col, knownList[row]));
-                    if (row == knownList.Length - 1)
-                        col++; 
+                    rhs[i] += a[knownList[row]] * -(alglib.sparseget((fda), col, knownList[row]));
                 }
-                rhs[i] = value;
-                value = 0;
+                i++;
             }
-            i = 0; j = 0;
+            i = 0; row = 0;col = 0;
 
             int fda0Count = 0;
             while (alglib.sparseenumerate(fda, ref uselessCounter1, ref uselessCounter2, out row, out col, out uselessNumb))
@@ -251,8 +252,8 @@ namespace ImageCrusher.Inpainting
             i = 0; j = 0;
             alglib.sparsematrix fdaNan;
             alglib.sparsecreate(m * n, nanList2.Length, out fdaNan);
-            /*for (; i < 11; i++)*/
-            for (; i < alglib.sparsegetnrows(fda) * alglib.sparsegetncols(fda); i++)
+            for (; i < 11; i++)
+                //for (; i < alglib.sparsegetnrows(fda) * alglib.sparsegetncols(fda); i++)
             {
                 alglib.sparseset(fdaNan, i, j, alglib.sparseget(fda, i, nanList2[j]));
                 if (i == alglib.sparsegetnrows(fdaNan) - 1)
@@ -297,7 +298,7 @@ namespace ImageCrusher.Inpainting
             i = 0; j = 0;
             alglib.sparsematrix fdaAny;
             alglib.sparsecreate(m * n, 1, out fdaAny);
-            while (alglib.sparseenumerate(fdaNan, ref uselessCounter1, ref uselessCounter2, out row, out col, out uselessNumb))
+            while (alglib.sparseenumerate(fdaNan2, ref uselessCounter1, ref uselessCounter2, out row, out col, out uselessNumb))
             {
                 alglib.sparseset(fdaAny, row, 0, 1);
             }
@@ -321,7 +322,7 @@ namespace ImageCrusher.Inpainting
             alglib.sparse.sparsematrix solvingInputA = new alglib.sparse.sparsematrix();
             alglib.sparse.sparsecreate(kNew.Length, nanCount, fdaNonZero, solvingInputA, default);
             int nRows = alglib.sparse.sparsegetnrows(solvingInputA, default);
-            int nCols = alglib.sparse.sparsegetncols(solvingInputA, default);
+            nCols = alglib.sparse.sparsegetncols(solvingInputA, default);
             for (col = 0; col < nCols; col++)
             {
                 for (row = 0; row < nRows; row++)                
@@ -415,6 +416,7 @@ namespace ImageCrusher.Inpainting
             finalImgArr.SaveArrayAsCSV("C:/Users/Artur/Downloads/zdj/FinalImgArray" + channel + ".csv");
             a.SaveArrayAsCSV("C:/Users/Artur/Downloads/zdj/A_" + channel + ".csv");
             originalInputImg.SaveArrayAsCSV("C:/Users/Artur/Downloads/zdj/OriginalInpuArray_" + channel + ".csv");
+            differences.SaveArrayAsCSV("C:/Users/Artur/Downloads/zdj/DifferencesForML_" + channel + ".csv"); //// FOr Ml Builder - delete this !!!!!!!!!!!!!!!!!!!!!!!!!!
         }
 
         public int[,] IdentifyNeighbours(int n, int m, int[,] nanList, int[,] talks_to)

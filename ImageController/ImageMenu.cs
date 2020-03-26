@@ -35,6 +35,30 @@ namespace ImageCrusher.ImageController
                     MessageBox.Show("Wrong format. Error: " + '\n' + e.ToString());   ///////////////// ???????
                 }
             }
+          //  SetImageToMlBuilder();                                   /// Only for ML Builder, delete later.
+        }
+        public void SetImageToMlBuilder()               /// Only for ML Builder, delete later.            !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        {
+            byte[,,] Data = Img.Data;
+            for (int item = 0; item < img.Height; item++)
+            {
+                for (int x = 0; x < img.Width+2; x++)
+                {
+                    if (Data[item, x, 0] == 0)
+                    {
+                        Data[item, x, 0] = 1;
+                    }
+                    if (Data[item, x, 1] == 0)
+                    {
+                        Data[item, x, 1] = 1;
+                    }
+                    if (Data[item, x, 2] == 0)
+                    {
+                        Data[item, x, 2] = 1;
+                    }
+                }
+
+            }
         }
         public void LoadMaskGray()
         {
@@ -51,7 +75,6 @@ namespace ImageCrusher.ImageController
                 }
             }
         }
-
         public void LoadRGB_ImageAsMask()
         {
             OpenFileDialog OpenFile = new OpenFileDialog();

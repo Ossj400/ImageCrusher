@@ -54,6 +54,7 @@
             this.BtInpaintNans = new System.Windows.Forms.Button();
             this.BtSaveMask = new System.Windows.Forms.Button();
             this.BtRGB_Mask = new System.Windows.Forms.Button();
+            this.BtSaveRGbMask = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.TrBarNoiseController)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PicBox2Editedmg)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PicBox1OrgImg)).BeginInit();
@@ -290,7 +291,7 @@
             // 
             // BtSaveMask
             // 
-            this.BtSaveMask.Location = new System.Drawing.Point(977, 567);
+            this.BtSaveMask.Location = new System.Drawing.Point(1046, 567);
             this.BtSaveMask.Name = "BtSaveMask";
             this.BtSaveMask.Size = new System.Drawing.Size(108, 30);
             this.BtSaveMask.TabIndex = 23;
@@ -303,11 +304,22 @@
             this.BtRGB_Mask.BackColor = System.Drawing.Color.LightCoral;
             this.BtRGB_Mask.Location = new System.Drawing.Point(828, 603);
             this.BtRGB_Mask.Name = "BtRGB_Mask";
-            this.BtRGB_Mask.Size = new System.Drawing.Size(257, 30);
+            this.BtRGB_Mask.Size = new System.Drawing.Size(197, 30);
             this.BtRGB_Mask.TabIndex = 24;
             this.BtRGB_Mask.Text = "Load RBG Image As Mask";
             this.BtRGB_Mask.UseVisualStyleBackColor = false;
             this.BtRGB_Mask.Click += new System.EventHandler(this.BtRGB_Mask_Click);
+            // 
+            // BtSaveRGbMask
+            // 
+            this.BtSaveRGbMask.BackColor = System.Drawing.Color.LightCoral;
+            this.BtSaveRGbMask.Location = new System.Drawing.Point(1031, 603);
+            this.BtSaveRGbMask.Name = "BtSaveRGbMask";
+            this.BtSaveRGbMask.Size = new System.Drawing.Size(123, 30);
+            this.BtSaveRGbMask.TabIndex = 25;
+            this.BtSaveRGbMask.Text = "Save RBG Mask";
+            this.BtSaveRGbMask.UseVisualStyleBackColor = false;
+            this.BtSaveRGbMask.Click += new System.EventHandler(this.BtSaveRGbMask_Click);
             // 
             // MainWindow
             // 
@@ -318,6 +330,7 @@
             this.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
             this.CausesValidation = false;
             this.ClientSize = new System.Drawing.Size(1887, 740);
+            this.Controls.Add(this.BtSaveRGbMask);
             this.Controls.Add(this.BtRGB_Mask);
             this.Controls.Add(this.BtSaveMask);
             this.Controls.Add(this.BtInpaintNans);
@@ -384,6 +397,7 @@
         private System.Windows.Forms.Button BtInpaintNans;
         private System.Windows.Forms.Button BtSaveMask;
         private System.Windows.Forms.Button BtRGB_Mask;
+        private System.Windows.Forms.Button BtSaveRGbMask;
     }
 }
 

@@ -76,7 +76,7 @@ namespace ImageCrusher.ImageController
                     {
                         Data[randPixY + (1 + pixNoiseRange), randPixX + pixNoiseRange, 0] = (byte)random.Next(1, 255);
                         Data[randPixY + (1 + pixNoiseRange), randPixX + pixNoiseRange, 1] = (byte)random.Next(1, 255);
-                        Data[randPixY + (1 + pixNoiseRange), randPixX + pixNoiseRange, 2] = (byte)random.Next(0, 255);
+                        Data[randPixY + (1 + pixNoiseRange), randPixX + pixNoiseRange, 2] = (byte)random.Next(1, 255);
 
                         Data[randPixY - (1 + pixNoiseRange), randPixX - pixNoiseRange, 0] = (byte)random.Next(1, 255);
                         Data[randPixY - (1 + pixNoiseRange), randPixX - pixNoiseRange, 1] = (byte)random.Next(1, 255);
@@ -103,7 +103,7 @@ namespace ImageCrusher.ImageController
             int randPixX = random.Next(0, (xPixels -1 + noiseRange));  // picking pixel for in good boundaries for x axis   |  from 0-max Size - 1
             int randPixY = random.Next(0, (yPixels - 1 + 2*noiseRange));  // same for y axis
 
-            for (int r = noiseRange; r <= Math.Abs(noiseRange); r++)
+            for (int r = noiseRange; r <= Math.Abs(noiseRange)/10; r++)
             {
                 randPixY++;
 

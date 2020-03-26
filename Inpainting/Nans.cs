@@ -15,13 +15,11 @@ namespace ImageCrusher.Inpainting
 {
     class Nans
     {
-
         Image<Rgb, byte> imageOutNans;
         Image<Rgb, byte> imageOut;
         Image<Rgb, byte> imageIn;
 
         public Image<Rgb, byte> ImageOutNans { get => imageOutNans; set => imageOutNans = value; }
-
         public Nans(ImageMenu image, Noise noise)
         {
             imageIn = image.Img;
@@ -34,12 +32,11 @@ namespace ImageCrusher.Inpainting
             imageOut = image.ImageOut;
             ImageOutNans = new Image<Rgb, byte>(imageIn.Width, imageIn.Height);
         }
-
         public Nans()
         {
         }
 
-        public void Compute(int channel) //  channel = 0-2; // red=0, green=1, blue=2     public async Task Compute(int channel)
+        public /*async Task*/ void Compute(int channel) //  channel = 0-2; // red=0, green=1, blue=2    
         {
             Process.GetCurrentProcess().MaxWorkingSet = new IntPtr(262144000);
             Process.GetCurrentProcess().MinWorkingSet = new IntPtr(209715200);
@@ -190,19 +187,15 @@ namespace ImageCrusher.Inpainting
             col = 0;
             double uselessNumb;
 
-               while(alglib.sparseenumerate(fda, ref uselessCounter1, ref uselessCounter2, out row, out col, out uselessNumb) == true)
-               {
-                    if (alglib.sparseget(fda, row, col) == -2 && alglib.sparseget(M, row, col) == -2 && row > n && row < alglib.sparsegetnrows(fda) - n)
-                        {
-                            alglib.sparseset(fda, (row), col, (alglib.sparseget(M, row, col) + alglib.sparseget(fda, row, col)));
-                        }
-               }
-
-            bool f = false;
+            while(alglib.sparseenumerate(fda, ref uselessCounter1, ref uselessCounter2, out row, out col, out uselessNumb) == true)
+            {
+                 if (alglib.sparseget(fda, row, col) == -2 && alglib.sparseget(M, row, col) == -2 && row > n && row < alglib.sparsegetnrows(fda) - n)
+                     alglib.sparseset(fda, (row), col, (alglib.sparseget(M, row, col) + alglib.sparseget(fda, row, col)));                   
+            }
             i = 0; j = 0;
+
             double value = 0;
             row = 0; col = 0;
-
             double[] rhs = new double[nm];
             for (i = 0; i < nm; i++)
             {
@@ -217,89 +210,49 @@ namespace ImageCrusher.Inpainting
             }
             i = 0; j = 0;
 
-
             int fda0Count = 0;
             while (alglib.sparseenumerate(fda, ref uselessCounter1, ref uselessCounter2, out row, out col, out uselessNumb))
                 fda0Count++;
 
-            ////double[,] fdaNon0 = new double[knownList.Length,3];
-            ////j = 0;
-            ////foreach (int item in knownList)
-            ////{
-            ////    uselessCounter2 = knownList[i];
-            ////    alglib.sparseenumerate(fda, ref uselessCounter1, ref uselessCounter2, out row, out col, out uselessNumb);
-            ////    fdaNon0[i, 2] = uselessNumb;
-            ////    fdaNon0[i,0] = row;
-            ////    fdaNon0[i, 1] = col;
-
-            ////    j++;
-            ////    i++;          
-            ////}
-            ////fdaNon0.SortByFirstColumn();
-
-            //double[,] fdaNon1 = new double[fda0Count, 3];
-            //while (alglib.sparseenumerate(fda, ref uselessCounter1, ref uselessCounter2, out row, out col, out uselessNumb))
-            //{
-            //    fdaNon1[i, 2] = uselessNumb;
-            //    fdaNon1[i, 0] = row;
-            //    fdaNon1[i, 1] = col;
-
-            //    j++;
-            //    i++;
-            //}
-            //i = 0;
-            //for (i = 0; i < fda0Count; i++)
-            //{
-
-            //    if (fdaNon1[i, 0] == 0)
-            //    {
-            //        fdaNon1[i, 2] = 1111; fdaNon1[i, 1] = 1111; fdaNon1[i, 0] = 1111;
-            //    }
-            //}
-            //fdaNon1.SortByFirstColumn();
-
-            //double temp1 = 0;
-            //double temp2 = 0;
-            //double temp3 = 0;
-            //for (i = 0; i < fda0Count-1; i++)   // sorting 
-            //{
-
-            //    if (fdaNon1[i, 0] == fdaNon1[i+1, 0] && fdaNon1[i,1] > fdaNon1[i+1,1])
-            //    {
-            //        temp1 = fdaNon1[i, 0];
-            //        temp2 = fdaNon1[i, 1];
-            //        temp3=  fdaNon1[i, 2];
-
-            //        fdaNon1[i, 0] = fdaNon1[i + 1, 0];
-            //        fdaNon1[i, 1] = fdaNon1[i + 1, 1];
-            //        fdaNon1[i, 2] = fdaNon1[i + 1, 2];
-            //        fdaNon1[i + 1, 0] = temp1;
-            //        fdaNon1[i + 1, 1] = temp2;
-            //        fdaNon1[i + 1, 2] = temp3;
-            //    }
-            //}
-
-
-            //row = 0; col = 0;
-            //for (i = 0; i < nm; i++)
-            //{
-            //    for (row = col; row < j; row++)
-            //    {
-            //        col++;
-            //        value += a[knownList[row]] * -fdaNon1[knownList[row],2];
-            //        if ((Math.Abs(fdaNon1[row, 0]) - Math.Abs(fdaNon1[row + 1, 0])) != 0)   // <--- dobre 
-            //            break; col = row + 1;
-            //    }
-            //    rhs[i] = value;
-            //    value = 0;
-            //}
-            //i = 0; j = 0;
-
-
-
+            i = 0; j = 0; row = 0; col = 0;
+            double[,] FdaNon0Arr = new double[fda0Count, 3];
+            while (alglib.sparseenumerate(fda, ref uselessCounter1, ref uselessCounter2, out row, out col, out uselessNumb))
+            {
+                FdaNon0Arr[i, 2] = uselessNumb;
+                FdaNon0Arr[i, 1] = row;
+                FdaNon0Arr[i, 0] = col;
+                i++;
+            }
+            FdaNon0Arr.SortByFirstColumn();
+            double temp1 = 0;
+            double temp2 = 0;
+            double temp3 = 0;
+            for (i = 0; i < fda0Count - 1; i++)   // sorting 
+            {
+                if (FdaNon0Arr[i, 0] == FdaNon0Arr[i + 1, 0] && FdaNon0Arr[i, 1] > FdaNon0Arr[i + 1, 1])
+                {
+                    temp1 = FdaNon0Arr[i, 0];
+                    temp2 = FdaNon0Arr[i, 1];
+                    temp3 = FdaNon0Arr[i, 2];
+                    FdaNon0Arr[i, 0] = FdaNon0Arr[i + 1, 0];
+                    FdaNon0Arr[i, 1] = FdaNon0Arr[i + 1, 1];
+                    FdaNon0Arr[i, 2] = FdaNon0Arr[i + 1, 2];
+                    FdaNon0Arr[i + 1, 0] = temp1;
+                    FdaNon0Arr[i + 1, 1] = temp2;
+                    FdaNon0Arr[i + 1, 2] = temp3;
+                    if (i > 1)
+                        i = i - 1;
+                    if (i > 2)
+                        i = i - 1;
+                    if (i > 3)
+                        i = i - 3;
+                }
+            }
+            i = 0; j = 0;
             alglib.sparsematrix fdaNan;
             alglib.sparsecreate(m * n, nanList2.Length, out fdaNan);
-            for (; i < 111; i++)
+            /*for (; i < 11; i++)*/
+            for (; i < alglib.sparsegetnrows(fda) * alglib.sparsegetncols(fda); i++)
             {
                 alglib.sparseset(fdaNan, i, j, alglib.sparseget(fda, i, nanList2[j]));
                 if (i == alglib.sparsegetnrows(fdaNan) - 1)
@@ -309,125 +262,42 @@ namespace ImageCrusher.Inpainting
                     if (j == nanList2.Length)
                         break;
                 }
-            }
-            i = 0; j = 0;row = 0; col = 0; 
-            double[,] fdaNon1 = new double[fda0Count, 3];
-            while (alglib.sparseenumerate(fda, ref uselessCounter1, ref uselessCounter2, out row, out col, out uselessNumb))
-            {
-                fdaNon1[i, 2] = uselessNumb;
-                fdaNon1[i, 1] = row;
-                fdaNon1[i, 0] = col;
-                i++;
-            }
-            fdaNon1.SortByFirstColumn();
-            double temp1 = 0;
-            double temp2 = 0;
-            double temp3 = 0;
-            for (i = 0; i < fda0Count-1; i++)   // sorting 
-            {
-                if (fdaNon1[i, 0] == fdaNon1[i + 1, 0] && fdaNon1[i, 1] > fdaNon1[i + 1, 1])
-                {
-                    temp1 = fdaNon1[i, 0];
-                    temp2 = fdaNon1[i, 1];
-                    temp3 = fdaNon1[i, 2];
-
-                    fdaNon1[i, 0] = fdaNon1[i + 1, 0];
-                    fdaNon1[i, 1] = fdaNon1[i + 1, 1];
-                    fdaNon1[i, 2] = fdaNon1[i + 1, 2];
-                    fdaNon1[i + 1, 0] = temp1;
-                    fdaNon1[i + 1, 1] = temp2;
-                    fdaNon1[i + 1, 2] = temp3;
-
-                    if(i>1)
-                        i = i - 1;
-                    if (i > 2)
-                        i = i - 1;
-                    if (i > 3)
-                        i = i - 3;
-                }
-            }
+            }      
 
             alglib.sparsematrix fdaNan2;
             alglib.sparsecreate(m * n, nanList2.Length, out fdaNan2);
-
-            List<int> L1 = new List<int>();
-            int counter=0;
             ij = 0;
-            for(i=0;i<fdaNon1.GetLength(0);i++)
+            for(i=0;i<FdaNon0Arr.GetLength(0);i++)
             {
-                if (fdaNon1[i, 0] == nanList2[ij])
-                    alglib.sparseset(fdaNan2, (int)fdaNon1[i, 1], ij, alglib.sparseget(fda, (int)fdaNon1[i, 1], nanList2[ij]));
-                    //L1.Add((int)fdaNon1[i, 2]);
-
-                if (fdaNon1[i, 0] > nanList2[ij] && ij < nanList2.Length)
-                        {
-                            if (ij < nanList2.Length-1)
-                            {
-                                ij++;
-                            }                            
-                        }
-                   
-  
+                if (FdaNon0Arr[i, 0] == nanList2[ij])
+                {
+                    alglib.sparseset(fdaNan2, (int)FdaNon0Arr[i, 1], ij, alglib.sparseget(fda, (int)FdaNon0Arr[i, 1], nanList2[ij]));
+                }
+                if (FdaNon0Arr[i, 0] > nanList2[ij] && ij < nanList2.Length)
+                {
+                    if (ij < nanList2.Length-1)
+                        ij++;                           
+                } 
             }
-            //L1.Sort();
-            //List<int> L2 = new List<int>();
             row = 0; ij = 0;
+            ////////// Comparing FdaNan with FdaNan2
             while (alglib.sparseenumerate(fdaNan, ref uselessCounter1, ref uselessCounter2, out row, out col, out uselessNumb))
             {
-                //L2.Add((int)uselessNumb);
                 ij++;
             }
-           // L2.Sort();
             ij = 0;
             while (alglib.sparseenumerate(fdaNan2, ref uselessCounter1, ref uselessCounter2, out row, out col, out uselessNumb))
             {
-                //L2.Add((int)uselessNumb);
                 ij++;
             }
             ij = 0;
-            //i = 0;j = 0;
-            //int jj = 0; int ii =0;
-            //alglib.sparsematrix fdaNan2;
-            //alglib.sparsecreate(m * n, nanList2.Length, out fdaNan2);
-            //for (; i < alglib.sparsegetnrows(fda) * alglib.sparsegetncols(fda); i++)
-            //{
-            //    ii = i;
-            //    jj = j;
-            //    if(alglib.sparseenumerate(fda, ref ii, ref nanList2[jj], out row, out col, out uselessNumb) == true)
-            //    alglib.sparseset(fdaNan2, i, j, alglib.sparseget(fda, i, nanList2[j]));
-            //    if (i == alglib.sparsegetnrows(fdaNan2) - 1)
-            //    {
-            //        i = -1;
-            //        j++;
-            //        if (j == nanList2.Length)
-            //            break;
-            //    }
-            //}
-
-            ///////////////////////////////////////////// Code for testing sparses for non zeros
-            //ij = 0; col = 0;
-            //for (row = 0; row < fdaNan.innerobj.tablesize; row++)
-            //{
-            //    if (alglib.sparseget(fdaNan, row, col) != 0)
-            //    {
-            //        ij++;
-            //    }
-            //    if (row == alglib.sparsegetnrows(fdaNan) - 1)
-            //    {
-            //        row = 0; col++;
-            //        if (col == alglib.sparsegetncols(fdaNan))
-
-            //            break;
-            //    }
-            //}
-            //ij = 0;
-
-            row = 0; ij = 0;
+       
+            row = 0;
             int fdaNonZero =0;
-            i = 0; j = 0; ij = 0;
+            i = 0; j = 0;
             alglib.sparsematrix fdaAny;
             alglib.sparsecreate(m * n, 1, out fdaAny);
-            while (alglib.sparseenumerate(fdaNan2, ref uselessCounter1, ref uselessCounter2, out row, out col, out uselessNumb))
+            while (alglib.sparseenumerate(fdaNan, ref uselessCounter1, ref uselessCounter2, out row, out col, out uselessNumb))
             {
                 alglib.sparseset(fdaAny, row, 0, 1);
             }
@@ -447,21 +317,18 @@ namespace ImageCrusher.Inpainting
             }
             j = 0;
 
+            // ---------------------------------------------------------------------------------------------------==================
             alglib.sparse.sparsematrix solvingInputA = new alglib.sparse.sparsematrix();
             alglib.sparse.sparsecreate(kNew.Length, nanCount, fdaNonZero, solvingInputA, default);
-            for (i = 0; j < alglib.sparse.sparsegetnrows(solvingInputA, default); i++)
+            int nRows = alglib.sparse.sparsegetnrows(solvingInputA, default);
+            int nCols = alglib.sparse.sparsegetncols(solvingInputA, default);
+            for (col = 0; col < nCols; col++)
             {
-
-               // alglib.sparse.sparserewriteexisting(solvingInputA,i,j,uselessNumb,default);
-                alglib.sparse.sparseset(solvingInputA, i, j, (alglib.sparseget(fda, kNew[i], nanList[j, 0])), default);
-                if (i == alglib.sparse.sparsegetnrows(solvingInputA, default) - 1)
-                {
-                    i = -1;
-                    if (j == alglib.sparse.sparsegetncols(solvingInputA, default) - 1)
-                        break;
-                    j++;
-                }
+                for (row = 0; row < nRows; row++)                
+                   alglib.sparse.sparseset(solvingInputA, row, col, (alglib.sparseget(fda, kNew[row], nanList[col, 0])), default);
             }
+            ij = 0; j = 0;
+            //------------------------------------------------------------------====================================================
 
             double[] solvingInputB = new double[kNew.Length];
             for (i = 0; i < kNew.Length; i++)
@@ -470,7 +337,6 @@ namespace ImageCrusher.Inpainting
             }
 
             double[] solve = new double[kNew.Length];
-
             alglib.sparsematrix solvingInputA1 = new alglib.sparsematrix(solvingInputA);
             alglib.linlsqrstate linlsqrstate;
             alglib.linlsqrcreate(solvingInputA.m, nanCount, out linlsqrstate);
@@ -495,21 +361,17 @@ namespace ImageCrusher.Inpainting
             int ijk = 0;
             ij = 0; j = 0;
             for (i = 0; i < nm; i++)
-            {
-               
+            {               
                 if (i != nanList2[ijk])
                 {
                     imageOutNans.Data[ij, j, channel] = imageOut.Data[ij, j, channel];
                     finalImgArr[i] = imageOutNans.Data[ij, j, channel];                       
                     ij++;
                 }
-
-
                 if (ij == imageOut.Height)
                 {
                     ij = 0;
                     j++;
-
                     if (j == imageOut.Width)
                         j = 0;
                 }
@@ -522,21 +384,18 @@ namespace ImageCrusher.Inpainting
                     if (ijk == nanList2.Length)
                         ijk = 0;
                 }
-
                 if (ij == imageOut.Height)
                 {
                     ij = 0;
                     j++;
-
                     if (j == imageOut.Width)
                         j = 0;
                 }
 
             }
 
-            ///// testing solve
+            ///// testing solve                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             ///// 
-
             i = 0; j = 0; ij = 0;
             double[] originalInputImg = new double[a.Length];
             for (; i < nm; i++)
@@ -552,14 +411,10 @@ namespace ImageCrusher.Inpainting
                         j = 0;
                 }
             }
-
             solve.SaveArrayAsCSV("C:/Users/Artur/Downloads/zdj/SolvedArrChannel_" + channel + ".csv");
             finalImgArr.SaveArrayAsCSV("C:/Users/Artur/Downloads/zdj/FinalImgArray" + channel + ".csv");
             a.SaveArrayAsCSV("C:/Users/Artur/Downloads/zdj/A_" + channel + ".csv");
             originalInputImg.SaveArrayAsCSV("C:/Users/Artur/Downloads/zdj/OriginalInpuArray_" + channel + ".csv");
-            //allList.SaveArrayAsCSV("C:/Users/Artur/Downloads/zdj/AllList" + channel + ".csv");
-            //// deleted neighb2.SaveArrayAsCSV("C:/Users/Artur/Downloads/zdj/NeighboursAllList" + channel + ".csv");
-
         }
 
         public int[,] IdentifyNeighbours(int n, int m, int[,] nanList, int[,] talks_to)

@@ -222,28 +222,25 @@ namespace ImageCrusher
             NansAlg.Compute(0);
             NansAlg.Compute(1);
             NansAlg.Compute(2);
-            //Task.Run(async () =>
+
+            //var tasks = new[]
             //{
-            //    await NansAlg.Compute(0);
-            //});
-            //Task.Run(async () =>
-            //{
-            //    await NansAlg.Compute(1);
-            //});
-            //Task.Run(async () =>
-            //{
-            //    await NansAlg.Compute(2);
-            //}).Wait();
+            //    Task.Factory.StartNew(() => NansAlg.Compute(0)),
+            //    Task.Factory.StartNew(() => NansAlg.Compute(1)),
+            //    Task.Factory.StartNew(() => NansAlg.Compute(2))
+            //};
+            //Task.WaitAll(tasks);
+
             PicBox3InPainted.Image = NansAlg.ImageOutNans.ToBitmap();
 
-            //}
-            //catch (NullReferenceException)
-            //{
-            //    MessageBox.Show("Nothing to inpaint.");
-            //}
-        }
+                //}
+                //catch (NullReferenceException)
+                //{
+                //    MessageBox.Show("Nothing to inpaint.");
+                //}
+            }
 
-        private void BtSaveMask_Click(object sender, EventArgs e)
+            private void BtSaveMask_Click(object sender, EventArgs e)
         {
             try
             {
@@ -260,6 +257,17 @@ namespace ImageCrusher
             {
                 MenuImg.LoadRGB_ImageAsMask();
                 PicBox2Editedmg.Image = MenuImg.ImageOut.ToBitmap();
+            }
+            catch
+            {
+            }
+        }
+        private void BtSaveRGbMask_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                MenuImg.SaveImage(NoiseImg.ImageOut.ToBitmap()); 
+                
             }
             catch
             {

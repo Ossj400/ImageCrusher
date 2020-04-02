@@ -219,17 +219,17 @@ namespace ImageCrusher
                 if(MenuImg.ImageOut!=null)
                     NansAlg = new Nans(MenuImg);
 
-            //NansAlg.Compute(0);
-            //NansAlg.Compute(1);
-            //NansAlg.Compute(2);
+            NansAlg.Compute(0);
+            NansAlg.Compute(1);
+            NansAlg.Compute(2);
 
-            var tasks = new[]
-            {
-                Task.Factory.StartNew(() => NansAlg.Compute(0)),
-                Task.Factory.StartNew(() => NansAlg.Compute(1)),
-                Task.Factory.StartNew(() => NansAlg.Compute(2))
-            };
-            Task.WaitAll(tasks);
+            //var tasks = new[]
+            //{
+            //    Task.Factory.StartNew(() => NansAlg.Compute(0)),
+            //    Task.Factory.StartNew(() => NansAlg.Compute(1)),
+            //    Task.Factory.StartNew(() => NansAlg.Compute(2))
+            //};
+            //Task.WaitAll(tasks);
 
             PicBox3InPainted.Image = NansAlg.ImageOutNans.ToBitmap();
 

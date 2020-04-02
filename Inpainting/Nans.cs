@@ -49,7 +49,6 @@ namespace ImageCrusher.Inpainting
             int nm = n * m;
             bool zero = false;
 
-            int[] differences = new int[nm];               //// FOr Ml Builder - delete this !!!!!!!!!!!!!!!!!!!!!!!!!!
             int[] a = new int[nm];
             int[] k = new int[nm];
             for (; i < nm; i++)
@@ -69,10 +68,8 @@ namespace ImageCrusher.Inpainting
 
             for (int item = 0; item < nm; item++)
             {
-                differences[item] = imageIn.Data[ij, j, channel];  //// FOr Ml Builder - delete this !!!!!!!!!!!!!!!!!!!!!!!!!!
                 if (imageOut.Data[ij, j, channel] != imageIn.Data[ij, j, channel])
                 {
-                    differences[item] = 0; //// FOr Ml Builder - delete this !!!!!!!!!!!!!!!!!!!!!!!!!!
                     k[i] = i;
                     nanCount++;
                     if (imageOut.Data[0, 0, channel] != imageIn.Data[0, 0, channel])
@@ -91,7 +88,7 @@ namespace ImageCrusher.Inpainting
             i = 0; j = 0;
 
             int[] nanList2 = new int[nanCount];                  // clean list of NaN pixels 
-            int[] knownList = new int[nm - nanCount];
+            double[] knownList = new double[nm - nanCount];
             bool zero0 = zero;
             foreach (int item in k)
             {
@@ -200,16 +197,22 @@ namespace ImageCrusher.Inpainting
             double value = 0;
             row = 0; col = 0;
             int nCols = alglib.sparsegetncols(fda);
+            // transpose(fda);
+
+            double[] colFda = new double[nCols];
             double[] rhs = new double[nm];
             for (col = 0; col < nCols; col++)
             {
+                // sparsegetrow(col, colFda), 
                 for (row = 0; row < knownList.Length; row++)
-                {
-                    rhs[i] += a[knownList[row]] * -(alglib.sparseget((fda), col, knownList[row]));
-                }
-                i++;
+                    rhs[col] += a[(int)knownList[row]] * -colFda[(int)knownList[row]]; //-alglib.sparseget(fda, col, (int)knownList[row]);
             }
             i = 0; row = 0;col = 0;
+
+
+            // transpose(fda);
+            double[] rhs2 = new double[nm];
+            alglib.sparsemtv(fda, knownList,ref rhs2);
 
             int fda0Count = 0;
             while (alglib.sparseenumerate(fda, ref uselessCounter1, ref uselessCounter2, out row, out col, out uselessNumb))
@@ -416,7 +419,6 @@ namespace ImageCrusher.Inpainting
             finalImgArr.SaveArrayAsCSV("C:/Users/Artur/Downloads/zdj/FinalImgArray" + channel + ".csv");
             a.SaveArrayAsCSV("C:/Users/Artur/Downloads/zdj/A_" + channel + ".csv");
             originalInputImg.SaveArrayAsCSV("C:/Users/Artur/Downloads/zdj/OriginalInpuArray_" + channel + ".csv");
-            differences.SaveArrayAsCSV("C:/Users/Artur/Downloads/zdj/DifferencesForML_" + channel + ".csv"); //// FOr Ml Builder - delete this !!!!!!!!!!!!!!!!!!!!!!!!!!
         }
 
         public int[,] IdentifyNeighbours(int n, int m, int[,] nanList, int[,] talks_to)

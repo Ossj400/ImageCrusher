@@ -55,6 +55,7 @@
             this.BtSaveMask = new System.Windows.Forms.Button();
             this.BtRGB_Mask = new System.Windows.Forms.Button();
             this.BtSaveRGbMask = new System.Windows.Forms.Button();
+            this.BtInpaintFSR = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.TrBarNoiseController)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PicBox2Editedmg)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PicBox1OrgImg)).BeginInit();
@@ -321,6 +322,16 @@
             this.BtSaveRGbMask.UseVisualStyleBackColor = false;
             this.BtSaveRGbMask.Click += new System.EventHandler(this.BtSaveRGbMask_Click);
             // 
+            // BtInpaintFSR
+            // 
+            this.BtInpaintFSR.Location = new System.Drawing.Point(1502, 636);
+            this.BtInpaintFSR.Name = "BtInpaintFSR";
+            this.BtInpaintFSR.Size = new System.Drawing.Size(163, 31);
+            this.BtInpaintFSR.TabIndex = 26;
+            this.BtInpaintFSR.Text = "Inpaint FSR";
+            this.BtInpaintFSR.UseVisualStyleBackColor = true;
+            this.BtInpaintFSR.Click += new System.EventHandler(this.BtInpaintFSR_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -330,6 +341,7 @@
             this.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
             this.CausesValidation = false;
             this.ClientSize = new System.Drawing.Size(1887, 740);
+            this.Controls.Add(this.BtInpaintFSR);
             this.Controls.Add(this.BtSaveRGbMask);
             this.Controls.Add(this.BtRGB_Mask);
             this.Controls.Add(this.BtSaveMask);
@@ -398,6 +410,7 @@
         private System.Windows.Forms.Button BtSaveMask;
         private System.Windows.Forms.Button BtRGB_Mask;
         private System.Windows.Forms.Button BtSaveRGbMask;
+        private System.Windows.Forms.Button BtInpaintFSR;
     }
 }
 

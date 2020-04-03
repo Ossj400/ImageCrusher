@@ -8,11 +8,11 @@ namespace ImageCrusher.Inpainting
 {
     class Indicator
     {
-        private Image<Rgb, byte> img;
-        private Image<Rgb, byte> imageOut;
+        private Image<Bgr, byte> img;
+        private Image<Bgr, byte> imageOut;
 
-        public Image<Rgb, byte> Img { get => img; set => img = value; }
-        public Image<Rgb, byte> ImageOut { get => imageOut; set => imageOut = value; }
+        public Image<Bgr, byte> Img { get => img; set => img = value; }
+        public Image<Bgr, byte> ImageOut { get => imageOut; set => imageOut = value; }
 
         public Indicator (ImageMenu image, NavierStokesInpaint navierStokesInpaint)
         {
@@ -32,7 +32,7 @@ namespace ImageCrusher.Inpainting
 
         public void RMSE_Algorithm()
         {
-            Img = new Image<Rgb, byte>(Img.ToBitmap());
+            Img = new Image<Bgr, byte>(Img.Data);
             double mean = 0;
             double totalRms;
             int n = ImageOut.Width * ImageOut.Height * 3;

@@ -14,12 +14,12 @@ namespace ImageCrusher.ImageController
 {
     class Noise
     {
-        readonly Image<Rgb, byte> img;
+        Image<Bgr, byte> img;
         Image<Gray, byte> mask;
         Image<Gray, byte> maskLoaded;
-        Image<Rgb, byte> imageOut;
+        Image<Bgr, byte> imageOut;
 
-        public Image<Rgb, byte> ImageOut { get => imageOut; set => imageOut = value; }
+        public Image<Bgr, byte> ImageOut { get => imageOut; set => imageOut = value; }
         public Image<Gray, byte> MaskLoaded { get => maskLoaded; set => maskLoaded = value; }
         public Image<Gray, byte> Mask { get => mask; set => mask = value; }
 
@@ -29,9 +29,9 @@ namespace ImageCrusher.ImageController
             MaskLoaded = image.Mask;          
         }
       
-        public Image<Rgb, byte> SaltAndPepperNoise(int trackBarValue, int noiseRange)  // Salt&Pepper Noise
+        public Image<Bgr, byte> SaltAndPepperNoise(int trackBarValue, int noiseRange)  // Salt&Pepper Noise
         {
-            ImageOut = new Image<Rgb, byte>(img.ToBitmap());
+            ImageOut = img.Copy();
             byte[,,] Data = ImageOut.Data;
             Random random = new Random();
             int xPixels = ImageOut.Size.Width;
@@ -56,9 +56,9 @@ namespace ImageCrusher.ImageController
             }
             return ImageOut;
         }
-        public Image<Rgb, byte> VerticalScratches(int trackBarValue, int noiseRange)
+        public Image<Bgr, byte> VerticalScratches(int trackBarValue, int noiseRange)
         {
-            ImageOut = new Image<Rgb, byte>(img.ToBitmap());
+            ImageOut = img.Copy();
             byte[,,] Data = ImageOut.Data;
             Random random = new Random();
             int xPixels = ImageOut.Size.Width;
@@ -92,10 +92,10 @@ namespace ImageCrusher.ImageController
             return ImageOut;
         }
 
-        public Image<Rgb, byte> Square(int noiseRange)
+        public Image<Bgr, byte> Square(int noiseRange)
         {
             noiseRange = 3 * noiseRange;
-            ImageOut = new Image<Rgb, byte>(img.ToBitmap());
+            ImageOut = img.Copy();
             byte[,,] Data = ImageOut.Data;
             Random random = new Random();
             int xPixels = ImageOut.Size.Width;
@@ -131,6 +131,18 @@ namespace ImageCrusher.ImageController
                 Mask = MaskLoaded;
 
             return Mask;
+        }
+        public Image<Gray, byte> GetMaskFSR()
+        {
+            if (ImageOut != null && MaskLoaded == null)
+                Mask = img.AbsDiff(ImageOut).Convert<Gray, byte>();
+            else
+                Mask = MaskLoaded;
+
+            Image<Gray, byte> Mask2 = Mask.Copy();
+            Mask2.SetValue(255); 
+            Mask2.SetValue(0, Mask);
+            return Mask2;
         }
     }
 }

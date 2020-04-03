@@ -14,6 +14,7 @@ namespace ImageCrusher
         ImageMenu MenuImg;
         NavierStokesInpaint NavierStokes;
         AlexandruTeleaInpaint AlexandruTelea;
+        FrequencySelectiveReconstruction FSR;
         Nans NansAlg;
         Noise NoiseImg;
 
@@ -23,6 +24,7 @@ namespace ImageCrusher
             MenuImg = new ImageMenu();
             NavierStokes = new NavierStokesInpaint();
             AlexandruTelea = new AlexandruTeleaInpaint();
+            FSR = new FrequencySelectiveReconstruction();
             NansAlg = new Nans();
             NoiseImg = new Noise(MenuImg);
         }
@@ -42,7 +44,7 @@ namespace ImageCrusher
         {
             try
             {
-                Image<Rgb, byte> img = new Image<Rgb, byte>(MenuImg.Img.ToBitmap());
+                Image<Bgr, byte> img = MenuImg.Img.Copy();
                 if (AlexandruTelea != null)
                     img = AlexandruTelea.ImageOutTelea;
                 if (NavierStokes != null)
@@ -219,17 +221,17 @@ namespace ImageCrusher
                 if(MenuImg.ImageOut!=null)
                     NansAlg = new Nans(MenuImg);
 
-            NansAlg.Compute(0);
-            NansAlg.Compute(1);
-            NansAlg.Compute(2);
+            //NansAlg.Compute(0);
+            //NansAlg.Compute(1);
+            //NansAlg.Compute(2);
 
-            //var tasks = new[]
-            //{
-            //    Task.Factory.StartNew(() => NansAlg.Compute(0)),
-            //    Task.Factory.StartNew(() => NansAlg.Compute(1)),
-            //    Task.Factory.StartNew(() => NansAlg.Compute(2))
-            //};
-            //Task.WaitAll(tasks);
+            var tasks = new[]
+            {
+                Task.Factory.StartNew(() => NansAlg.Compute(0)),
+                Task.Factory.StartNew(() => NansAlg.Compute(1)),
+                Task.Factory.StartNew(() => NansAlg.Compute(2))
+            };
+            Task.WaitAll(tasks);
 
             PicBox3InPainted.Image = NansAlg.ImageOutNans.ToBitmap();
 
@@ -271,6 +273,21 @@ namespace ImageCrusher
             }
             catch
             {
+            }
+        }
+
+        private void BtInpaintFSR_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                AlexandruTelea = null;
+                NansAlg = null;
+                FSR = new FrequencySelectiveReconstruction();
+                PicBox3InPainted.Image = FSR.InpaintFSR(MenuImg, NoiseImg).ToBitmap();
+            }
+            catch (NullReferenceException)
+            {
+                MessageBox.Show("Nothing to inpaint.");
             }
         }
     }

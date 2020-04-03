@@ -10,27 +10,28 @@ using MNET = MathNet.Numerics.LinearAlgebra.Double;
 using ACMATH = Accord.Math;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace ImageCrusher.Inpainting
 {
     class Nans
     {
-        Image<Rgb, byte> imageOutNans;
-        Image<Rgb, byte> imageOut;
-        Image<Rgb, byte> imageIn;
+        Image<Bgr, byte> imageOutNans;
+        Image<Bgr, byte> imageOut;
+        Image<Bgr, byte> imageIn;
 
-        public Image<Rgb, byte> ImageOutNans { get => imageOutNans; set => imageOutNans = value; }
+        public Image<Bgr, byte> ImageOutNans { get => imageOutNans; set => imageOutNans = value; }
         public Nans(ImageMenu image, Noise noise)
         {
             imageIn = image.Img;
             imageOut = noise.ImageOut;
-            ImageOutNans = new Image<Rgb, byte>(imageIn.Width, imageIn.Height);
+            ImageOutNans = new Image<Bgr, byte>(imageIn.Width, imageIn.Height);
         }
         public Nans(ImageMenu image)
         {
             imageIn = image.Img;
             imageOut = image.ImageOut;
-            ImageOutNans = new Image<Rgb, byte>(imageIn.Width, imageIn.Height);
+            ImageOutNans = new Image<Bgr, byte>(imageIn.Width, imageIn.Height);
         }
         public Nans()
         {
@@ -38,8 +39,6 @@ namespace ImageCrusher.Inpainting
 
         public async Task /*void*/ Compute(int channel) //  channel = 0-2; // red=0, green=1, blue=2    
         {
-            Process.GetCurrentProcess().MaxWorkingSet = new IntPtr(262144000);
-            Process.GetCurrentProcess().MinWorkingSet = new IntPtr(209715200);
             int i = 0;
             int j = 0;
             int ij = 0;
@@ -88,7 +87,7 @@ namespace ImageCrusher.Inpainting
             i = 0; j = 0;
 
             int[] nanList2 = new int[nanCount];                  // clean list of NaN pixels 
-            double[] knownList = new double[nm - nanCount];
+            int[] knownList = new int[nm - nanCount];
             bool zero0 = zero;
             foreach (int item in k)
             {
@@ -173,7 +172,12 @@ namespace ImageCrusher.Inpainting
 
             alglib.sparsematrix fda;
             alglib.sparsecopy(M, out fda);
-            for (i = 0; i < c1.GetLength(0); i++)
+
+            int c1Length = c1.GetLength(0);
+            if (c2[c1Length-1, 0] < 0)
+                c1Length-- ;
+
+            for (i = 0; i < c1Length; i++)
             {
                 alglib.sparseset(fda, (c1[i, 0]), (c2[i, 0]), c3[i, 0]);
                 alglib.sparseset(fda, (c1[i, 1]), (c2[i, 1]), c3[i, 1]);
@@ -190,7 +194,7 @@ namespace ImageCrusher.Inpainting
             while(alglib.sparseenumerate(fda, ref uselessCounter1, ref uselessCounter2, out row, out col, out uselessNumb) == true)
             {
                  if (alglib.sparseget(fda, row, col) == -2 && alglib.sparseget(M, row, col) == -2 && row > n && row < alglib.sparsegetnrows(fda) - n)
-                     alglib.sparseset(fda, (row), col, (alglib.sparseget(M, row, col) + alglib.sparseget(fda, row, col)));                   
+                     alglib.sparseset(fda, row, col, (alglib.sparseget(M, row, col) + alglib.sparseget(fda, row, col)));                   
             }
             i = 0; j = 0;
 
@@ -205,14 +209,14 @@ namespace ImageCrusher.Inpainting
             {
                 // sparsegetrow(col, colFda), 
                 for (row = 0; row < knownList.Length; row++)
-                    rhs[col] += a[(int)knownList[row]] * -colFda[(int)knownList[row]]; //-alglib.sparseget(fda, col, (int)knownList[row]);
+                    rhs[col] += a[knownList[row]] /* * -colFda[(int)knownList[row]];*/ *-alglib.sparseget(fda, col, knownList[row]);
             }
             i = 0; row = 0;col = 0;
 
 
             // transpose(fda);
-            double[] rhs2 = new double[nm];
-            alglib.sparsemtv(fda, knownList,ref rhs2);
+            //double[] rhs2 = new double[nm];
+            //alglib.sparsemtv(fda, knownList,ref rhs2);
 
             int fda0Count = 0;
             while (alglib.sparseenumerate(fda, ref uselessCounter1, ref uselessCounter2, out row, out col, out uselessNumb))

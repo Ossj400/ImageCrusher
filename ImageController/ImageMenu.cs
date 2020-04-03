@@ -5,7 +5,6 @@ using Emgu.CV;
 using System.Windows.Forms;
 
 /// <summary>
-/// inpaint NaNs zaimplementować w C#
 /// 
 /// zrobić samo MSE i z tego RMSE i PSNR
 /// </summary>
@@ -13,12 +12,13 @@ namespace ImageCrusher.ImageController
 {
     class ImageMenu
     {
-        Image<Rgb, byte> img;
-        Image<Rgb, byte> imageOut;
+        Image<Bgr, byte> img;
+        Image<Bgr, byte> imageOut;
         Image<Gray, byte> mask;
+        public string imgPath;
 
-        public Image<Rgb, byte> Img { get => img; set => img = value; }
-        public Image<Rgb, byte> ImageOut { get => imageOut; set => imageOut = value; }
+        public Image<Bgr, byte> Img { get => img; set => img = value; }
+        public Image<Bgr, byte> ImageOut { get => imageOut; set => imageOut = value; }
         public Image<Gray, byte> Mask { get => mask; set => mask = value; }
 
         public void LoadImage()
@@ -28,38 +28,16 @@ namespace ImageCrusher.ImageController
             {
                 try
                 {
-                    Img = new Image<Rgb, byte>(OpenFile.FileName);
+                    Img = new Image<Bgr, byte>(OpenFile.FileName);
+                    imgPath = OpenFile.FileName;
                 }
                 catch (ArgumentException e)
                 {
                     MessageBox.Show("Wrong format. Error: " + '\n' + e.ToString());   ///////////////// ???????
                 }
             }
-          //  SetImageToMlBuilder();                                   /// Only for ML Builder, delete later.
         }
-        public void SetImageToMlBuilder()               /// Only for ML Builder, delete later.            !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        {
-            byte[,,] Data = Img.Data;
-            for (int item = 0; item < img.Height; item++)
-            {
-                for (int x = 0; x < img.Width+2; x++)
-                {
-                    if (Data[item, x, 0] == 0)
-                    {
-                        Data[item, x, 0] = 1;
-                    }
-                    if (Data[item, x, 1] == 0)
-                    {
-                        Data[item, x, 1] = 1;
-                    }
-                    if (Data[item, x, 2] == 0)
-                    {
-                        Data[item, x, 2] = 1;
-                    }
-                }
-
-            }
-        }
+       
         public void LoadMaskGray()
         {
             OpenFileDialog OpenFile = new OpenFileDialog();
@@ -82,7 +60,7 @@ namespace ImageCrusher.ImageController
             {
                 try
                 {
-                    ImageOut = new Image<Rgb, byte>(OpenFile.FileName);
+                    ImageOut = new Image<Bgr, byte>(OpenFile.FileName);
                 }
                 catch (ArgumentException e)
                 {

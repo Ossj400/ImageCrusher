@@ -6,6 +6,7 @@ using ImageCrusher.Inpainting;
 using ImageCrusher.ImageController;
 using Emgu.CV.Structure;
 using System.Threading.Tasks;
+using Emgu.CV.XPhoto;
 
 namespace ImageCrusher
 {
@@ -145,6 +146,7 @@ namespace ImageCrusher
             {
                 AlexandruTelea = null;
                 NansAlg = null;
+                FSR = null;
                 NavierStokes = new NavierStokesInpaint();
                 PicBox3InPainted.Image = NavierStokes.InpaintNav(MenuImg, NoiseImg, 1).ToBitmap();
             }
@@ -159,6 +161,7 @@ namespace ImageCrusher
             {
                 NavierStokes = null;
                 NansAlg = null;
+                FSR = null;
                 AlexandruTelea = new AlexandruTeleaInpaint();
                 PicBox3InPainted.Image = AlexandruTelea.InpaintTel(MenuImg, NoiseImg, 1).ToBitmap();
             }
@@ -166,60 +169,21 @@ namespace ImageCrusher
             {
                 MessageBox.Show("Nothing to inpaint.");
             }
-        }
-        private void BtCalcRMSError_Click(object sender, EventArgs e)
-        {
-            Indicator indicate = null;
-            if (NavierStokes != null)
-                indicate = new Indicator(MenuImg, NavierStokes);
-            if (AlexandruTelea != null)
-                indicate = new Indicator(MenuImg, AlexandruTelea);
-            if (NansAlg != null)
-                indicate = new Indicator(MenuImg, NansAlg);
-
-            try
-            {
-                TxtBoxRMSerror.Text = indicate.RMSE().DisplayDouble(3);
-            }
-            catch (NullReferenceException)
-            {
-                MessageBox.Show("Insert images to compare.");
-            }
-        }
-        private void BtCalcPSNRerror_Click(object sender, EventArgs e)
-        {
-            Indicator indicate = null;
-            if (NavierStokes != null)
-                indicate = new Indicator(MenuImg, NavierStokes);
-            if (AlexandruTelea != null)
-                indicate = new Indicator(MenuImg, AlexandruTelea);
-            if (NansAlg != null)
-                indicate = new Indicator(MenuImg, NansAlg);
-
-            try
-            {
-                double[] psnr = indicate.PNSR();
-                TxtBoxPSNRRed.Text = psnr[0].DisplayDouble(3);
-                TxtBoxPSNRGreen.Text = psnr[1].DisplayDouble(3);
-                TxtBoxPSNRBlue.Text = psnr[2].DisplayDouble(3);
-            }
-            catch (NullReferenceException)
-            {
-                MessageBox.Show("Insert images to compare.");
-            }
-        }
+        }  
 
         private void BtInpaintNans_Click(object sender, EventArgs e)  // private asnyc void..
         {
             //try
             //{
-                NavierStokes = null;
-                AlexandruTelea = null;
+            NavierStokes = null;
+            AlexandruTelea = null;
+            FSR = null;
 
-                if(MenuImg.ImageOut==null)
-                    NansAlg = new Nans(MenuImg, NoiseImg);
-                if(MenuImg.ImageOut!=null)
-                    NansAlg = new Nans(MenuImg);
+
+            if (MenuImg.ImageOut == null)
+                NansAlg = new Nans(MenuImg, NoiseImg);
+            if (MenuImg.ImageOut != null)
+                NansAlg = new Nans(MenuImg);
 
             //NansAlg.Compute(0);
             //NansAlg.Compute(1);
@@ -235,23 +199,208 @@ namespace ImageCrusher
 
             PicBox3InPainted.Image = NansAlg.ImageOutNans.ToBitmap();
 
-                //}
-                //catch (NullReferenceException)
-                //{
-                //    MessageBox.Show("Nothing to inpaint.");
-                //}
-            }
+            //}
+            //catch (NullReferenceException)
+            //{
+            //    MessageBox.Show("Nothing to inpaint.");
+            //}
+        }
 
-            private void BtSaveMask_Click(object sender, EventArgs e)
+
+        private void BtInpaintFSR_Click(object sender, EventArgs e)
         {
             try
             {
-                MenuImg.SaveMask(NoiseImg.GetMask());
+                MessageBox.Show("Please wait untill inpainting is done (window will arrive).");
+                NavierStokes = null;
+                AlexandruTelea = null;
+                NansAlg = null;
+                FSR = new FrequencySelectiveReconstruction();
+
+                Task.Run(async () =>
+                {
+                    try
+                    {
+                        await FSR.InpaintFSR(MenuImg, NoiseImg, XPhotoInvoke.InpaintType.FsrBest);
+                        Image<Bgr, byte> image = FSR.ImageOutFSR.ToImage<Bgr, byte>();
+                        PicBox3InPainted.Image = image.ToBitmap();
+                    }
+                    catch (Exception ee)
+                    {
+                        throw ee;
+                    }
+                });
+                MessageBox.Show("Inpaint done.");
             }
-            catch
+            catch (NullReferenceException)
             {
+                MessageBox.Show("Nothing to inpaint.");
             }
         }
+
+        private void BtInpaintFSRFast_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                MessageBox.Show("Please wait untill inpainting is done (window will arrive).");
+                NavierStokes = null;
+                AlexandruTelea = null;
+                NansAlg = null;
+                FSR = new FrequencySelectiveReconstruction();
+
+                Task.Run(async () =>
+                {
+                    try
+                    {
+                        await FSR.InpaintFSR(MenuImg, NoiseImg, XPhotoInvoke.InpaintType.FsrFast);
+                        Image<Bgr, byte> image = FSR.ImageOutFSR.ToImage<Bgr, byte>();
+                        PicBox3InPainted.Image = image.ToBitmap();
+                    }
+                    catch (Exception ee)
+                    {
+                        throw ee;
+                    }
+                });
+                MessageBox.Show("Inpaint done.");
+            }
+            catch (NullReferenceException)
+            {
+                MessageBox.Show("Nothing to inpaint.");
+            }
+        }
+
+        private void BtInpaintShiftMap_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                MessageBox.Show("Please wait untill inpainting is done (window will arrive).");
+                NavierStokes = null;
+                AlexandruTelea = null;
+                NansAlg = null;
+                FSR = new FrequencySelectiveReconstruction();
+
+                Task.Run(async () =>
+                {
+                    try
+                    {
+                        await FSR.InpaintFSR(MenuImg, NoiseImg, XPhotoInvoke.InpaintType.Shiftmap);
+                        Image<Bgr, byte> image = FSR.ImageOutFSR.ToImage<Bgr, byte>();
+                        PicBox3InPainted.Image = image.ToBitmap();
+                    }
+                    catch (Exception ee)
+                    {
+                        throw ee;
+                    }
+                    MessageBox.Show("Inpaint done.");
+                });
+
+            }
+            catch (NullReferenceException)
+            {
+                MessageBox.Show("Nothing to inpaint.");
+            }
+            
+        }
+        private void BtCalcRMSError_Click(object sender, EventArgs e)
+        {
+            Indicator indicate = null;
+            if (NavierStokes != null)
+                indicate = new Indicator(MenuImg, NavierStokes);
+            if (AlexandruTelea != null)
+                indicate = new Indicator(MenuImg, AlexandruTelea);
+            if (NansAlg != null)
+                indicate = new Indicator(MenuImg, NansAlg);
+            if (FSR != null)
+                indicate = new Indicator(MenuImg, FSR);
+
+            try
+            {
+                TxtBoxRMSerror.Text = indicate.RMSE().DisplayDouble(3);
+            }
+            catch (NullReferenceException)
+            {
+                MessageBox.Show("Insert images to compare.");
+            }
+        }
+
+        private void BtCalcPSNRerror_Click(object sender, EventArgs e)
+        {
+            Indicator indicate = null;
+            if (NavierStokes != null)
+                indicate = new Indicator(MenuImg, NavierStokes);
+            if (AlexandruTelea != null)
+                indicate = new Indicator(MenuImg, AlexandruTelea);
+            if (NansAlg != null)
+                indicate = new Indicator(MenuImg, NansAlg);
+            if (FSR != null)
+                indicate = new Indicator(MenuImg, FSR);
+
+            try
+            {
+                TxtBoxCalcPSNR.Text = indicate.PNSR().DisplayDouble(3);
+            }
+            catch (NullReferenceException)
+            {
+                MessageBox.Show("Insert images to compare.");
+            }
+        }
+
+        private void BtCalcGMSD_Click(object sender, EventArgs e)
+        {
+            Indicator indicate = null;
+            if (NavierStokes != null)
+                indicate = new Indicator(MenuImg, NavierStokes);
+            if (AlexandruTelea != null)
+                indicate = new Indicator(MenuImg, AlexandruTelea);
+            if (NansAlg != null)
+                indicate = new Indicator(MenuImg, NansAlg);
+            if (FSR != null)
+                indicate = new Indicator(MenuImg, FSR);
+
+            try
+            {
+                TxtBoxCalcGMSD.Text = indicate.GMSD().DisplayDouble(3);
+            }
+            catch (NullReferenceException)
+            {
+                MessageBox.Show("Insert images to compare.");
+            }
+
+        }
+
+        private void BtCalcSSIM_Click(object sender, EventArgs e)
+        {
+            Indicator indicate = null;
+            if (NavierStokes != null)
+                indicate = new Indicator(MenuImg, NavierStokes);
+            if (AlexandruTelea != null)
+                indicate = new Indicator(MenuImg, AlexandruTelea);
+            if (NansAlg != null)
+                indicate = new Indicator(MenuImg, NansAlg);
+            if (FSR != null)
+                indicate = new Indicator(MenuImg, FSR);
+
+            try
+            {
+                TxtBoxCalcSSIM.Text = indicate.SSIM().DisplayDouble(3);
+            }
+            catch (NullReferenceException)
+            {
+                MessageBox.Show("Insert images to compare.");
+            }
+        }
+
+
+            private void BtSaveMask_Click(object sender, EventArgs e)
+            {
+                 try
+                 {
+                     MenuImg.SaveMask(NoiseImg.GetMask());
+                 }
+                 catch
+                 {
+                 }
+            }
 
         private void BtRGB_Mask_Click(object sender, EventArgs e)    /// THIS BUTTON IS JUST TO TRY SOMETHING AND CAN BE PROBLEMATIC FOR PROJECT
         {
@@ -276,19 +425,5 @@ namespace ImageCrusher
             }
         }
 
-        private void BtInpaintFSR_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                AlexandruTelea = null;
-                NansAlg = null;
-                FSR = new FrequencySelectiveReconstruction();
-                PicBox3InPainted.Image = FSR.InpaintFSR(MenuImg, NoiseImg).ToBitmap();
-            }
-            catch (NullReferenceException)
-            {
-                MessageBox.Show("Nothing to inpaint.");
-            }
-        }
     }
 }

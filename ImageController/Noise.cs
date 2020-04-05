@@ -17,11 +17,14 @@ namespace ImageCrusher.ImageController
         Image<Bgr, byte> img;
         Image<Gray, byte> mask;
         Image<Gray, byte> maskLoaded;
+        Image<Gray, byte> mask2;
         Image<Bgr, byte> imageOut;
 
         public Image<Bgr, byte> ImageOut { get => imageOut; set => imageOut = value; }
         public Image<Gray, byte> MaskLoaded { get => maskLoaded; set => maskLoaded = value; }
         public Image<Gray, byte> Mask { get => mask; set => mask = value; }
+        public Image<Gray, byte> Mask2 { get => mask2; set => mask2 = value; }
+
 
         public Noise(ImageMenu image)
         {
@@ -138,8 +141,10 @@ namespace ImageCrusher.ImageController
                 Mask = img.AbsDiff(ImageOut).Convert<Gray, byte>();
             else
                 Mask = MaskLoaded;
+            if(Mask==null)
+                Mask = img.AbsDiff(ImageOut).Convert<Gray, byte>();
 
-            Image<Gray, byte> Mask2 = Mask.Copy();
+            Mask2 = Mask.Copy();
             Mask2.SetValue(255); 
             Mask2.SetValue(0, Mask);
             return Mask2;

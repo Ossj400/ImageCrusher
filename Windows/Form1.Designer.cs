@@ -42,10 +42,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.BtCalcRMSerror = new System.Windows.Forms.Button();
             this.TxtBoxRMSerror = new System.Windows.Forms.TextBox();
-            this.TxtBoxPSNRRed = new System.Windows.Forms.TextBox();
             this.BtCalcPSNRerror = new System.Windows.Forms.Button();
-            this.TxtBoxPSNRGreen = new System.Windows.Forms.TextBox();
-            this.TxtBoxPSNRBlue = new System.Windows.Forms.TextBox();
             this.PicBox3InPainted = new System.Windows.Forms.PictureBox();
             this.BtInpaintNavierStokes = new System.Windows.Forms.Button();
             this.BtLoadMask = new System.Windows.Forms.Button();
@@ -55,7 +52,14 @@
             this.BtSaveMask = new System.Windows.Forms.Button();
             this.BtRGB_Mask = new System.Windows.Forms.Button();
             this.BtSaveRGbMask = new System.Windows.Forms.Button();
-            this.BtInpaintFSR = new System.Windows.Forms.Button();
+            this.BtInpaintFSRBest = new System.Windows.Forms.Button();
+            this.TxtBoxCalcPSNR = new System.Windows.Forms.TextBox();
+            this.TxtBoxCalcGMSD = new System.Windows.Forms.TextBox();
+            this.BtCalcGMSD = new System.Windows.Forms.Button();
+            this.TxtBoxCalcSSIM = new System.Windows.Forms.TextBox();
+            this.BtCalcSSIM = new System.Windows.Forms.Button();
+            this.BtInpaintFSRFast = new System.Windows.Forms.Button();
+            this.BtInpaintShiftMap = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.TrBarNoiseController)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PicBox2Editedmg)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PicBox1OrgImg)).BeginInit();
@@ -66,7 +70,7 @@
             // TrBarNoiseController
             // 
             this.TrBarNoiseController.LargeChange = 1;
-            this.TrBarNoiseController.Location = new System.Drawing.Point(178, 678);
+            this.TrBarNoiseController.Location = new System.Drawing.Point(176, 696);
             this.TrBarNoiseController.Maximum = 11;
             this.TrBarNoiseController.Name = "TrBarNoiseController";
             this.TrBarNoiseController.Size = new System.Drawing.Size(185, 56);
@@ -97,7 +101,7 @@
             // 
             // BtLoadImg
             // 
-            this.BtLoadImg.Location = new System.Drawing.Point(12, 573);
+            this.BtLoadImg.Location = new System.Drawing.Point(12, 582);
             this.BtLoadImg.Name = "BtLoadImg";
             this.BtLoadImg.Size = new System.Drawing.Size(108, 30);
             this.BtLoadImg.TabIndex = 3;
@@ -107,7 +111,7 @@
             // 
             // BtSaveImg
             // 
-            this.BtSaveImg.Location = new System.Drawing.Point(1278, 636);
+            this.BtSaveImg.Location = new System.Drawing.Point(1496, 696);
             this.BtSaveImg.Name = "BtSaveImg";
             this.BtSaveImg.Size = new System.Drawing.Size(163, 31);
             this.BtSaveImg.TabIndex = 4;
@@ -118,7 +122,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(190, 655);
+            this.label1.Location = new System.Drawing.Point(197, 676);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(123, 17);
             this.label1.TabIndex = 5;
@@ -127,7 +131,7 @@
             // LblRangeNoise
             // 
             this.LblRangeNoise.AutoSize = true;
-            this.LblRangeNoise.Location = new System.Drawing.Point(424, 655);
+            this.LblRangeNoise.Location = new System.Drawing.Point(414, 676);
             this.LblRangeNoise.Name = "LblRangeNoise";
             this.LblRangeNoise.Size = new System.Drawing.Size(154, 17);
             this.LblRangeNoise.TabIndex = 7;
@@ -136,7 +140,7 @@
             // TrBarRangeNoise
             // 
             this.TrBarRangeNoise.LargeChange = 1;
-            this.TrBarRangeNoise.Location = new System.Drawing.Point(416, 678);
+            this.TrBarRangeNoise.Location = new System.Drawing.Point(399, 696);
             this.TrBarRangeNoise.Maximum = 100;
             this.TrBarRangeNoise.Name = "TrBarRangeNoise";
             this.TrBarRangeNoise.Size = new System.Drawing.Size(169, 56);
@@ -145,7 +149,7 @@
             // BtScratches
             // 
             this.BtScratches.AutoSize = true;
-            this.BtScratches.Location = new System.Drawing.Point(399, 572);
+            this.BtScratches.Location = new System.Drawing.Point(367, 587);
             this.BtScratches.Name = "BtScratches";
             this.BtScratches.Size = new System.Drawing.Size(135, 21);
             this.BtScratches.TabIndex = 8;
@@ -157,7 +161,7 @@
             // BtSaltNPepperNoise
             // 
             this.BtSaltNPepperNoise.AutoSize = true;
-            this.BtSaltNPepperNoise.Location = new System.Drawing.Point(399, 599);
+            this.BtSaltNPepperNoise.Location = new System.Drawing.Point(367, 614);
             this.BtSaltNPepperNoise.Name = "BtSaltNPepperNoise";
             this.BtSaltNPepperNoise.Size = new System.Drawing.Size(134, 21);
             this.BtSaltNPepperNoise.TabIndex = 9;
@@ -170,7 +174,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.8F);
-            this.label2.Location = new System.Drawing.Point(188, 578);
+            this.label2.Location = new System.Drawing.Point(171, 596);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(175, 25);
             this.label2.TabIndex = 10;
@@ -178,9 +182,9 @@
             // 
             // BtCalcRMSerror
             // 
-            this.BtCalcRMSerror.Location = new System.Drawing.Point(650, 641);
+            this.BtCalcRMSerror.Location = new System.Drawing.Point(650, 656);
             this.BtCalcRMSerror.Name = "BtCalcRMSerror";
-            this.BtCalcRMSerror.Size = new System.Drawing.Size(163, 31);
+            this.BtCalcRMSerror.Size = new System.Drawing.Size(163, 30);
             this.BtCalcRMSerror.TabIndex = 11;
             this.BtCalcRMSerror.Text = "Calculate RMS Error";
             this.BtCalcRMSerror.UseVisualStyleBackColor = true;
@@ -188,44 +192,20 @@
             // 
             // TxtBoxRMSerror
             // 
-            this.TxtBoxRMSerror.Location = new System.Drawing.Point(842, 646);
+            this.TxtBoxRMSerror.Location = new System.Drawing.Point(830, 660);
             this.TxtBoxRMSerror.Name = "TxtBoxRMSerror";
-            this.TxtBoxRMSerror.Size = new System.Drawing.Size(107, 22);
+            this.TxtBoxRMSerror.Size = new System.Drawing.Size(90, 22);
             this.TxtBoxRMSerror.TabIndex = 12;
-            // 
-            // TxtBoxPSNRRed
-            // 
-            this.TxtBoxPSNRRed.Location = new System.Drawing.Point(842, 683);
-            this.TxtBoxPSNRRed.Name = "TxtBoxPSNRRed";
-            this.TxtBoxPSNRRed.Size = new System.Drawing.Size(107, 22);
-            this.TxtBoxPSNRRed.TabIndex = 14;
-            this.TxtBoxPSNRRed.Text = "Red";
             // 
             // BtCalcPSNRerror
             // 
-            this.BtCalcPSNRerror.Location = new System.Drawing.Point(650, 678);
+            this.BtCalcPSNRerror.Location = new System.Drawing.Point(650, 692);
             this.BtCalcPSNRerror.Name = "BtCalcPSNRerror";
-            this.BtCalcPSNRerror.Size = new System.Drawing.Size(163, 31);
+            this.BtCalcPSNRerror.Size = new System.Drawing.Size(163, 30);
             this.BtCalcPSNRerror.TabIndex = 13;
             this.BtCalcPSNRerror.Text = "Calculate PSNR";
             this.BtCalcPSNRerror.UseVisualStyleBackColor = true;
             this.BtCalcPSNRerror.Click += new System.EventHandler(this.BtCalcPSNRerror_Click);
-            // 
-            // TxtBoxPSNRGreen
-            // 
-            this.TxtBoxPSNRGreen.Location = new System.Drawing.Point(977, 683);
-            this.TxtBoxPSNRGreen.Name = "TxtBoxPSNRGreen";
-            this.TxtBoxPSNRGreen.Size = new System.Drawing.Size(107, 22);
-            this.TxtBoxPSNRGreen.TabIndex = 15;
-            this.TxtBoxPSNRGreen.Text = "Green";
-            // 
-            // TxtBoxPSNRBlue
-            // 
-            this.TxtBoxPSNRBlue.Location = new System.Drawing.Point(1107, 683);
-            this.TxtBoxPSNRBlue.Name = "TxtBoxPSNRBlue";
-            this.TxtBoxPSNRBlue.Size = new System.Drawing.Size(107, 22);
-            this.TxtBoxPSNRBlue.TabIndex = 16;
-            this.TxtBoxPSNRBlue.Text = "Blue";
             // 
             // PicBox3InPainted
             // 
@@ -240,9 +220,9 @@
             // 
             // BtInpaintNavierStokes
             // 
-            this.BtInpaintNavierStokes.Location = new System.Drawing.Point(1278, 567);
+            this.BtInpaintNavierStokes.Location = new System.Drawing.Point(1350, 572);
             this.BtInpaintNavierStokes.Name = "BtInpaintNavierStokes";
-            this.BtInpaintNavierStokes.Size = new System.Drawing.Size(163, 31);
+            this.BtInpaintNavierStokes.Size = new System.Drawing.Size(152, 31);
             this.BtInpaintNavierStokes.TabIndex = 18;
             this.BtInpaintNavierStokes.Text = "Inpaint NavierStokes";
             this.BtInpaintNavierStokes.UseVisualStyleBackColor = true;
@@ -250,7 +230,7 @@
             // 
             // BtLoadMask
             // 
-            this.BtLoadMask.Location = new System.Drawing.Point(828, 567);
+            this.BtLoadMask.Location = new System.Drawing.Point(650, 576);
             this.BtLoadMask.Name = "BtLoadMask";
             this.BtLoadMask.Size = new System.Drawing.Size(108, 30);
             this.BtLoadMask.TabIndex = 19;
@@ -260,9 +240,9 @@
             // 
             // BtInpaintTelea
             // 
-            this.BtInpaintTelea.Location = new System.Drawing.Point(1502, 567);
+            this.BtInpaintTelea.Location = new System.Drawing.Point(1517, 630);
             this.BtInpaintTelea.Name = "BtInpaintTelea";
-            this.BtInpaintTelea.Size = new System.Drawing.Size(163, 31);
+            this.BtInpaintTelea.Size = new System.Drawing.Size(123, 31);
             this.BtInpaintTelea.TabIndex = 20;
             this.BtInpaintTelea.Text = "Inpaint Telea";
             this.BtInpaintTelea.UseVisualStyleBackColor = true;
@@ -271,7 +251,7 @@
             // BtSquare
             // 
             this.BtSquare.AutoSize = true;
-            this.BtSquare.Location = new System.Drawing.Point(540, 572);
+            this.BtSquare.Location = new System.Drawing.Point(508, 587);
             this.BtSquare.Name = "BtSquare";
             this.BtSquare.Size = new System.Drawing.Size(75, 21);
             this.BtSquare.TabIndex = 21;
@@ -282,9 +262,9 @@
             // 
             // BtInpaintNans
             // 
-            this.BtInpaintNans.Location = new System.Drawing.Point(1712, 567);
+            this.BtInpaintNans.Location = new System.Drawing.Point(1517, 572);
             this.BtInpaintNans.Name = "BtInpaintNans";
-            this.BtInpaintNans.Size = new System.Drawing.Size(163, 31);
+            this.BtInpaintNans.Size = new System.Drawing.Size(123, 31);
             this.BtInpaintNans.TabIndex = 22;
             this.BtInpaintNans.Text = "Inpaint NaNs";
             this.BtInpaintNans.UseVisualStyleBackColor = true;
@@ -292,7 +272,7 @@
             // 
             // BtSaveMask
             // 
-            this.BtSaveMask.Location = new System.Drawing.Point(1046, 567);
+            this.BtSaveMask.Location = new System.Drawing.Point(1139, 572);
             this.BtSaveMask.Name = "BtSaveMask";
             this.BtSaveMask.Size = new System.Drawing.Size(108, 30);
             this.BtSaveMask.TabIndex = 23;
@@ -303,7 +283,7 @@
             // BtRGB_Mask
             // 
             this.BtRGB_Mask.BackColor = System.Drawing.Color.LightCoral;
-            this.BtRGB_Mask.Location = new System.Drawing.Point(828, 603);
+            this.BtRGB_Mask.Location = new System.Drawing.Point(650, 612);
             this.BtRGB_Mask.Name = "BtRGB_Mask";
             this.BtRGB_Mask.Size = new System.Drawing.Size(197, 30);
             this.BtRGB_Mask.TabIndex = 24;
@@ -314,7 +294,7 @@
             // BtSaveRGbMask
             // 
             this.BtSaveRGbMask.BackColor = System.Drawing.Color.LightCoral;
-            this.BtSaveRGbMask.Location = new System.Drawing.Point(1031, 603);
+            this.BtSaveRGbMask.Location = new System.Drawing.Point(1124, 608);
             this.BtSaveRGbMask.Name = "BtSaveRGbMask";
             this.BtSaveRGbMask.Size = new System.Drawing.Size(123, 30);
             this.BtSaveRGbMask.TabIndex = 25;
@@ -322,26 +302,93 @@
             this.BtSaveRGbMask.UseVisualStyleBackColor = false;
             this.BtSaveRGbMask.Click += new System.EventHandler(this.BtSaveRGbMask_Click);
             // 
-            // BtInpaintFSR
+            // BtInpaintFSRBest
             // 
-            this.BtInpaintFSR.Location = new System.Drawing.Point(1502, 636);
-            this.BtInpaintFSR.Name = "BtInpaintFSR";
-            this.BtInpaintFSR.Size = new System.Drawing.Size(163, 31);
-            this.BtInpaintFSR.TabIndex = 26;
-            this.BtInpaintFSR.Text = "Inpaint FSR";
-            this.BtInpaintFSR.UseVisualStyleBackColor = true;
-            this.BtInpaintFSR.Click += new System.EventHandler(this.BtInpaintFSR_Click);
+            this.BtInpaintFSRBest.Location = new System.Drawing.Point(1658, 572);
+            this.BtInpaintFSRBest.Name = "BtInpaintFSRBest";
+            this.BtInpaintFSRBest.Size = new System.Drawing.Size(139, 31);
+            this.BtInpaintFSRBest.TabIndex = 26;
+            this.BtInpaintFSRBest.Text = "Inpaint FSR";
+            this.BtInpaintFSRBest.UseVisualStyleBackColor = true;
+            this.BtInpaintFSRBest.Click += new System.EventHandler(this.BtInpaintFSR_Click);
+            // 
+            // TxtBoxCalcPSNR
+            // 
+            this.TxtBoxCalcPSNR.Location = new System.Drawing.Point(830, 696);
+            this.TxtBoxCalcPSNR.Name = "TxtBoxCalcPSNR";
+            this.TxtBoxCalcPSNR.Size = new System.Drawing.Size(90, 22);
+            this.TxtBoxCalcPSNR.TabIndex = 27;
+            // 
+            // TxtBoxCalcGMSD
+            // 
+            this.TxtBoxCalcGMSD.Location = new System.Drawing.Point(1157, 696);
+            this.TxtBoxCalcGMSD.Name = "TxtBoxCalcGMSD";
+            this.TxtBoxCalcGMSD.Size = new System.Drawing.Size(90, 22);
+            this.TxtBoxCalcGMSD.TabIndex = 31;
+            // 
+            // BtCalcGMSD
+            // 
+            this.BtCalcGMSD.Location = new System.Drawing.Point(973, 692);
+            this.BtCalcGMSD.Name = "BtCalcGMSD";
+            this.BtCalcGMSD.Size = new System.Drawing.Size(163, 30);
+            this.BtCalcGMSD.TabIndex = 30;
+            this.BtCalcGMSD.Text = "Calculate GMSD";
+            this.BtCalcGMSD.UseVisualStyleBackColor = true;
+            this.BtCalcGMSD.Click += new System.EventHandler(this.BtCalcGMSD_Click);
+            // 
+            // TxtBoxCalcSSIM
+            // 
+            this.TxtBoxCalcSSIM.Location = new System.Drawing.Point(1157, 660);
+            this.TxtBoxCalcSSIM.Name = "TxtBoxCalcSSIM";
+            this.TxtBoxCalcSSIM.Size = new System.Drawing.Size(90, 22);
+            this.TxtBoxCalcSSIM.TabIndex = 29;
+            // 
+            // BtCalcSSIM
+            // 
+            this.BtCalcSSIM.Location = new System.Drawing.Point(973, 656);
+            this.BtCalcSSIM.Name = "BtCalcSSIM";
+            this.BtCalcSSIM.Size = new System.Drawing.Size(163, 30);
+            this.BtCalcSSIM.TabIndex = 28;
+            this.BtCalcSSIM.Text = "Calculate SSIM";
+            this.BtCalcSSIM.UseVisualStyleBackColor = true;
+            this.BtCalcSSIM.Click += new System.EventHandler(this.BtCalcSSIM_Click);
+            // 
+            // BtInpaintFSRFast
+            // 
+            this.BtInpaintFSRFast.Location = new System.Drawing.Point(1658, 630);
+            this.BtInpaintFSRFast.Name = "BtInpaintFSRFast";
+            this.BtInpaintFSRFast.Size = new System.Drawing.Size(139, 31);
+            this.BtInpaintFSRFast.TabIndex = 32;
+            this.BtInpaintFSRFast.Text = "Inpaint FSR Fast";
+            this.BtInpaintFSRFast.UseVisualStyleBackColor = true;
+            this.BtInpaintFSRFast.Click += new System.EventHandler(this.BtInpaintFSRFast_Click);
+            // 
+            // BtInpaintShiftMap
+            // 
+            this.BtInpaintShiftMap.Location = new System.Drawing.Point(1350, 630);
+            this.BtInpaintShiftMap.Name = "BtInpaintShiftMap";
+            this.BtInpaintShiftMap.Size = new System.Drawing.Size(152, 31);
+            this.BtInpaintShiftMap.TabIndex = 33;
+            this.BtInpaintShiftMap.Text = "Inpaint ShiftMap";
+            this.BtInpaintShiftMap.UseVisualStyleBackColor = true;
+            this.BtInpaintShiftMap.Click += new System.EventHandler(this.BtInpaintShiftMap_Click);
             // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
             this.CausesValidation = false;
-            this.ClientSize = new System.Drawing.Size(1887, 740);
-            this.Controls.Add(this.BtInpaintFSR);
+            this.ClientSize = new System.Drawing.Size(1888, 753);
+            this.Controls.Add(this.BtInpaintShiftMap);
+            this.Controls.Add(this.BtInpaintFSRFast);
+            this.Controls.Add(this.TxtBoxCalcGMSD);
+            this.Controls.Add(this.BtCalcGMSD);
+            this.Controls.Add(this.TxtBoxCalcSSIM);
+            this.Controls.Add(this.BtCalcSSIM);
+            this.Controls.Add(this.TxtBoxCalcPSNR);
+            this.Controls.Add(this.BtInpaintFSRBest);
             this.Controls.Add(this.BtSaveRGbMask);
             this.Controls.Add(this.BtRGB_Mask);
             this.Controls.Add(this.BtSaveMask);
@@ -351,9 +398,6 @@
             this.Controls.Add(this.BtLoadMask);
             this.Controls.Add(this.BtInpaintNavierStokes);
             this.Controls.Add(this.PicBox3InPainted);
-            this.Controls.Add(this.TxtBoxPSNRBlue);
-            this.Controls.Add(this.TxtBoxPSNRGreen);
-            this.Controls.Add(this.TxtBoxPSNRRed);
             this.Controls.Add(this.BtCalcPSNRerror);
             this.Controls.Add(this.TxtBoxRMSerror);
             this.Controls.Add(this.BtCalcRMSerror);
@@ -369,9 +413,12 @@
             this.Controls.Add(this.PicBox2Editedmg);
             this.Controls.Add(this.TrBarNoiseController);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximumSize = new System.Drawing.Size(1906, 800);
+            this.MinimumSize = new System.Drawing.Size(1900, 750);
             this.Name = "MainWindow";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Form1";
+            this.Text = "Inpainting Comparer";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             ((System.ComponentModel.ISupportInitialize)(this.TrBarNoiseController)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.PicBox2Editedmg)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.PicBox1OrgImg)).EndInit();
@@ -397,10 +444,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button BtCalcRMSerror;
         private System.Windows.Forms.TextBox TxtBoxRMSerror;
-        private System.Windows.Forms.TextBox TxtBoxPSNRRed;
         private System.Windows.Forms.Button BtCalcPSNRerror;
-        private System.Windows.Forms.TextBox TxtBoxPSNRGreen;
-        private System.Windows.Forms.TextBox TxtBoxPSNRBlue;
         private System.Windows.Forms.PictureBox PicBox3InPainted;
         private System.Windows.Forms.Button BtInpaintNavierStokes;
         private System.Windows.Forms.Button BtLoadMask;
@@ -410,7 +454,14 @@
         private System.Windows.Forms.Button BtSaveMask;
         private System.Windows.Forms.Button BtRGB_Mask;
         private System.Windows.Forms.Button BtSaveRGbMask;
-        private System.Windows.Forms.Button BtInpaintFSR;
+        private System.Windows.Forms.Button BtInpaintFSRBest;
+        private System.Windows.Forms.TextBox TxtBoxCalcPSNR;
+        private System.Windows.Forms.TextBox TxtBoxCalcGMSD;
+        private System.Windows.Forms.Button BtCalcGMSD;
+        private System.Windows.Forms.TextBox TxtBoxCalcSSIM;
+        private System.Windows.Forms.Button BtCalcSSIM;
+        private System.Windows.Forms.Button BtInpaintFSRFast;
+        private System.Windows.Forms.Button BtInpaintShiftMap;
     }
 }
 

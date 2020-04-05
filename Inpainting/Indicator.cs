@@ -10,7 +10,8 @@ namespace ImageCrusher.Inpainting
     {
         private Image<Bgr, byte> img;
         private Image<Bgr, byte> imageOut;
-
+        double rmsE;
+        double mse;
         public Image<Bgr, byte> Img { get => img; set => img = value; }
         public Image<Bgr, byte> ImageOut { get => imageOut; set => imageOut = value; }
 
@@ -29,12 +30,16 @@ namespace ImageCrusher.Inpainting
             this.Img = image.Img;
             this.ImageOut = NansAlg.ImageOutNans;
         }
+        public Indicator(ImageMenu image, FrequencySelectiveReconstruction FSR)
+        {
+            this.Img = image.Img;
+            this.ImageOut = FSR.ImageOutFSR.ToImage<Bgr, byte>();
+        }
 
         public void RMSE_Algorithm()
         {
             Img = new Image<Bgr, byte>(Img.Data);
             double mean = 0;
-            double totalRms;
             int n = ImageOut.Width * ImageOut.Height * 3;
             int orgVal;
             int newVal;
@@ -56,7 +61,8 @@ namespace ImageCrusher.Inpainting
                     mean += Math.Pow(newVal - orgVal, 2);
                 }
             }
-            totalRms = Math.Sqrt(mean / n);
+            rmsE = Math.Sqrt(mean / n);
+            mse = mean / n;
         }
         public double RMSE()
         {
@@ -66,12 +72,28 @@ namespace ImageCrusher.Inpainting
             return rMSE;
         }
 
-        public double[] PNSR()
+        public double PNSR()
         {
-            QualityPSNR PSNR = new QualityPSNR(Img);
-            double[] pSNR = new double[4];
-            pSNR = PSNR.Compute(ImageOut).ToArray();
-            return pSNR;
+            //QualityPSNR PSNR = new QualityPSNR(Img);
+            //double[] pSNR = new double[4];
+            //pSNR = PSNR.Compute(ImageOut).ToArray();
+            RMSE_Algorithm();
+            int bitSignal = 8;
+            double myPSNR = 10 * Math.Log10((Math.Pow((Math.Pow(2, bitSignal) - 1), 2) / mse));      // 8 - lb bitów
+            return myPSNR;
+        }
+        public double SSIM()
+        {
+            QualitySSIM sSIM = new QualitySSIM(Img);
+            double ssim = sSIM.Compute(ImageOut).V0 + sSIM.Compute(ImageOut).V1 + sSIM.Compute(ImageOut).V2;
+            return ssim/3;
+        }
+
+        public double GMSD()
+        {
+            QualityGMSD gMSD = new QualityGMSD(Img);
+            double gmsd = gMSD.Compute(ImageOut).V0 + gMSD.Compute(ImageOut).V1 + gMSD.Compute(ImageOut).V2;
+            return gmsd/3;
         }
     }
 }

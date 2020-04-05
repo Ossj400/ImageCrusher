@@ -6,33 +6,34 @@ using Emgu.CV.XPhoto;
 using System.Drawing;
 using System.Windows.Forms;
 using System.IO;
+using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 
 namespace ImageCrusher.Inpainting
 {
     class FrequencySelectiveReconstruction
     {
-        Mat imageOutFSR = new Mat();
-        //Image<Bgr, byte> imageOutFSRIM;
-        Mat imageIn;
-        Image<Gray,Byte> mask;
-        Mat maskM;
+        Mat imageOutFSR;
+        public Mat ImageOutFSR { get => imageOutFSR; set => imageOutFSR = value; }
 
-        public Image<Bgr,byte> InpaintFSR(ImageMenu image, Noise mask1)
+        public async Task InpaintFSR(ImageMenu image, Noise mask1, XPhotoInvoke.InpaintType inpaintType)
         {
-            //imageIn = image.Img.Mat;
-            imageIn = new Mat(image.imgPath); // File.Open(image.imgPath, FileMode.Open).To;
-            mask = mask1.GetMaskFSR();
-            maskM = new Mat(mask.Mat, mask.ROI);
+            Image<Gray, Byte> mask = mask1.GetMaskFSR();
+            Mat imageIn = new Mat(image.imgPath);
+            Mat maskM = new Mat(mask.Mat, mask.ROI);
+            imageOutFSR = new Mat();           
             try
             {
-                XPhotoInvoke.Inpaint(imageIn,maskM, imageOutFSR, XPhotoInvoke.InpaintType.FsrFast);
+                XPhotoInvoke.Inpaint(imageIn, maskM, imageOutFSR, inpaintType);
+                ImageOutFSR = imageOutFSR;
             }
-            catch(Exception e)
+            catch (Exception e) 
             {
-                string exp = e.ToString();
-            }
-            return imageOutFSR.ToImage<Bgr,byte>();
+                throw e;
+            }               
+            
         }
+
     }
 }
 

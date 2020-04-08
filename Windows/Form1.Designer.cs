@@ -60,8 +60,7 @@
             this.BtCalcSSIM = new System.Windows.Forms.Button();
             this.BtInpaintFSRFast = new System.Windows.Forms.Button();
             this.BtInpaintShiftMap = new System.Windows.Forms.Button();
-            this.NoiseAmountInput = new System.Windows.Forms.TextBox();
-            this.NoiseSymbolSizeInput = new System.Windows.Forms.TextBox();
+            this.BtAutomate = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.TrBarNoiseController)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PicBox2Editedmg)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PicBox1OrgImg)).BeginInit();
@@ -375,20 +374,17 @@
             this.BtInpaintShiftMap.UseVisualStyleBackColor = true;
             this.BtInpaintShiftMap.Click += new System.EventHandler(this.BtInpaintShiftMap_Click);
             // 
-            // NoiseAmountInput
+            // BtAutomate
             // 
-            this.NoiseAmountInput.Location = new System.Drawing.Point(203, 730);
-            this.NoiseAmountInput.Name = "NoiseAmountInput";
-            this.NoiseAmountInput.Size = new System.Drawing.Size(90, 22);
-            this.NoiseAmountInput.TabIndex = 34;
-            this.NoiseAmountInput.TextChanged += new System.EventHandler(this.NoiseAmountInput_TextChanged);
-            // 
-            // NoiseSymbolSizeInput
-            // 
-            this.NoiseSymbolSizeInput.Location = new System.Drawing.Point(440, 730);
-            this.NoiseSymbolSizeInput.Name = "NoiseSymbolSizeInput";
-            this.NoiseSymbolSizeInput.Size = new System.Drawing.Size(90, 22);
-            this.NoiseSymbolSizeInput.TabIndex = 35;
+            this.BtAutomate.BackColor = System.Drawing.Color.LightGreen;
+            this.BtAutomate.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.BtAutomate.Location = new System.Drawing.Point(12, 676);
+            this.BtAutomate.Name = "BtAutomate";
+            this.BtAutomate.Size = new System.Drawing.Size(108, 64);
+            this.BtAutomate.TabIndex = 36;
+            this.BtAutomate.Text = "Automate results";
+            this.BtAutomate.UseVisualStyleBackColor = false;
+            this.BtAutomate.Click += new System.EventHandler(this.BtAutomate_Click);
             // 
             // MainWindow
             // 
@@ -398,8 +394,7 @@
             this.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
             this.CausesValidation = false;
             this.ClientSize = new System.Drawing.Size(1888, 753);
-            this.Controls.Add(this.NoiseSymbolSizeInput);
-            this.Controls.Add(this.NoiseAmountInput);
+            this.Controls.Add(this.BtAutomate);
             this.Controls.Add(this.BtInpaintShiftMap);
             this.Controls.Add(this.BtInpaintFSRFast);
             this.Controls.Add(this.TxtBoxCalcGMSD);
@@ -481,8 +476,7 @@
         private System.Windows.Forms.Button BtCalcSSIM;
         private System.Windows.Forms.Button BtInpaintFSRFast;
         private System.Windows.Forms.Button BtInpaintShiftMap;
-        private System.Windows.Forms.TextBox NoiseAmountInput;
-        private System.Windows.Forms.TextBox NoiseSymbolSizeInput;
+        private System.Windows.Forms.Button BtAutomate;
     }
 }
 

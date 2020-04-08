@@ -136,6 +136,7 @@ namespace ImageCrusher
                     BtSquare.Checked = false;
                     int val = TrBarNoiseController.Value;
                     PicBox2Editedmg.Image = NoiseImg.SaltAndPepperNoise(val, -range).ToBitmap();
+                    //PicBox2Editedmg.Image = NoiseImg.SaltAndPepperNoiseNumbed(40).ToBitmap();
                 }
                 //if (BtSaltNPepperNoise.Checked == true && NoiseAmountInput.Text != null)
                 //{
@@ -398,6 +399,21 @@ namespace ImageCrusher
             NoiseImg = new Noise(MenuImg);
             NoiseImg.MaskLoaded = null;
             NoiseMethod(0);
+        }
+
+        private void BtAutomate_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Please choose directory to make automatic tests of algorithms by picking photo from folder.");
+            MenuImg.LoadImage();
+            PicBox1OrgImg.Image = MenuImg.Img.ToBitmap();
+            MessageBox.Show("Please choose directory to make automatic tests of algorithms by picking mask from folder.");
+            MenuImg.LoadMaskGray();
+            PicBox2Editedmg.Image = MenuImg.Mask.ToBitmap();
+            NoiseImg.MaskLoaded = MenuImg.Mask;
+            data = new DataGenerator(MenuImg);
+            data.Loope3();
+            data.Loope4();
+            data.Loope5();
         }
     }
 }

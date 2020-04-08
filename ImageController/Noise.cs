@@ -66,8 +66,8 @@ namespace ImageCrusher.ImageController
             Random random = new Random();
             int xPixels = ImageOut.Size.Width-1;
             int yPixels = ImageOut.Size.Height-1;
-            //double percentage;
-            //double noiseAmount = 30;
+            double percentage;
+            double noiseAmount = 30;
             for (int r = 0; r <= (Math.Pow(trackBarValue, trackBarValue / 2) / 2); r++)
             {
                 int randPixX = random.Next(1, (xPixels - 1));  // picking pixel for x axis, from 0-max Size - 1
@@ -92,29 +92,29 @@ namespace ImageCrusher.ImageController
                         randPixY = random.Next(1, (yPixels - 1));
                     }
 
-                    //if (r == (Math.Pow(trackBarValue, trackBarValue / 2) / 2) - 1)
-                    //{
-                    //    percentage = CorruptedPercentage();
-                    //    if (Math.Round(percentage) < noiseAmount)
-                    //    {
-                    //        if (percentage < noiseAmount)
-                    //            r = (int)((double)r - (double)((double)r / 50));
-                    //        if (percentage < noiseAmount - 2)
-                    //            r = (int)((double)r - (double)((double)r / 20));
-                    //        if (percentage < noiseAmount - 5)
-                    //            r = (int)((double)r - (double)((double)r / 12));
-                    //        if (percentage < noiseAmount - 10)
-                    //            r = (int)((double)r - (double)((double)r / 5));
-                    //        if (percentage < noiseAmount - 20)
-                    //            r = (int)((double)r - (double)((double)r / 2));
-                    //        if (percentage < noiseAmount - 30)
-                    //            r = (int)((double)r - (double)((double)r / 1));
-                    //        if (percentage < noiseAmount - 40)
-                    //            r = 0;
-                    //    }
-                    //    else
-                    //        break;
-                    //}
+                    if (r == (Math.Pow(trackBarValue, trackBarValue / 2) / 2) - 1)
+                    {
+                        percentage = CorruptedPercentage();
+                        if (percentage < noiseAmount)
+                        {
+                            if (percentage < noiseAmount)
+                                r = (int)((double)r - (double)((double)r / 50));
+                            if (percentage < noiseAmount - 2)
+                                r = (int)((double)r - (double)((double)r / 20));
+                            if (percentage < noiseAmount - 5)
+                                r = (int)((double)r - (double)((double)r / 12));
+                            if (percentage < noiseAmount - 10)
+                                r = (int)((double)r - (double)((double)r / 5));
+                            if (percentage < noiseAmount - 20)
+                                r = (int)((double)r - (double)((double)r / 2));
+                            if (percentage < noiseAmount - 30)
+                                r = (int)((double)r - (double)((double)r / 1));
+                            if (percentage < noiseAmount - 40)
+                                r = 0;
+                        }
+                        else
+                            break;
+                    }
                 }
             }
             return ImageOut;
@@ -130,7 +130,6 @@ namespace ImageCrusher.ImageController
             int yPixels = ImageOut.Size.Height-1;
             int randPixX = random.Next(1, (xPixels -1 + 300));  // picking pixel for in good boundaries for x axis   |  from 0-max Size - 1
             int randPixY = random.Next(1, (yPixels - 1 + 450));  // same for y axis
-            double percentage;
             int pix = (int)HowManyPixelsNeedToBeCorrupted(35);
             for (int r = noiseRange; r <= Math.Abs(noiseRange) / 10; r++)
             {
@@ -212,7 +211,7 @@ namespace ImageCrusher.ImageController
                     {
                         percentage = CorruptedPercentage();
                     if (percentage < noiseAmount)
-                        {
+                    {
                         if (percentage < noiseAmount)
                             i = i - 500;
                         if (percentage < noiseAmount - 2)
@@ -228,6 +227,8 @@ namespace ImageCrusher.ImageController
                         if (percentage < noiseAmount - 40)
                             i = 0;
                     }
+                    else
+                        break;
 
                     }
                 }
@@ -241,17 +242,17 @@ namespace ImageCrusher.ImageController
             int ij = 0; int j = 0; double nanCount = 0;
             for (int i = 0; i < ImageOut.Height * ImageOut.Width; i++)
             {
-                if (imageOut.Data[ij, j, 0] != img.Data[ij, j, 0] || imageOut.Data[ij, j, 1] != img.Data[ij, j, 1] || imageOut.Data[ij, j, 2] != img.Data[ij, j, 2])
+                if (ImageOut.Data[ij, j, 0] != img.Data[ij, j, 0] || ImageOut.Data[ij, j, 1] != img.Data[ij, j, 1] || ImageOut.Data[ij, j, 2] != img.Data[ij, j, 2])
                 {
                     nanCount++;
                 }
                 i++;
                 ij++;
-                if (ij == imageOut.Height)
+                if (ij == ImageOut.Height)
                 {
                     ij = 0;
                     j++;
-                    if (j == imageOut.Width)
+                    if (j == ImageOut.Width)
                         j = 0;
                 }
             }

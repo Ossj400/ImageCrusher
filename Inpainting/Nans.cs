@@ -34,7 +34,7 @@ namespace ImageCrusher.Inpainting
         {
         }
 
-        public async Task /*void*/ Compute(int channel) //  channel = 0-2; // red=0, green=1, blue=2    
+        public async Task /*void*/ Compute(int channel) //  channel = 0-2; // green=1, blue=0 , red=2, 
         {
             int i = 0;
             int j = 0;
@@ -194,26 +194,18 @@ namespace ImageCrusher.Inpainting
                      alglib.sparseset(fda, row, col, (alglib.sparseget(M, row, col) + alglib.sparseget(fda, row, col)));                   
             }
             i = 0; j = 0;
-
-            double value = 0;
             row = 0; col = 0;
-            int nCols = alglib.sparsegetncols(fda);
-            // transpose(fda);
 
+            int nCols = alglib.sparsegetncols(fda);
+            alglib.sparseconverttocrs(fda);
             double[] colFda = new double[nCols];
             double[] rhs = new double[nm];
             for (col = 0; col < nCols; col++)
             {
-                // sparsegetrow(col, colFda), 
                 for (row = 0; row < knownList.Length; row++)
-                    rhs[col] += a[knownList[row]] /* * -colFda[(int)knownList[row]];*/ *-alglib.sparseget(fda, col, knownList[row]);
+                    rhs[col] += a[knownList[row]] *-alglib.sparseget(fda, col, knownList[row]);
             }
             i = 0; row = 0;col = 0;
-
-
-            // transpose(fda);
-            //double[] rhs2 = new double[nm];
-            //alglib.sparsemtv(fda, knownList,ref rhs2);
 
             int fda0Count = 0;
             while (alglib.sparseenumerate(fda, ref uselessCounter1, ref uselessCounter2, out row, out col, out uselessNumb))

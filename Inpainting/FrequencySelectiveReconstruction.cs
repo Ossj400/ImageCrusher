@@ -16,22 +16,14 @@ namespace ImageCrusher.Inpainting
         Mat imageOutFSR;
         public Mat ImageOutFSR { get => imageOutFSR; set => imageOutFSR = value; }
 
-        public async Task InpaintFSR(ImageMenu image, Noise mask1, XPhotoInvoke.InpaintType inpaintType)
+        public void InpaintFSR(ImageMenu image, Noise mask1, XPhotoInvoke.InpaintType inpaintType)
         {
             Image<Gray, Byte> mask = mask1.GetMaskFSR();
             Mat imageIn = new Mat(image.imgPath);
             Mat maskM = new Mat(mask.Mat, mask.ROI);
-            imageOutFSR = new Mat();           
-            try
-            {
-                XPhotoInvoke.Inpaint(imageIn, maskM, imageOutFSR, inpaintType);
-                ImageOutFSR = imageOutFSR;
-            }
-            catch (Exception e) 
-            {
-                throw e;
-            }               
-            
+            imageOutFSR = new Mat();
+            XPhotoInvoke.Inpaint(imageIn, maskM, imageOutFSR, inpaintType);
+            ImageOutFSR = imageOutFSR;       
         }
 
     }

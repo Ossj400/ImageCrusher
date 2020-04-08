@@ -16,6 +16,7 @@ namespace ImageCrusher.ImageController
         Image<Bgr, byte> imageOut;
         Image<Gray, byte> mask;
         public string imgPath;
+        public string maskPath;
 
         public Image<Bgr, byte> Img { get => img; set => img = value; }
         public Image<Bgr, byte> ImageOut { get => imageOut; set => imageOut = value; }
@@ -46,6 +47,7 @@ namespace ImageCrusher.ImageController
                 try
                 {
                     Mask = new Image<Gray, byte>(OpenFile.FileName);
+                    maskPath = OpenFile.FileName;
                 }
                 catch (ArgumentException e)
                 {
@@ -61,6 +63,7 @@ namespace ImageCrusher.ImageController
                 try
                 {
                     ImageOut = new Image<Bgr, byte>(OpenFile.FileName);
+                    maskPath = OpenFile.FileName;
                 }
                 catch (ArgumentException e)
                 {

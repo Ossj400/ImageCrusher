@@ -9,6 +9,7 @@ using Emgu.CV;
 using System.Windows.Forms;
 using Emgu.CV.Quality;
 using System.Drawing.Imaging;
+using AForge.Imaging.Filters;
 
 namespace ImageCrusher.ImageController
 {
@@ -30,8 +31,7 @@ namespace ImageCrusher.ImageController
         {
             this.img = image.Img;
             MaskLoaded = image.Mask;          
-        }
-      
+        }     
         public Image<Bgr, byte> SaltAndPepperNoise(int trackBarValue, int noiseRange)  // Salt&Pepper Noise
         {
             ImageOut = img.Copy();
@@ -46,11 +46,11 @@ namespace ImageCrusher.ImageController
                 int absPixNoiseRange = Math.Abs(pixNoiseRange); // for good loop conditioning
                 for (; pixNoiseRange <= absPixNoiseRange; pixNoiseRange++)  // counting from -range to range
                 {
-                    int randPixX = random.Next(0, (xPixels - 1));  // picking pixel for x axis, from 0-max Size - 1
-                    int randPixY = random.Next(0, (yPixels - 1));  // same for y axis
+                    int randPixX = random.Next(1, (xPixels - 1));  // picking pixel for x axis, from 0-max Size - 1
+                    int randPixY = random.Next(1, (yPixels - 1));  // same for y axis
                     if ((randPixX >= 0) && (randPixX < xPixels) && (randPixY >= 0) && (randPixY < yPixels)) // if random number and range is in boundaries of array loop is going
                     {
-                        int rand = random.Next(1, 255);
+                        int rand = random.Next(0, 255);
                         Data[randPixY, randPixX, 0] = (byte)rand;
                         Data[randPixY, randPixX, 1] = (byte)rand;
                         Data[randPixY, randPixX, 2] = (byte)rand;
@@ -59,37 +59,62 @@ namespace ImageCrusher.ImageController
             }
             return ImageOut;
         }
-        public Image<Bgr, byte> VerticalScratches(int trackBarValue, int noiseRange)
+        public Image<Bgr, byte> DiagonalScratches(int trackBarValue, int noiseRange)
         {
             ImageOut = img.Copy();
             byte[,,] Data = ImageOut.Data;
             Random random = new Random();
-            int xPixels = ImageOut.Size.Width;
-            int yPixels = ImageOut.Size.Height;
-
+            int xPixels = ImageOut.Size.Width-1;
+            int yPixels = ImageOut.Size.Height-1;
+            //double percentage;
+            //double noiseAmount = 30;
             for (int r = 0; r <= (Math.Pow(trackBarValue, trackBarValue / 2) / 2); r++)
             {
-                int randPixX = random.Next(0, (xPixels - 1));  // picking pixel for x axis, from 0-max Size - 1
-                int randPixY = random.Next(0, (yPixels - 1));  // same for y axis
+                int randPixX = random.Next(1, (xPixels - 1));  // picking pixel for x axis, from 0-max Size - 1
+                int randPixY = random.Next(1, (yPixels - 1));  // same for y axis
                 int pixNoiseRange = noiseRange;
                 int absPixNoiseRange = Math.Abs(pixNoiseRange); // for good loop conditioning
                 for (; pixNoiseRange <= absPixNoiseRange; pixNoiseRange++)  // counting from -range to range
                 {
-                    if ((randPixX + pixNoiseRange >= 0) && (randPixX - pixNoiseRange >= 0) && (randPixX - pixNoiseRange < xPixels) && (randPixX + pixNoiseRange < xPixels) && (randPixY + (pixNoiseRange + 1) < yPixels) && (randPixY + (pixNoiseRange + 1) >= 0) && (randPixY - (pixNoiseRange + 1) >= 0) && (randPixY - (pixNoiseRange + 1) < yPixels) && (randPixY + (pixNoiseRange + 1) >= 0)) // if random number and range is in boundaries of array loop is going
+                    if ((randPixX + pixNoiseRange >= 1) && (randPixX - pixNoiseRange >= 1) && (randPixX - pixNoiseRange < xPixels) && (randPixX + pixNoiseRange < xPixels) && (randPixY + (pixNoiseRange + 1) < yPixels) && (randPixY + (pixNoiseRange + 1) >= 1) && (randPixY - (pixNoiseRange + 1) >= 1) && (randPixY - (pixNoiseRange + 1) < yPixels) && (randPixY + (pixNoiseRange + 1) >= 1)) // if random number and range is in boundaries of array loop is going
                     {
-                        Data[randPixY + (1 + pixNoiseRange), randPixX + pixNoiseRange, 0] = (byte)random.Next(1, 255);
-                        Data[randPixY + (1 + pixNoiseRange), randPixX + pixNoiseRange, 1] = (byte)random.Next(1, 255);
-                        Data[randPixY + (1 + pixNoiseRange), randPixX + pixNoiseRange, 2] = (byte)random.Next(1, 255);
+                        Data[randPixY + (1 + pixNoiseRange), randPixX + pixNoiseRange, 0] = (byte)random.Next(0, 255);
+                        Data[randPixY + (1 + pixNoiseRange), randPixX + pixNoiseRange, 1] = (byte)random.Next(0, 255);
+                        Data[randPixY + (1 + pixNoiseRange), randPixX + pixNoiseRange, 2] = (byte)random.Next(0, 255);
 
-                        Data[randPixY - (1 + pixNoiseRange), randPixX - pixNoiseRange, 0] = (byte)random.Next(1, 255);
-                        Data[randPixY - (1 + pixNoiseRange), randPixX - pixNoiseRange, 1] = (byte)random.Next(1, 255);
-                        Data[randPixY - (1 + pixNoiseRange), randPixX - pixNoiseRange, 2] = (byte)random.Next(1, 255);
+                        Data[randPixY - (1 + pixNoiseRange), randPixX - pixNoiseRange, 0] = (byte)random.Next(0, 255);
+                        Data[randPixY - (1 + pixNoiseRange), randPixX - pixNoiseRange, 1] = (byte)random.Next(0, 255);
+                        Data[randPixY - (1 + pixNoiseRange), randPixX - pixNoiseRange, 2] = (byte)random.Next(0, 255);
                     }
                     else
                     {
                         randPixX = random.Next(1, (xPixels - 1));  // new randoms for same pixNoise range
                         randPixY = random.Next(1, (yPixels - 1));
                     }
+
+                    //if (r == (Math.Pow(trackBarValue, trackBarValue / 2) / 2) - 1)
+                    //{
+                    //    percentage = CorruptedPercentage();
+                    //    if (Math.Round(percentage) < noiseAmount)
+                    //    {
+                    //        if (percentage < noiseAmount)
+                    //            r = (int)((double)r - (double)((double)r / 50));
+                    //        if (percentage < noiseAmount - 2)
+                    //            r = (int)((double)r - (double)((double)r / 20));
+                    //        if (percentage < noiseAmount - 5)
+                    //            r = (int)((double)r - (double)((double)r / 12));
+                    //        if (percentage < noiseAmount - 10)
+                    //            r = (int)((double)r - (double)((double)r / 5));
+                    //        if (percentage < noiseAmount - 20)
+                    //            r = (int)((double)r - (double)((double)r / 2));
+                    //        if (percentage < noiseAmount - 30)
+                    //            r = (int)((double)r - (double)((double)r / 1));
+                    //        if (percentage < noiseAmount - 40)
+                    //            r = 0;
+                    //    }
+                    //    else
+                    //        break;
+                    //}
                 }
             }
             return ImageOut;
@@ -97,16 +122,48 @@ namespace ImageCrusher.ImageController
 
         public Image<Bgr, byte> Square(int noiseRange)
         {
-            noiseRange = 3 * noiseRange;
+            noiseRange = 5 * noiseRange;
             ImageOut = img.Copy();
             byte[,,] Data = ImageOut.Data;
             Random random = new Random();
-            int xPixels = ImageOut.Size.Width;
-            int yPixels = ImageOut.Size.Height;
-            int randPixX = random.Next(0, (xPixels -1 + noiseRange));  // picking pixel for in good boundaries for x axis   |  from 0-max Size - 1
-            int randPixY = random.Next(0, (yPixels - 1 + 2*noiseRange));  // same for y axis
+            int xPixels = ImageOut.Size.Width-1;
+            int yPixels = ImageOut.Size.Height-1;
+            int randPixX = random.Next(1, (xPixels -1 + 300));  // picking pixel for in good boundaries for x axis   |  from 0-max Size - 1
+            int randPixY = random.Next(1, (yPixels - 1 + 450));  // same for y axis
+            double percentage;
+            int pix = (int)HowManyPixelsNeedToBeCorrupted(35);
+            for (int r = noiseRange; r <= Math.Abs(noiseRange) / 10; r++)
+            {
+                randPixY++;
+                int pixNoiseRange = noiseRange;     // make a new variable from noiseRange to use new variable in loop
+                int absPixNoiseRange = Math.Abs(pixNoiseRange); // for good loop conditioning
+                for (; pixNoiseRange <= absPixNoiseRange; pixNoiseRange++)  // counting from -range to range
+                {
+                    if (randPixY < yPixels) // if random number and range is in boundaries of array loop is going
+                    {
+                        Data[randPixY, randPixX + (int)(0.5*pixNoiseRange), 0] = 0;
+                        Data[randPixY, randPixX + (int)(0.5 * pixNoiseRange), 1] = 0;
+                        Data[randPixY, randPixX + (int)(0.5 * pixNoiseRange), 2] = 0;
+                    }
+                }
+            }
+            return ImageOut;
+        }
 
-            for (int r = noiseRange; r <= Math.Abs(noiseRange)/10; r++)
+          public Image<Bgr, byte> Square2(int noiseRange)
+        {
+            noiseRange = 5 * noiseRange;
+            ImageOut = img.Copy();
+            byte[,,] Data = ImageOut.Data;
+            Random random = new Random();
+            int xPixels = ImageOut.Size.Width-1;
+            int yPixels = ImageOut.Size.Height-1;
+            int randPixX = random.Next(1, (xPixels -1 + 300));  // picking pixel for in good boundaries for x axis   |  from 0-max Size - 1
+            int randPixY = random.Next(1, (yPixels - 1 + 450));  // same for y axis
+            double percentage;
+            int pix = (int)HowManyPixelsNeedToBeCorrupted(35);
+            int pixC = 0;
+            for (int r = noiseRange; r <= Math.Abs(noiseRange) / 10; r++)
             {
                 randPixY++;
 
@@ -114,16 +171,98 @@ namespace ImageCrusher.ImageController
                 int absPixNoiseRange = Math.Abs(pixNoiseRange); // for good loop conditioning
                 for (; pixNoiseRange <= absPixNoiseRange; pixNoiseRange++)  // counting from -range to range
                 {
-                    if (randPixY < yPixels && randPixX + pixNoiseRange < xPixels) // if random number and range is in boundaries of array loop is going
+                    if (randPixY < yPixels) // if random number and range is in boundaries of array loop is going
                     {
-                        Data[randPixY, randPixX + pixNoiseRange, 0] = 0;
-                        Data[randPixY, randPixX + pixNoiseRange, 1] = 0;
-                        Data[randPixY, randPixX + pixNoiseRange, 2] = 0;
+                        Data[randPixY, randPixX + (int)(0.5*pixNoiseRange), 0] = 0;
+                        Data[randPixY, randPixX + (int)(0.5 * pixNoiseRange), 1] = 0;
+                        Data[randPixY, randPixX + (int)(0.5 * pixNoiseRange), 2] = 0;
+                        pixC++;
                     }
                 }
 
+                    percentage = CorruptedPercentage();
+                    if(percentage>30)
+                        break;
+
+
             }
             return ImageOut;
+        }
+       
+        public Image<Bgr, byte> SaltAndPepperNoiseNumbed(int noiseAmount)
+        {
+            ImageOut = img.Copy();
+            byte[,,] Data = ImageOut.Data;
+            Random random = new Random();
+            int xPixels = ImageOut.Size.Width-1;
+            int yPixels = ImageOut.Size.Height-1;
+            double percentage;
+            int pixNoiseRange = (int)HowManyPixelsNeedToBeCorrupted(noiseAmount);
+
+                for (int i=0; i <= pixNoiseRange; i++)  
+                {
+                    int randPixX = random.Next(1, (xPixels - 1));  // picking pixel for x axis, from 0-max Size - 1
+                    int randPixY = random.Next(1, (yPixels - 1));  // same for y axis                    {
+                        int rand = random.Next(0, 255);
+                        Data[randPixY, randPixX, 0] = (byte)rand;
+                        Data[randPixY, randPixX, 1] = (byte)rand;
+                        Data[randPixY, randPixX, 2] = (byte)rand;
+
+                    if (i == pixNoiseRange - 1)
+                    {
+                        percentage = CorruptedPercentage();
+                    if (percentage < noiseAmount)
+                        {
+                        if (percentage < noiseAmount)
+                            i = i - 500;
+                        if (percentage < noiseAmount - 2)
+                            i = i - 1000;
+                        if (percentage < noiseAmount - 5)
+                            i = i - 10000;
+                        if (percentage < noiseAmount - 10)
+                            i = i - 25000;
+                        if (percentage < noiseAmount - 20)
+                            i = i - 55000;
+                        if (percentage < noiseAmount - 30)
+                            i = i - 95000;
+                        if (percentage < noiseAmount - 40)
+                            i = 0;
+                    }
+
+                    }
+                }
+
+           percentage = CorruptedPercentage();
+           return ImageOut;
+        }
+
+        public double CorruptedPercentage()
+        {
+            int ij = 0; int j = 0; double nanCount = 0;
+            for (int i = 0; i < ImageOut.Height * ImageOut.Width; i++)
+            {
+                if (imageOut.Data[ij, j, 0] != img.Data[ij, j, 0] || imageOut.Data[ij, j, 1] != img.Data[ij, j, 1] || imageOut.Data[ij, j, 2] != img.Data[ij, j, 2])
+                {
+                    nanCount++;
+                }
+                i++;
+                ij++;
+                if (ij == imageOut.Height)
+                {
+                    ij = 0;
+                    j++;
+                    if (j == imageOut.Width)
+                        j = 0;
+                }
+            }
+            return (nanCount/(ImageOut.Height*ImageOut.Width)) * 100;
+        }
+
+        public double HowManyPixelsNeedToBeCorrupted(double percentOfcorrupted)
+        {
+            double pxCount = 0;
+            pxCount = (0.01 * percentOfcorrupted) * (ImageOut.Height * ImageOut.Width);
+            return pxCount;
         }
 
         public Image<Gray, byte> GetMask()

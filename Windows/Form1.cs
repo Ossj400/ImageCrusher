@@ -7,6 +7,7 @@ using ImageCrusher.ImageController;
 using Emgu.CV.Structure;
 using System.Threading.Tasks;
 using Emgu.CV.XPhoto;
+using DataGeneratorSpace;
 
 namespace ImageCrusher
 {
@@ -18,6 +19,7 @@ namespace ImageCrusher
         FrequencySelectiveReconstruction FSR;
         Nans NansAlg;
         Noise NoiseImg;
+        DataGenerator data;
 
         public MainWindow()
         {
@@ -67,6 +69,12 @@ namespace ImageCrusher
                 MenuImg.LoadMaskGray();
                 PicBox2Editedmg.Image = MenuImg.Mask.ToBitmap();
                 NoiseImg.MaskLoaded = MenuImg.Mask;
+                //data = new DataGenerator(MenuImg);
+                //data.ReadPhotoName();
+                //data.ReadMaskName();
+                //data.CreateFolder();
+                //data.CreateFile();
+                //data.GenerateValues(1,30,5,0.1,0.8);
             }
             catch
             {
@@ -85,6 +93,7 @@ namespace ImageCrusher
             {
             }
         }
+
 
         private void BtScratches_CheckedChanged(object sender, EventArgs e)
         {
@@ -119,25 +128,39 @@ namespace ImageCrusher
 
         private void NoiseMethod(int range)
         {
-            if (BtSaltNPepperNoise.Checked == true)
+            try
             {
-                BtScratches.Checked = false;
-                BtSquare.Checked = false;
-                int val = TrBarNoiseController.Value;
-                PicBox2Editedmg.Image = NoiseImg.SaltAndPepperNoise(val, -range).ToBitmap();
+                if (BtSaltNPepperNoise.Checked == true)
+                {
+                    BtScratches.Checked = false;
+                    BtSquare.Checked = false;
+                    int val = TrBarNoiseController.Value;
+                    PicBox2Editedmg.Image = NoiseImg.SaltAndPepperNoise(val, -range).ToBitmap();
+                }
+                //if (BtSaltNPepperNoise.Checked == true && NoiseAmountInput.Text != null)
+                //{
+                //    BtScratches.Checked = false;
+                //    BtSquare.Checked = false;
+                //    int val = Convert.ToInt32(NoiseAmountInput.Text);
+                //    PicBox2Editedmg.Image = NoiseImg.SaltAndPepperNoiseNumbed(val).ToBitmap();
+                //}
+
+                if (BtScratches.Checked == true)
+                {
+                    BtSaltNPepperNoise.Checked = false;
+                    BtSquare.Checked = false;
+                    int val = TrBarNoiseController.Value;
+                    PicBox2Editedmg.Image = NoiseImg.DiagonalScratches(val, -range).ToBitmap();
+                }
+                if (BtSquare.Checked == true)
+                {
+                    BtScratches.Checked = false;
+                    BtSaltNPepperNoise.Checked = false;
+                    PicBox2Editedmg.Image = NoiseImg.Square(-range).ToBitmap();
+                }
             }
-            if (BtScratches.Checked == true)
+            catch(Exception e)
             {
-                BtSaltNPepperNoise.Checked = false;
-                BtSquare.Checked = false;
-                int val = TrBarNoiseController.Value;
-                PicBox2Editedmg.Image = NoiseImg.VerticalScratches(val, -range).ToBitmap();
-            }
-            if (BtSquare.Checked == true)
-            {
-                BtScratches.Checked = false;
-                BtSaltNPepperNoise.Checked = false;
-                PicBox2Editedmg.Image = NoiseImg.Square(-range).ToBitmap();
             }
         }
         private void BtInpaintNavierStokes_Click(object sender, EventArgs e)
@@ -173,64 +196,42 @@ namespace ImageCrusher
 
         private void BtInpaintNans_Click(object sender, EventArgs e)  // private asnyc void..
         {
-            //try
-            //{
-            NavierStokes = null;
-            AlexandruTelea = null;
-            FSR = null;
-
-
-            if (MenuImg.ImageOut == null)
-                NansAlg = new Nans(MenuImg, NoiseImg);
-            if (MenuImg.ImageOut != null)
-                NansAlg = new Nans(MenuImg);
-
-            //NansAlg.Compute(0);
-            //NansAlg.Compute(1);
-            //NansAlg.Compute(2);
-
-            var tasks = new[]
+            try
             {
-                Task.Factory.StartNew(() => NansAlg.Compute(0)),
-                Task.Factory.StartNew(() => NansAlg.Compute(1)),
-                Task.Factory.StartNew(() => NansAlg.Compute(2))
-            };
-            Task.WaitAll(tasks);
+                NavierStokes = null;
+                AlexandruTelea = null;
+                FSR = null;
 
-            PicBox3InPainted.Image = NansAlg.ImageOutNans.ToBitmap();
+                if (MenuImg.ImageOut == null)
+                    NansAlg = new Nans(MenuImg, NoiseImg);
+                if (MenuImg.ImageOut != null)
+                    NansAlg = new Nans(MenuImg);
 
-            //}
-            //catch (NullReferenceException)
-            //{
-            //    MessageBox.Show("Nothing to inpaint.");
-            //}
+                var tasks = new[]
+                {
+                    Task.Factory.StartNew(() => NansAlg.Compute(0)),
+                    Task.Factory.StartNew(() => NansAlg.Compute(1)),
+                    Task.Factory.StartNew(() => NansAlg.Compute(2))
+                };
+                Task.WaitAll(tasks);
+                PicBox3InPainted.Image = NansAlg.ImageOutNans.ToBitmap();
+            }
+            catch (NullReferenceException)
+            {
+                MessageBox.Show("Nothing to inpaint.");
+            }
         }
-
 
         private void BtInpaintFSR_Click(object sender, EventArgs e)
         {
             try
             {
-                MessageBox.Show("Please wait untill inpainting is done (window will arrive).");
                 NavierStokes = null;
                 AlexandruTelea = null;
                 NansAlg = null;
                 FSR = new FrequencySelectiveReconstruction();
-
-                Task.Run(async () =>
-                {
-                    try
-                    {
-                        await FSR.InpaintFSR(MenuImg, NoiseImg, XPhotoInvoke.InpaintType.FsrBest);
-                        Image<Bgr, byte> image = FSR.ImageOutFSR.ToImage<Bgr, byte>();
-                        PicBox3InPainted.Image = image.ToBitmap();
-                    }
-                    catch (Exception ee)
-                    {
-                        throw ee;
-                    }
-                });
-                MessageBox.Show("Inpaint done.");
+                FSR.InpaintFSR(MenuImg, NoiseImg, XPhotoInvoke.InpaintType.FsrBest);
+                PicBox3InPainted.Image = FSR.ImageOutFSR.ToImage<Bgr, byte>().ToBitmap();
             }
             catch (NullReferenceException)
             {
@@ -242,26 +243,12 @@ namespace ImageCrusher
         {
             try
             {
-                MessageBox.Show("Please wait untill inpainting is done (window will arrive).");
                 NavierStokes = null;
                 AlexandruTelea = null;
                 NansAlg = null;
                 FSR = new FrequencySelectiveReconstruction();
-
-                Task.Run(async () =>
-                {
-                    try
-                    {
-                        await FSR.InpaintFSR(MenuImg, NoiseImg, XPhotoInvoke.InpaintType.FsrFast);
-                        Image<Bgr, byte> image = FSR.ImageOutFSR.ToImage<Bgr, byte>();
-                        PicBox3InPainted.Image = image.ToBitmap();
-                    }
-                    catch (Exception ee)
-                    {
-                        throw ee;
-                    }
-                });
-                MessageBox.Show("Inpaint done.");
+                FSR.InpaintFSR(MenuImg, NoiseImg, XPhotoInvoke.InpaintType.FsrFast);
+                PicBox3InPainted.Image = FSR.ImageOutFSR.ToImage<Bgr, byte>().ToBitmap();
             }
             catch (NullReferenceException)
             {
@@ -273,33 +260,17 @@ namespace ImageCrusher
         {
             try
             {
-                MessageBox.Show("Please wait untill inpainting is done (window will arrive).");
                 NavierStokes = null;
                 AlexandruTelea = null;
                 NansAlg = null;
                 FSR = new FrequencySelectiveReconstruction();
-
-                Task.Run(async () =>
-                {
-                    try
-                    {
-                        await FSR.InpaintFSR(MenuImg, NoiseImg, XPhotoInvoke.InpaintType.Shiftmap);
-                        Image<Bgr, byte> image = FSR.ImageOutFSR.ToImage<Bgr, byte>();
-                        PicBox3InPainted.Image = image.ToBitmap();
-                    }
-                    catch (Exception ee)
-                    {
-                        throw ee;
-                    }
-                    MessageBox.Show("Inpaint done.");
-                });
-
+                FSR.InpaintFSR(MenuImg, NoiseImg, XPhotoInvoke.InpaintType.Shiftmap);
+                PicBox3InPainted.Image = FSR.ImageOutFSR.ToImage<Bgr, byte>().ToBitmap();
             }
             catch (NullReferenceException)
             {
                 MessageBox.Show("Nothing to inpaint.");
             }
-            
         }
         private void BtCalcRMSError_Click(object sender, EventArgs e)
         {
@@ -389,8 +360,6 @@ namespace ImageCrusher
                 MessageBox.Show("Insert images to compare.");
             }
         }
-
-
             private void BtSaveMask_Click(object sender, EventArgs e)
             {
                  try
@@ -417,13 +386,18 @@ namespace ImageCrusher
         {
             try
             {
-                MenuImg.SaveImage(NoiseImg.ImageOut.ToBitmap()); 
-                
+                MenuImg.SaveImage(NoiseImg.ImageOut.ToBitmap());            
             }
             catch
             {
             }
         }
 
+        private void NoiseAmountInput_TextChanged(object sender, EventArgs e)
+        {
+            NoiseImg = new Noise(MenuImg);
+            NoiseImg.MaskLoaded = null;
+            NoiseMethod(0);
+        }
     }
 }

@@ -45,3 +45,12 @@ C:\Users\Artur\source\repos\WindowsFormsApp1\bin\Debug\x86\opencv_videoio_ffmpeg
 C:\Users\Artur\source\repos\WindowsFormsApp1\bin\Debug\Emgu.CV.World.NetStandard.dll
 C:\Users\Artur\source\repos\WindowsFormsApp1\bin\Debug\Emgu.CV.World.NetStandard.xml
 C:\Users\Artur\source\repos\WindowsFormsApp1\obj\Debug\ImageCrusher.v.0.1.csprojAssemblyReference.cache
+C:\Users\Artur\source\repos\WindowsFormsApp1\bin\Debug\AForge.dll
+C:\Users\Artur\source\repos\WindowsFormsApp1\bin\Debug\AForge.Imaging.dll
+C:\Users\Artur\source\repos\WindowsFormsApp1\bin\Debug\AForge.Math.dll
+C:\Users\Artur\source\repos\WindowsFormsApp1\bin\Debug\EPPlus.dll
+C:\Users\Artur\source\repos\WindowsFormsApp1\bin\Debug\ExcelLibrary.dll
+C:\Users\Artur\source\repos\WindowsFormsApp1\bin\Debug\AForge.xml
+C:\Users\Artur\source\repos\WindowsFormsApp1\bin\Debug\AForge.Imaging.xml
+C:\Users\Artur\source\repos\WindowsFormsApp1\bin\Debug\AForge.Math.xml
+C:\Users\Artur\source\repos\WindowsFormsApp1\bin\Debug\EPPlus.xml

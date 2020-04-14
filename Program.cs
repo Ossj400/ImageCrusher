@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 namespace ImageCrusher
 {
@@ -10,19 +12,16 @@ namespace ImageCrusher
         [STAThread]
         static void Main()
         {
+
+            if (Environment.OSVersion.Version.Major == 6)
+                SetProcessDPIAware();
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainWindow());
         }
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        private static extern bool SetProcessDPIAware();
     }
 
-    class Auto
-    {
-        public Opony rodzaj { get; set; }
-    }
-
-    class Opony
-    {
-       public int rozmiar = 6;
-    }
 }

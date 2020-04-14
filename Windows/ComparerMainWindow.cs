@@ -160,7 +160,7 @@ namespace ImageCrusher
                     PicBox2Editedmg.Image = NoiseImg.Square(-range).ToBitmap();
                 }
             }
-            catch(Exception e)
+            catch
             {
             }
         }
@@ -411,9 +411,18 @@ namespace ImageCrusher
             PicBox2Editedmg.Image = MenuImg.Mask.ToBitmap();
             NoiseImg.MaskLoaded = MenuImg.Mask;
             data = new DataGenerator(MenuImg);
+            data.Loope1();
+            data = new DataGenerator(MenuImg);
+            data.Loope2();
+            data = new DataGenerator(MenuImg);
             data.Loope3();
-            data.Loope4();
-            data.Loope5();
+            //data = new DataGenerator(MenuImg);
+            //data.Loope4();
+            //data = new DataGenerator(MenuImg);
+            //data.Loope5();
+            //data = new DataGenerator(MenuImg);
+            //data.Loope6();
+            //data = new DataGenerator(MenuImg);
         }
     }
 }

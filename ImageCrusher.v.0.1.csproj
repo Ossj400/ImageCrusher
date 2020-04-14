@@ -116,18 +116,18 @@
     <Compile Include="Inpainting\Nans.cs" />
     <Compile Include="Inpainting\NavierStokes.cs" />
     <Compile Include="ExtensionMethods.cs" />
-    <Compile Include="Windows\Form1.cs">
+    <Compile Include="Windows\ComparerMainWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Windows\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Windows\ComparerMainWindow.Designer.cs">
+      <DependentUpon>ComparerMainWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="ImageController\ImageMenu.cs" />
     <Compile Include="ImageController\Noise.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Windows\Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="Windows\ComparerMainWindow.resx">
+      <DependentUpon>ComparerMainWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

@@ -36,7 +36,6 @@ namespace DataGeneratorSpace
             maskPath = image.maskPath;
             img = image.Img;
         }
-
         public string ReadPhotoName()
         {
 
@@ -68,11 +67,11 @@ namespace DataGeneratorSpace
             return maskName;
         }
 
-        public string CreateFolder()
+        public string CreateFolder(string methodName)
         {
             path0 = string.Format(photoPath.Remove(del-2));
-            dateNow = DateTime.Now.Day.ToString() + DateTime.Now.Hour.ToString() + DateTime.Now.Minute.ToString() + DateTime.Now.Second.ToString();
-            dirNew = path0 + @"\Documents\ResultOf_" + dateNow;
+            dateNow = DateTime.Now.Day.ToString() + DateTime.Now.Hour.ToString() + DateTime.Now.Minute.ToString() + "sec" + DateTime.Now.Second.ToString();
+            dirNew = path0 + @"\Documents\ResultOf_" + methodName + dateNow;
             Directory.CreateDirectory(dirNew);
             DirectorySecurity sec = Directory.GetAccessControl(dirNew);
             SecurityIdentifier everyone = new SecurityIdentifier(WellKnownSidType.WorldSid,null);
@@ -118,14 +117,14 @@ namespace DataGeneratorSpace
             workbook.Save(path0);
         }
 
-        public void Loope()
+        public void Loope1()
         {
 
             methodName = "Alexandru_Telea";
             ReadPhotoName();
             string enviroPh = string.Format(photoPath.Remove(del - 2));
             ReadMaskName();
-            CreateFolder();
+            CreateFolder(methodName);
             CreateFile();
             int i = 0;
             string enviroMsk = string.Format(maskPath);
@@ -145,36 +144,36 @@ namespace DataGeneratorSpace
                     UseMethods(newIm, alexandruTelea, "Alexandru Telea");
                     alexandruTelea.ImageOutTelea.Save(path0 + methodName + i.ToString() + ".bmp");
                 }
-            }
+            }       
         }
             public void Loope2()
-       {
-            methodName = "Navier_Stokes";
-            ReadPhotoName();
-            string enviroPh = string.Format(photoPath.Remove(del - 2));
-            ReadMaskName();
-            CreateFolder();
-            CreateFile();
-            int i = 0;
-            string enviroMsk = string.Format(maskPath);
-            foreach (object file in Directory.EnumerateFiles(enviroMsk.Remove(del - 2)))
             {
-                foreach (object files in Directory.EnumerateFiles(enviroPh))
+                methodName = "Navier_Stokes";
+                ReadPhotoName();
+                string enviroPh = string.Format(photoPath.Remove(del - 2));
+                ReadMaskName();
+                CreateFolder(methodName);
+                CreateFile();
+                int i = 0;
+                string enviroMsk = string.Format(maskPath);
+                foreach (object file in Directory.EnumerateFiles(enviroMsk.Remove(del - 2)))
                 {
-                    i++;
-                    ImageMenu newIm = new ImageMenu();
-                    newIm.Img = new Image<Bgr, byte>(files.ToString());
-                    Noise noise = new Noise(newIm);
-                    noise.MaskLoaded = new Image<Gray, byte>(file.ToString());
-                    NavierStokesInpaint navierStokes = new NavierStokesInpaint();
-                    navierStokes.InpaintNav(newIm, noise, 1);
-                    photoPath = files.ToString();
-                    maskPath = file.ToString();
-                    UseMethods(newIm, navierStokes, "Navier Stokes");
-                    navierStokes.ImageOutNav.Save(path0 + methodName + i.ToString() + ".bmp");
+                    foreach (object files in Directory.EnumerateFiles(enviroPh))
+                    {
+                        i++;
+                        ImageMenu newIm = new ImageMenu();
+                        newIm.Img = new Image<Bgr, byte>(files.ToString());
+                        Noise noise = new Noise(newIm);
+                        noise.MaskLoaded = new Image<Gray, byte>(file.ToString());
+                        NavierStokesInpaint navierStokes = new NavierStokesInpaint();
+                        navierStokes.InpaintNav(newIm, noise, 1);
+                        photoPath = files.ToString();
+                        maskPath = file.ToString();
+                        UseMethods(newIm, navierStokes, "Navier Stokes");
+                        navierStokes.ImageOutNav.Save(path0 + methodName + i.ToString() + ".bmp");
+                    }
                 }
             }
-         }
 
         public void Loope3()
         {
@@ -182,9 +181,9 @@ namespace DataGeneratorSpace
             methodName = "FSR_F";
             ReadPhotoName();
             ReadMaskName();
-            CreateFolder();
+            CreateFolder(methodName);
             CreateFile();
-            string enviroPh = string.Format(photoPath.Remove(del - 1));// + @"\Images";
+            string enviroPh = string.Format(photoPath.Remove(del - 1));
             string enviroMsk = string.Format(maskPath);
             foreach (object file in Directory.EnumerateFiles(enviroMsk.Remove(del - 2)))
             {
@@ -212,9 +211,9 @@ namespace DataGeneratorSpace
                  methodName = "Shift_Map";
                  ReadPhotoName();
                  ReadMaskName();
-                 CreateFolder();
+                 CreateFolder(methodName);
                  CreateFile();
-                 string enviroPh = string.Format(photoPath.Remove(del - 1));// + @"\Images";
+                 string enviroPh = string.Format(photoPath.Remove(del - 1));
                  string enviroMsk = string.Format(maskPath);
                 foreach (object file in Directory.EnumerateFiles(enviroMsk.Remove(del - 2)))
                  {
@@ -235,35 +234,72 @@ namespace DataGeneratorSpace
                      }
                  }
              }
-        public void Loope5()
-        {
-            int i = 0;
-            methodName = "FSR_B";
-            ReadPhotoName();
-            ReadMaskName();
-            CreateFolder();
-            CreateFile();
-            string enviroPh = string.Format(photoPath.Remove(del - 1));// + @"\Images";
-            string enviroMsk = string.Format(maskPath);
-            foreach (object file in Directory.EnumerateFiles(enviroMsk.Remove(del - 2)))
+
+            public void Loope5()
             {
-                foreach (object files in Directory.EnumerateFiles(enviroPh))
+                int i = 0;
+                methodName = "FSR_B";
+                ReadPhotoName();
+                ReadMaskName();
+                CreateFolder(methodName);
+                CreateFile();
+                string enviroPh = string.Format(photoPath.Remove(del - 1));
+                string enviroMsk = string.Format(maskPath);
+                foreach (object file in Directory.EnumerateFiles(enviroMsk.Remove(del - 2)))
                 {
-                    i++;
-                    ImageMenu newIm = new ImageMenu();
-                    newIm.Img = new Image<Bgr, byte>(files.ToString());
-                    Noise noise = new Noise(newIm);
-                    noise.MaskLoaded = new Image<Gray, byte>(file.ToString());
-                    FrequencySelectiveReconstruction FSR = new FrequencySelectiveReconstruction();
-                    newIm.imgPath = files.ToString();
-                    FSR.InpaintFSR(newIm, noise, Emgu.CV.XPhoto.XPhotoInvoke.InpaintType.FsrBest);
-                    photoPath = files.ToString();
-                    maskPath = file.ToString();
-                    UseMethods(newIm, FSR, "FsrBest");
-                    FSR.ImageOutFSR.Save(path0 + methodName + i.ToString() + ".bmp");
+                    foreach (object files in Directory.EnumerateFiles(enviroPh))
+                    {
+                        i++;
+                        ImageMenu newIm = new ImageMenu();
+                        newIm.Img = new Image<Bgr, byte>(files.ToString());
+                        Noise noise = new Noise(newIm);
+                        noise.MaskLoaded = new Image<Gray, byte>(file.ToString());
+                        FrequencySelectiveReconstruction FSR = new FrequencySelectiveReconstruction();
+                        newIm.imgPath = files.ToString();
+                        FSR.InpaintFSR(newIm, noise, Emgu.CV.XPhoto.XPhotoInvoke.InpaintType.FsrBest);
+                        photoPath = files.ToString();
+                        maskPath = file.ToString();
+                        UseMethods(newIm, FSR, "FsrBest");
+                        FSR.ImageOutFSR.Save(path0 + methodName + i.ToString() + ".bmp");
+                    }
                 }
             }
-        }
+
+             public void Loope6()
+             {
+                 int i = 0;
+                 methodName = "Nans";
+                 ReadPhotoName();
+                 ReadMaskName();
+                 CreateFolder(methodName);
+                 CreateFile();
+                 string enviroPh = string.Format(photoPath.Remove(del - 1));
+                 string enviroMsk = string.Format(maskPath);
+                 foreach (object file in Directory.EnumerateFiles(enviroMsk.Remove(del - 2)))
+                 {
+                     foreach (object files in Directory.EnumerateFiles(enviroPh))
+                     {
+                         i++;
+                         ImageMenu newIm = new ImageMenu();
+                         newIm.Img = new Image<Bgr, byte>(files.ToString());
+                         Noise noise = new Noise(newIm);
+                         noise.MaskLoaded = new Image<Gray, byte>(file.ToString());
+                         Nans nansAlg = new Nans(newIm, noise);
+                         newIm.imgPath = files.ToString();
+                         var tasks = new[]
+                         {
+                         Task.Factory.StartNew(() => nansAlg.Compute(0)),
+                         Task.Factory.StartNew(() => nansAlg.Compute(1)),
+                         Task.Factory.StartNew(() => nansAlg.Compute(2))
+                          };
+                         Task.WaitAll(tasks);
+                         photoPath = files.ToString();
+                         maskPath = file.ToString();
+                         UseMethods(newIm, nansAlg, methodName);
+                         nansAlg.ImageOutNans.Save(path0 + methodName + i.ToString() + ".bmp");
+                     }
+                 }
+             }
         public virtual void UseMethods(ImageMenu image, NavierStokesInpaint navier, string methodName)
         {
             string phName = ReadPhotoName();
@@ -309,6 +345,5 @@ namespace DataGeneratorSpace
             double gmsd = indicator.GMSD();
             GenerateValues(phName, msName, rmse, psnr, ssim, gmsd, methodName);
         }
-
     }
 }

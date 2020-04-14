@@ -34,7 +34,7 @@ namespace ImageCrusher.ImageController
                 }
                 catch (ArgumentException e)
                 {
-                    MessageBox.Show("Wrong format. Error: " + '\n' + e.ToString());   ///////////////// ???????
+                    MessageBox.Show("Wrong format. Error: " + '\n' + e.ToString());  
                 }
             }
         }

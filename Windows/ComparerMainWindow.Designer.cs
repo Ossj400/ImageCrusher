@@ -71,7 +71,7 @@
             // TrBarNoiseController
             // 
             this.TrBarNoiseController.LargeChange = 1;
-            this.TrBarNoiseController.Location = new System.Drawing.Point(163, 696);
+            this.TrBarNoiseController.Location = new System.Drawing.Point(186, 689);
             this.TrBarNoiseController.Maximum = 11;
             this.TrBarNoiseController.Name = "TrBarNoiseController";
             this.TrBarNoiseController.Size = new System.Drawing.Size(185, 56);
@@ -102,7 +102,7 @@
             // 
             // BtLoadImg
             // 
-            this.BtLoadImg.Location = new System.Drawing.Point(12, 582);
+            this.BtLoadImg.Location = new System.Drawing.Point(35, 575);
             this.BtLoadImg.Name = "BtLoadImg";
             this.BtLoadImg.Size = new System.Drawing.Size(108, 30);
             this.BtLoadImg.TabIndex = 3;
@@ -112,7 +112,7 @@
             // 
             // BtSaveImg
             // 
-            this.BtSaveImg.Location = new System.Drawing.Point(1531, 710);
+            this.BtSaveImg.Location = new System.Drawing.Point(1495, 688);
             this.BtSaveImg.Name = "BtSaveImg";
             this.BtSaveImg.Size = new System.Drawing.Size(163, 31);
             this.BtSaveImg.TabIndex = 4;
@@ -123,7 +123,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(184, 676);
+            this.label1.Location = new System.Drawing.Point(207, 669);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(123, 17);
             this.label1.TabIndex = 5;
@@ -132,7 +132,7 @@
             // LblRangeNoise
             // 
             this.LblRangeNoise.AutoSize = true;
-            this.LblRangeNoise.Location = new System.Drawing.Point(401, 676);
+            this.LblRangeNoise.Location = new System.Drawing.Point(424, 669);
             this.LblRangeNoise.Name = "LblRangeNoise";
             this.LblRangeNoise.Size = new System.Drawing.Size(154, 17);
             this.LblRangeNoise.TabIndex = 7;
@@ -141,7 +141,7 @@
             // TrBarRangeNoise
             // 
             this.TrBarRangeNoise.LargeChange = 1;
-            this.TrBarRangeNoise.Location = new System.Drawing.Point(386, 696);
+            this.TrBarRangeNoise.Location = new System.Drawing.Point(409, 689);
             this.TrBarRangeNoise.Maximum = 100;
             this.TrBarRangeNoise.Name = "TrBarRangeNoise";
             this.TrBarRangeNoise.Size = new System.Drawing.Size(169, 56);
@@ -150,7 +150,7 @@
             // BtScratches
             // 
             this.BtScratches.AutoSize = true;
-            this.BtScratches.Location = new System.Drawing.Point(354, 587);
+            this.BtScratches.Location = new System.Drawing.Point(377, 580);
             this.BtScratches.Name = "BtScratches";
             this.BtScratches.Size = new System.Drawing.Size(135, 21);
             this.BtScratches.TabIndex = 8;
@@ -162,7 +162,7 @@
             // BtSaltNPepperNoise
             // 
             this.BtSaltNPepperNoise.AutoSize = true;
-            this.BtSaltNPepperNoise.Location = new System.Drawing.Point(354, 614);
+            this.BtSaltNPepperNoise.Location = new System.Drawing.Point(377, 607);
             this.BtSaltNPepperNoise.Name = "BtSaltNPepperNoise";
             this.BtSaltNPepperNoise.Size = new System.Drawing.Size(134, 21);
             this.BtSaltNPepperNoise.TabIndex = 9;
@@ -175,7 +175,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.8F);
-            this.label2.Location = new System.Drawing.Point(158, 596);
+            this.label2.Location = new System.Drawing.Point(181, 589);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(175, 25);
             this.label2.TabIndex = 10;
@@ -221,7 +221,7 @@
             // 
             // BtInpaintNavierStokes
             // 
-            this.BtInpaintNavierStokes.Location = new System.Drawing.Point(1383, 571);
+            this.BtInpaintNavierStokes.Location = new System.Drawing.Point(1348, 572);
             this.BtInpaintNavierStokes.Name = "BtInpaintNavierStokes";
             this.BtInpaintNavierStokes.Size = new System.Drawing.Size(152, 31);
             this.BtInpaintNavierStokes.TabIndex = 18;
@@ -241,7 +241,7 @@
             // 
             // BtInpaintTelea
             // 
-            this.BtInpaintTelea.Location = new System.Drawing.Point(1550, 641);
+            this.BtInpaintTelea.Location = new System.Drawing.Point(1515, 636);
             this.BtInpaintTelea.Name = "BtInpaintTelea";
             this.BtInpaintTelea.Size = new System.Drawing.Size(123, 31);
             this.BtInpaintTelea.TabIndex = 20;
@@ -252,7 +252,7 @@
             // BtSquare
             // 
             this.BtSquare.AutoSize = true;
-            this.BtSquare.Location = new System.Drawing.Point(495, 587);
+            this.BtSquare.Location = new System.Drawing.Point(518, 580);
             this.BtSquare.Name = "BtSquare";
             this.BtSquare.Size = new System.Drawing.Size(75, 21);
             this.BtSquare.TabIndex = 21;
@@ -263,7 +263,7 @@
             // 
             // BtInpaintNans
             // 
-            this.BtInpaintNans.Location = new System.Drawing.Point(1550, 571);
+            this.BtInpaintNans.Location = new System.Drawing.Point(1515, 572);
             this.BtInpaintNans.Name = "BtInpaintNans";
             this.BtInpaintNans.Size = new System.Drawing.Size(123, 31);
             this.BtInpaintNans.TabIndex = 22;
@@ -305,7 +305,7 @@
             // 
             // BtInpaintFSRBest
             // 
-            this.BtInpaintFSRBest.Location = new System.Drawing.Point(1691, 571);
+            this.BtInpaintFSRBest.Location = new System.Drawing.Point(1656, 572);
             this.BtInpaintFSRBest.Name = "BtInpaintFSRBest";
             this.BtInpaintFSRBest.Size = new System.Drawing.Size(139, 31);
             this.BtInpaintFSRBest.TabIndex = 26;
@@ -356,7 +356,7 @@
             // 
             // BtInpaintFSRFast
             // 
-            this.BtInpaintFSRFast.Location = new System.Drawing.Point(1691, 641);
+            this.BtInpaintFSRFast.Location = new System.Drawing.Point(1656, 636);
             this.BtInpaintFSRFast.Name = "BtInpaintFSRFast";
             this.BtInpaintFSRFast.Size = new System.Drawing.Size(139, 31);
             this.BtInpaintFSRFast.TabIndex = 32;
@@ -366,7 +366,7 @@
             // 
             // BtInpaintShiftMap
             // 
-            this.BtInpaintShiftMap.Location = new System.Drawing.Point(1383, 641);
+            this.BtInpaintShiftMap.Location = new System.Drawing.Point(1348, 636);
             this.BtInpaintShiftMap.Name = "BtInpaintShiftMap";
             this.BtInpaintShiftMap.Size = new System.Drawing.Size(152, 31);
             this.BtInpaintShiftMap.TabIndex = 33;
@@ -378,7 +378,7 @@
             // 
             this.BtAutomate.BackColor = System.Drawing.Color.LightGreen;
             this.BtAutomate.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.BtAutomate.Location = new System.Drawing.Point(12, 676);
+            this.BtAutomate.Location = new System.Drawing.Point(35, 669);
             this.BtAutomate.Name = "BtAutomate";
             this.BtAutomate.Size = new System.Drawing.Size(108, 64);
             this.BtAutomate.TabIndex = 36;
@@ -388,8 +388,8 @@
             // 
             // MainWindow
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoSize = true;
             this.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
             this.CausesValidation = false;

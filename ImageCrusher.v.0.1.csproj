@@ -142,7 +142,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="alglib\alglibnet2.dll" />
-    <Content Include="License-LGPL.txt" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">

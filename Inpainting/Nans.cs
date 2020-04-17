@@ -144,8 +144,6 @@ namespace ImageCrusher.Inpainting
             i = 0; j = 0; row = 0; col = 0; ij = 0;
 
             int[,] talks_to = new int[4, 2] { { -1, 0 }, { 0, -1 }, { -1, 1 }, { 0, 1 } };
-
-            //setting all list
             int[,] allList = IdentifyNeighbours(n, m, nanList, talks_to);
 
             var InpRows = CreateInputsForSparseM(allList, n, 1);
@@ -156,7 +154,6 @@ namespace ImageCrusher.Inpainting
             var c1 = InpCols.Item1;
             var c2 = InpCols.Item2;
             var c3 = InpCols.Item3;
-            //~~~!~~~~~~~~~~~~~!!!v                   ~~~~~~~~~~~~~~~~~~~~           sparse matrix
 
             alglib.sparsematrix M;
             alglib.sparsecreate(m*n, m*n, out M);

@@ -44,13 +44,5 @@ C:\Users\Artur\source\repos\WindowsFormsApp1\bin\Release\x86\opencv_videoio_ffmp
 C:\Users\Artur\source\repos\WindowsFormsApp1\bin\Release\Emgu.CV.World.NetStandard.dll
 C:\Users\Artur\source\repos\WindowsFormsApp1\bin\Release\Emgu.CV.World.NetStandard.xml
 C:\Users\Artur\source\repos\WindowsFormsApp1\obj\Release\ImageCrusher.v.0.1.csproj.CoreCompileInputs.cache
-C:\Users\Artur\source\repos\WindowsFormsApp1\bin\Release\AForge.dll
-C:\Users\Artur\source\repos\WindowsFormsApp1\bin\Release\AForge.Imaging.dll
-C:\Users\Artur\source\repos\WindowsFormsApp1\bin\Release\AForge.Math.dll
-C:\Users\Artur\source\repos\WindowsFormsApp1\bin\Release\AForge.xml
-C:\Users\Artur\source\repos\WindowsFormsApp1\bin\Release\AForge.Imaging.xml
-C:\Users\Artur\source\repos\WindowsFormsApp1\bin\Release\AForge.Math.xml
-C:\Users\Artur\source\repos\WindowsFormsApp1\bin\Release\EPPlus.dll
 C:\Users\Artur\source\repos\WindowsFormsApp1\bin\Release\ExcelLibrary.dll
-C:\Users\Artur\source\repos\WindowsFormsApp1\bin\Release\EPPlus.xml
 C:\Users\Artur\source\repos\WindowsFormsApp1\obj\Release\ImageCrusher.v.0.1.csprojAssemblyReference.cache

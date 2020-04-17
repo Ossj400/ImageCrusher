@@ -69,12 +69,6 @@ namespace ImageCrusher
                 MenuImg.LoadMaskGray();
                 PicBox2Editedmg.Image = MenuImg.Mask.ToBitmap();
                 NoiseImg.MaskLoaded = MenuImg.Mask;
-                //data = new DataGenerator(MenuImg);
-                //data.ReadPhotoName();
-                //data.ReadMaskName();
-                //data.CreateFolder();
-                //data.CreateFile();
-                //data.GenerateValues(1,30,5,0.1,0.8);
             }
             catch
             {
@@ -195,7 +189,7 @@ namespace ImageCrusher
             }
         }  
 
-        private void BtInpaintNans_Click(object sender, EventArgs e)  // private asnyc void..
+        private void BtInpaintNans_Click(object sender, EventArgs e)
         {
             try
             {
@@ -372,7 +366,7 @@ namespace ImageCrusher
                  }
             }
 
-        private void BtRGB_Mask_Click(object sender, EventArgs e)    /// THIS BUTTON IS JUST TO TRY SOMETHING AND CAN BE PROBLEMATIC FOR PROJECT
+        private void BtRGB_Mask_Click(object sender, EventArgs e)   
         {
             try
             {
@@ -394,34 +388,27 @@ namespace ImageCrusher
             }
         }
 
-        private void NoiseAmountInput_TextChanged(object sender, EventArgs e)
-        {
-            NoiseImg = new Noise(MenuImg);
-            NoiseImg.MaskLoaded = null;
-            NoiseMethod(0);
-        }
-
         private void BtAutomate_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Please choose directory to make automatic tests of algorithms by picking photo from folder.");
-            MenuImg.LoadImage();
-            PicBox1OrgImg.Image = MenuImg.Img.ToBitmap();
-            MessageBox.Show("Please choose directory to make automatic tests of algorithms by picking mask from folder.");
-            MenuImg.LoadMaskGray();
-            PicBox2Editedmg.Image = MenuImg.Mask.ToBitmap();
-            NoiseImg.MaskLoaded = MenuImg.Mask;
-            data = new DataGenerator(MenuImg);
-            data.Loope1();
-            data = new DataGenerator(MenuImg);
-            data.Loope2();
-            data = new DataGenerator(MenuImg);
-            data.Loope3();
+                MessageBox.Show("Please choose directory to make automatic tests of algorithms by picking photo from folder.");
+                MenuImg.LoadImage();
+                PicBox1OrgImg.Image = MenuImg.Img.ToBitmap();
+                MessageBox.Show("Please choose directory to make automatic tests of algorithms by picking mask from folder.");
+                MenuImg.LoadMaskGray();
+                PicBox2Editedmg.Image = MenuImg.Mask.ToBitmap();
+                NoiseImg.MaskLoaded = MenuImg.Mask;
             //data = new DataGenerator(MenuImg);
-            //data.Loope4();
+            //data.GenTelea();
             //data = new DataGenerator(MenuImg);
-            //data.Loope5();
+            //data.GenNStokes();
             //data = new DataGenerator(MenuImg);
-            //data.Loope6();
+            //data.GenFSRF();
+            //data = new DataGenerator(MenuImg);
+            //data.GenShiftM();
+            data = new DataGenerator(MenuImg);
+            data.GenFsrB();
+            //data = new DataGenerator(MenuImg);
+            //data.GenNans();
             //data = new DataGenerator(MenuImg);
         }
     }

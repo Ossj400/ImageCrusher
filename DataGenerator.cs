@@ -25,9 +25,9 @@ namespace DataGeneratorSpace
         string maskPath;
         string maskName;
         string path0;
-        Workbook workbook;
-        Image<Bgr, byte> ImgOut;
         Image<Bgr, byte> img;
+        Image<Bgr, byte> imageOut;
+        Workbook workbook;
         string methodName = "0";
 
         public DataGenerator (ImageMenu image)
@@ -95,7 +95,6 @@ namespace DataGeneratorSpace
             worksheet.Cells.ColumnWidth[0, 1] = 30;
             workbook1.Worksheets.Add(worksheet);
             workbook1.Save(path0);
-           // workbook = workbook1;
 
             return path0;
         }
@@ -112,12 +111,11 @@ namespace DataGeneratorSpace
             worksheet.Cells[lastRow + 1, 4] = new Cell(ssim);
             worksheet.Cells[lastRow + 1, 5] = new Cell(gmsd);
             worksheet.Cells[lastRow + 1, 6] = new Cell(methodName);
-
             workbook.Worksheets.Add(worksheet);
             workbook.Save(path0);
         }
 
-        public void Loope1()
+        public void GenTelea()
         {
 
             methodName = "Alexandru_Telea";
@@ -146,7 +144,7 @@ namespace DataGeneratorSpace
                 }
             }       
         }
-            public void Loope2()
+            public void GenNStokes()
             {
                 methodName = "Navier_Stokes";
                 ReadPhotoName();
@@ -175,7 +173,7 @@ namespace DataGeneratorSpace
                 }
             }
 
-        public void Loope3()
+        public void GenFSRF()
         {
             int i = 0;
             methodName = "FSR_F";
@@ -205,7 +203,7 @@ namespace DataGeneratorSpace
             }
         }
 
-             public void Loope4()
+             public void GenShiftM()
              {
                  int i = 0;
                  methodName = "Shift_Map";
@@ -235,7 +233,7 @@ namespace DataGeneratorSpace
                  }
              }
 
-            public void Loope5()
+            public void GenFsrB()
             {
                 int i = 0;
                 methodName = "FSR_B";
@@ -265,7 +263,7 @@ namespace DataGeneratorSpace
                 }
             }
 
-             public void Loope6()
+             public void GenNans()
              {
                  int i = 0;
                  methodName = "Nans";
